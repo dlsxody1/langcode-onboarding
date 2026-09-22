@@ -38,9 +38,11 @@
 실습(labs)은 읽기보다 **우선순위가 높다**. 시간이 모자라면 문서를 건너뛰고 실습을 해라.
 "공부했다"와 "만들어봤다"는 입사 후 첫 티켓을 잡을 때 완전히 다른 상태다.
 
-## 새 맥북에서 처음 할 것 (Day 0 세팅)
+## Day 0 세팅 — 새 맥북 / 집 윈도우
 
-맥북을 밀고 나서 이 레포를 클론한 직후 실행한다.
+**두 대에서 다 돌아가게 써 뒀다.** 맥북은 초기화 직후, 윈도우는 그냥 지금.
+
+### macOS
 
 ```bash
 # 1. Homebrew (없으면)
@@ -51,14 +53,66 @@ brew install --cask dotnet-sdk
 dotnet --version        # 9.x 가 찍히면 성공
 
 # 3. Python (RAG 실습용) — 3.11 이상
-brew install python@3.13 uv
+brew install python@3.13
 
-# 4. Postgres + pgvector (선택, lab2 심화용). Docker 로 띄우는 게 제일 빠르다
-docker run -d --name pgvector -e POSTGRES_PASSWORD=dev -p 5432:5432 pgvector/pgvector:pg17
-
-# 5. C# 에디터 — VS Code + C# Dev Kit 확장, 또는 JetBrains Rider
+# 4. C# 에디터 — VS Code + C# Dev Kit
 code --install-extension ms-dotnettools.csdevkit
+
+# 5. (선택) Postgres + pgvector — lab2 심화용
+docker run -d --name pgvector -e POSTGRES_PASSWORD=dev -p 5432:5432 pgvector/pgvector:pg17
 ```
+
+### Windows
+
+**.NET 개발은 오히려 윈도우가 1급 시민이다.** WSL 없이 네이티브로 해도 되고,
+Visual Studio 2022 Community 를 쓰면 디버거·EF 도구가 전부 통합돼 있다.
+
+PowerShell 에서:
+
+```powershell
+# 1. .NET 9 SDK
+winget install Microsoft.DotNet.SDK.9
+# 새 터미널을 열고
+dotnet --version
+
+# 2. Python 3.13
+winget install Python.Python.3.13
+python --version
+
+# 3. Git (없으면)
+winget install Git.Git
+
+# 4. 에디터 — 둘 중 하나
+winget install Microsoft.VisualStudioCode
+code --install-extension ms-dotnettools.csdevkit
+#   또는 (C# 만 할 거면 이쪽이 더 편하다)
+winget install Microsoft.VisualStudio.2022.Community
+
+# 5. (선택) Docker Desktop — lab2 심화용. WSL2 백엔드가 필요하다
+winget install Docker.DockerDesktop
+```
+
+**윈도우에서만 신경 쓸 것 3가지:**
+
+| | |
+| --- | --- |
+| `python3` 가 아니라 **`python`** | 이 레포의 명령어에서 `python3` → `python` 으로 바꿔 읽어라 |
+| **한글 출력이 깨지면** | `$env:PYTHONUTF8 = "1"` 을 먼저 실행. 영구 적용은 `setx PYTHONUTF8 1` |
+| **줄바꿈(CRLF)** | 이 레포는 `.gitattributes` 로 고정해 뒀다. 별도 설정 불필요 |
+
+`curl` 은 Windows 10 이후 기본 내장이지만 PowerShell 에서는 `Invoke-WebRequest` 의 별칭이라
+옵션이 다르게 동작한다. **`curl.exe`** 로 명시해서 부르면 macOS 와 똑같이 쓸 수 있다.
+
+### 둘 중 어디서 공부할까
+
+| | 맥북 | 윈도우 |
+| --- | --- | --- |
+| 문서 읽기 | ○ | ○ |
+| lab2 (미니 RAG) | ○ | ○ |
+| lab1 (.NET CRUD) | ○ | **◎ 더 편하다** (Visual Studio) |
+
+**lab1 은 집 윈도우에서 하는 걸 권한다.** 맥북 초기화를 기다릴 이유가 없고,
+회사 코드도 결국 Windows/Visual Studio 로 짜여 있을 가능성이 높다.
 
 `dotnet` 이 없어도 `01-backend-basics/` 와 `03-rag/` 는 전부 읽을 수 있다. 세팅이 막히면 읽기부터 시작해라.
 

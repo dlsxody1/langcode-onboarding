@@ -12,11 +12,29 @@
 
 ## 0. 준비
 
-```bash
-brew install --cask dotnet-sdk
-dotnet --version          # 9.x 이상
+> 💡 **이 실습은 집 윈도우에서 하는 걸 권한다.** .NET 은 윈도우가 1급 시민이고,
+> Visual Studio 2022 를 쓰면 디버거·EF 도구·SQL 뷰어가 전부 통합돼 있다.
+> 맥북 초기화를 기다릴 이유가 없다.
+
+**Windows (PowerShell)**
+
+```powershell
+winget install Microsoft.DotNet.SDK.9
+# 새 터미널을 열고
+dotnet --version                          # 9.x 이상
 dotnet tool install --global dotnet-ef
 ```
+
+**macOS**
+
+```bash
+brew install --cask dotnet-sdk
+dotnet --version                          # 9.x 이상
+dotnet tool install --global dotnet-ef
+```
+
+`dotnet ef` 가 "명령을 찾을 수 없다"고 나오면 PATH 문제다.
+Windows 는 `%USERPROFILE%\.dotnet\tools`, macOS 는 `~/.dotnet/tools` 를 PATH 에 추가한다.
 
 **DB 는 SQLite 를 쓴다.** Docker 도 Postgres 도 필요 없다. 파일 하나로 끝난다.
 (회사는 PostgreSQL/MSSQL 을 쓰지만, EF Core 코드는 연결 문자열만 다르고 거의 같다)
@@ -66,6 +84,50 @@ dotnet watch run                              # 핫 리로드로 실행
 
 ## 3. 동작 확인
 
+가장 쉬운 방법은 **브라우저로 `http://localhost:5000/openapi/v1.json`** 을 열거나,
+Visual Studio 의 `.http` 파일 / VS Code 의 REST Client 확장을 쓰는 것이다.
+CLI 로 하려면 아래를 쓴다.
+
+### Windows (PowerShell)
+
+PowerShell 에서 `curl` 은 `Invoke-WebRequest` 의 별칭이라 옵션이 다르다.
+**`curl.exe`** 로 명시하거나, 아래처럼 PowerShell 네이티브 방식을 쓴다.
+
+```powershell
+$BASE = "http://localhost:5000"
+
+# 보호자 생성
+$owner = Invoke-RestMethod -Uri "$BASE/api/owners" -Method Post -ContentType 'application/json' `
+  -Body '{"name":"김철수","phone":"010-1234-5678"}'
+$owner
+
+# 펫 생성 (201 확인)
+$body = @{ name="코코"; species="dog"; birthDate="2022-03-01"; ownerId=$owner.id } | ConvertTo-Json
+Invoke-WebRequest -Uri "$BASE/api/pets" -Method Post -ContentType 'application/json' -Body $body |
+  Select-Object StatusCode, Headers
+
+# 목록
+Invoke-RestMethod -Uri "$BASE/api/pets?page=1&size=10" | ConvertTo-Json -Depth 5
+
+# 중복 생성 -> 409
+try { Invoke-RestMethod -Uri "$BASE/api/pets" -Method Post -ContentType 'application/json' -Body $body }
+catch { $_.Exception.Response.StatusCode }        # Conflict
+
+# 검증 실패 -> 400
+try { Invoke-RestMethod -Uri "$BASE/api/pets" -Method Post -ContentType 'application/json' `
+        -Body '{"name":"","species":"dog"}' }
+catch { $_.Exception.Response.StatusCode }        # BadRequest
+
+# 없는 것 -> 404
+try { Invoke-RestMethod -Uri "$BASE/api/pets/00000000-0000-0000-0000-000000000000" }
+catch { $_.Exception.Response.StatusCode }        # NotFound
+```
+
+> PowerShell 은 4xx 를 예외로 던진다. 그래서 `try/catch` 가 필요하다.
+> 상태코드를 편하게 보려면 `curl.exe -i ...` 쪽이 낫다.
+
+### macOS / Linux / Git Bash
+
 ```bash
 BASE=http://localhost:5000
 
@@ -99,8 +161,6 @@ curl -i -X POST $BASE/api/pets -H 'Content-Type: application/json' \
 ```
 
 **상태코드를 하나하나 눈으로 확인해라.** 201/400/404/409 를 코드가 어디서 만드는지 찾아보는 게 핵심이다.
-
----
 
 ## 4. 반드시 해볼 것 — 여기가 진짜 실습
 

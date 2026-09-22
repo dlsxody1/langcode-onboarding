@@ -7,8 +7,13 @@
 
 ```bash
 cd labs/lab2-mini-rag
-python3 minirag.py eval
+python3 minirag.py eval        # 윈도우는 python3 대신 python
 ```
+
+> **윈도우 사용자:** 아래 모든 명령에서 `python3` → `python` 으로 바꿔 읽어라.
+> 한글이 깨지면 PowerShell 에서 `$env:PYTHONUTF8 = "1"` 을 먼저 실행한다.
+> 파일 이름에 한글이 있어도(`사내규정.md`) 동작하지만, 인자로 넘길 때는 따옴표로 감싸라 —
+> `python minirag.py search "비밀번호" --only "보안정책.md"`
 
 ---
 
