@@ -16,7 +16,7 @@ POST /api/agent/run   →  ... 180초 ...  →  200 OK
 | 계층 | 기본 타임아웃 | 결과 |
 | --- | --- | --- |
 | 브라우저 `fetch` | 무제한이지만 사용자가 먼저 포기 | |
-| nginx / Azure App Gateway | 60~240초 | **504 Gateway Timeout** |
+| nginx / Azure App Gateway | 60\~240초 | **504 Gateway Timeout** |
 | 로드밸런서 idle timeout | 4분(Azure LB 기본) | 연결 끊김 |
 | Kestrel 요청 타임아웃 | 설정 가능 | |
 

@@ -17,3 +17,9 @@ __pycache__/
 # 로컬 비밀값
 .env
 appsettings.Development.local.json
+
+# Next.js
+node_modules/
+.next/
+next-env.d.ts
+.vercel

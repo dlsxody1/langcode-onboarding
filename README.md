@@ -27,13 +27,13 @@
 
 | 일자 | 읽을 것 | 분량 |
 | --- | --- | --- |
-| D-9 | `01-backend-basics/` 01~03 (수명주기 · 계층/DI · DB) | 길다. 여기가 핵심 |
-| D-8 | `01-backend-basics/` 04~05 (인증인가 · 오래 걸리는 작업) | |
-| D-7 | `02-csharp-dotnet/` 01~02 (C# · ASP.NET Core) | |
+| D-9 | `01-backend-basics/` 01\~03 (수명주기 · 계층/DI · DB) | 길다. 여기가 핵심 |
+| D-8 | `01-backend-basics/` 04\~05 (인증인가 · 오래 걸리는 작업) | |
+| D-7 | `02-csharp-dotnet/` 01\~02 (C# · ASP.NET Core) | |
 | D-6 | `02-csharp-dotnet/` 03 (EF Core) — **3-2절 LINQ→SQL 대조표를 꼼꼼히** | |
 | D-5 | `labs/lab1-dotnet-crud/` 의 **"📖 실행하지 않고 읽기만 할 경우"** + `reference/` 코드 4개 | 300줄 |
-| D-4 | `03-rag/` 01~02 — **02의 3-2절·5-2절이 실측 데이터** | |
-| D-3 | `03-rag/` 03~04 | |
+| D-4 | `03-rag/` 01\~02 — **02의 3-2절·5-2절이 실측 데이터** | |
+| D-3 | `03-rag/` 03\~04 | |
 | D-2 | `04-agent/` 전체 | 짧다 |
 | D-1 | `05-realtime-ui/` + `06-fullstack-workflow/` + `02-csharp-dotnet/04` | |
 

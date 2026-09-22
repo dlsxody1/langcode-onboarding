@@ -17,7 +17,7 @@
 | 이름 | 실제로 무엇 |
 | --- | --- |
 | **.NET** (구 .NET Core) | 런타임 + 표준 라이브러리 + 도구. 크로스 플랫폼. **지금 쓰는 것** |
-| **.NET Framework** | 2002~2019 의 구버전. **Windows 전용.** 고객사 레거시에서 만날 수 있다 |
+| **.NET Framework** | 2002\~2019 의 구버전. **Windows 전용.** 고객사 레거시에서 만날 수 있다 |
 | **C#** | 언어 |
 | **ASP.NET Core** | .NET 위의 웹 프레임워크 |
 | **EF Core** | ORM (Entity Framework Core) |

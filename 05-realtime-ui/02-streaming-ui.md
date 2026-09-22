@@ -63,7 +63,7 @@ onToken((t) => { bufferRef.current += t; });   // 렌더 유발 없음
 ```
 
 초당 60회 이상으로는 어차피 사람이 인지하지 못한다. `requestAnimationFrame` 이나
-50~100ms throttle 로 커밋 빈도를 고정한다.
+50\~100ms throttle 로 커밋 빈도를 고정한다.
 
 > 입원 차트에서 한 것과 같은 발상이다. **"데이터 갱신 빈도"와 "렌더 빈도"를 분리한다.**
 

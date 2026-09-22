@@ -1,0 +1,512 @@
+/* ─────────────────────────────────────────────────────────────
+   시험지 · 편집 디자인
+   종이(warm off-white) / 먹 / 괘선 / 채점펜 빨강 하나
+   ───────────────────────────────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+:root {
+  /* 종이 — 순백 금지. 따뜻하게 틀어 둔다 */
+  --paper:        oklch(0.975 0.009 84);
+  --paper-sunk:   oklch(0.951 0.012 84);
+  --paper-raised: oklch(0.990 0.006 84);
+
+  /* 먹 — 순검정 금지 */
+  --ink:          oklch(0.265 0.014 62);
+  --ink-soft:     oklch(0.455 0.014 66);
+  --ink-faint:    oklch(0.625 0.012 70);
+
+  /* 괘선 */
+  --rule:         oklch(0.872 0.014 80);
+  --rule-soft:    oklch(0.922 0.011 82);
+
+  /* 채점펜 — 이 사이트의 유일한 액센트 */
+  --pen:          oklch(0.545 0.196 27);
+  --pen-soft:     oklch(0.700 0.130 28);
+  --pen-wash:     oklch(0.945 0.030 30);
+
+  /* 연필 — 부차 표시 */
+  --pencil:       oklch(0.545 0.052 245);
+  --pencil-wash:  oklch(0.948 0.018 245);
+
+  --serif: "Gowun Batang", "Apple SD Gothic Neo", serif;
+  --sans:  "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --mono:  "IBM Plex Mono", "SFMono-Regular", monospace;
+
+  --measure: 68ch;
+  --gut: clamp(1.15rem, 4vw, 2.75rem);
+
+  --step--1: clamp(0.80rem, 0.78rem + 0.12vw, 0.865rem);
+  --step-0:  clamp(0.945rem, 0.91rem + 0.18vw, 1.045rem);
+  --step-1:  clamp(1.12rem, 1.05rem + 0.34vw, 1.32rem);
+  --step-2:  clamp(1.38rem, 1.25rem + 0.62vw, 1.78rem);
+  --step-3:  clamp(1.72rem, 1.48rem + 1.14vw, 2.55rem);
+  --step-4:  clamp(2.15rem, 1.70rem + 2.20vw, 3.75rem);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  font-weight: 400;
+  line-height: 1.78;
+  letter-spacing: -0.003em;
+  word-break: keep-all;          /* 한국어 어절 단위 줄바꿈 */
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 종이 결 — 아주 옅은 가로 괘선. 이미지 없이 그라디언트로 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 39px,
+    color-mix(in oklch, var(--rule-soft) 42%, transparent) 39px 40px
+  );
+  opacity: 0.5;
+}
+#shell { position: relative; z-index: 1; }
+
+a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 0.22em; }
+a:hover { text-decoration-color: var(--pen); }
+:focus-visible { outline: 2px solid var(--pen); outline-offset: 3px; border-radius: 1px; }
+
+/* ── 상단 표제 ─────────────────────────────────────────── */
+.masthead {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: baseline; gap: 1rem;
+  padding: 0.72rem var(--gut);
+  background: color-mix(in oklch, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(120%) blur(6px);
+  border-bottom: 1px solid var(--rule);
+}
+.masthead__title {
+  font-family: var(--serif); font-weight: 700;
+  font-size: var(--step-0); letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.masthead__sub { font-size: var(--step--1); color: var(--ink-faint); }
+.masthead__spacer { flex: 1; }
+.masthead nav { display: flex; gap: 1.1rem; font-size: var(--step--1); }
+.masthead nav a { text-decoration: none; color: var(--ink-soft); }
+.masthead nav a:hover, .masthead nav a[aria-current="page"] { color: var(--pen); }
+
+/* ── 레이아웃 ─────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  max-width: 78rem;
+  margin: 0 auto;
+  padding: 0 var(--gut) 6rem;
+}
+@media (min-width: 56rem) {
+  .layout { grid-template-columns: 14rem minmax(0, 1fr); gap: clamp(2rem, 4vw, 4.5rem); }
+}
+
+/* ── 목차 ─────────────────────────────────────────────── */
+.toc { padding-top: 2.6rem; font-size: var(--step--1); }
+@media (min-width: 56rem) { .toc { position: sticky; top: 3.4rem; align-self: start; max-height: calc(100dvh - 4.5rem); overflow-y: auto; padding-bottom: 3rem; } }
+.toc__label {
+  font-family: var(--serif); font-size: var(--step--1);
+  letter-spacing: 0.18em; color: var(--ink-faint);
+  padding-bottom: 0.5rem; border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 1.1rem;
+}
+.toc__group { margin-bottom: 1.45rem; }
+@media (max-width: 55.99rem) {
+  /* 좁은 화면: 전체 목차를 본문 위에 쏟지 않고 지금 챕터만 남긴다 */
+  .toc { padding-top: 1.6rem; padding-bottom: 0.4rem; }
+  .toc__group:not([data-current]) { display: none; }
+  .toc__all { display: block; font-size: var(--step--1); color: var(--ink-faint); text-decoration: none; }
+}
+@media (min-width: 56rem) { .toc__all { display: none; } }
+.toc__no {
+  font-family: var(--serif); font-size: var(--step-0); font-weight: 700;
+  color: var(--pen); margin-right: 0.45rem;
+}
+.toc__chapter { font-family: var(--serif); font-size: var(--step-0); line-height: 1.35; margin-bottom: 0.45rem; }
+.toc__list { list-style: none; margin: 0; padding: 0 0 0 1.6rem; }
+.toc__list li { border-bottom: 1px dotted var(--rule); }
+.toc__list a {
+  display: block; padding: 0.3rem 0;
+  text-decoration: none; color: var(--ink-soft); line-height: 1.5;
+}
+.toc__list a:hover { color: var(--ink); }
+.toc__list a[aria-current="page"] { color: var(--pen); font-weight: 500; }
+.toc__list a[aria-current="page"]::before { content: "▸"; margin-left: -0.85rem; margin-right: 0.2rem; }
+.toc__quiz { padding-left: 1.6rem; padding-top: 0.4rem; }
+.toc__quiz a { font-size: var(--step--1); color: var(--pen); text-decoration: none; }
+
+/* ── 본문 ─────────────────────────────────────────────── */
+.sheet { padding-top: 2.6rem; min-width: 0; }
+
+.doc-head { margin-bottom: 2.6rem; padding-bottom: 1.4rem; border-bottom: 2px solid var(--ink); }
+.doc-head__meta {
+  display: flex; align-items: baseline; gap: 0.6rem;
+  font-size: var(--step--1); color: var(--ink-faint); margin-bottom: 0.5rem;
+}
+.doc-head__no {
+  font-family: var(--serif); font-weight: 700; font-size: var(--step-1);
+  color: var(--pen); line-height: 1;
+}
+.doc-head h1 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: var(--step-3); line-height: 1.22; letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* 마크다운 조판 */
+.prose { max-width: var(--measure); }
+.prose > * + * { margin-top: 1.05em; }
+.prose h2 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: var(--step-2); line-height: 1.3; letter-spacing: -0.015em;
+  margin-top: 3.1rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+  position: relative;
+}
+.prose h3 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: var(--step-1); line-height: 1.38;
+  margin-top: 2.1rem;
+}
+.prose h4 { font-size: var(--step-0); font-weight: 600; margin-top: 1.6rem; }
+.prose h1 { display: none; }   /* 파일 첫 H1 은 doc-head 가 대신한다 */
+.prose h1 + * { margin-top: 0; }
+
+.prose a.anchor {
+  position: absolute; left: -1.1rem; top: 1rem;
+  color: var(--rule); text-decoration: none; font-size: 0.8em;
+  opacity: 0; transition: opacity 0.18s var(--ease);
+}
+.prose h2:hover a.anchor { opacity: 1; }
+@media (max-width: 56rem) { .prose a.anchor { display: none; } }
+
+.prose p { margin-block: 0; }
+.prose strong { font-weight: 600; }
+.prose em { font-style: normal; background: linear-gradient(transparent 62%, var(--pen-wash) 0); padding: 0 0.1em; }
+
+.prose ul, .prose ol { padding-left: 1.3rem; margin-block: 0; }
+.prose li + li { margin-top: 0.35rem; }
+.prose li::marker { color: var(--ink-faint); }
+
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 2.6rem 0; }
+.prose hr + h2 { border-top: 0; padding-top: 0; margin-top: 0; }
+.prose hr + h2 a.anchor { top: 0.1rem; }
+
+/* 인용 — 시험지의 '참고' 란처럼 */
+.prose blockquote {
+  margin: 1.6rem 0; padding: 0.95rem 1.15rem;
+  background: var(--paper-sunk);
+  border: 1px solid var(--rule);
+  font-size: var(--step--1); line-height: 1.72; color: var(--ink-soft);
+}
+.prose blockquote > * + * { margin-top: 0.7em; }
+.prose blockquote strong { color: var(--ink); }
+
+/* 코드 — 인쇄된 리스팅. 색을 넣지 않는 것이 이 톤의 선택이다 */
+.prose code {
+  font-family: var(--mono); font-size: 0.875em;
+  background: var(--paper-sunk); border: 1px solid var(--rule-soft);
+  padding: 0.08em 0.34em; border-radius: 2px;
+  word-break: break-all;
+}
+.prose pre {
+  font-family: var(--mono);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink-faint);
+  padding: 0.95rem 1.1rem;
+  overflow-x: auto;
+  font-size: var(--step--1); line-height: 1.66;
+  margin-block: 1.5rem;
+}
+.prose a.xref { text-decoration: none; }
+.prose a.xref code {
+  border-color: var(--pen-soft); background: var(--pen-wash); color: var(--pen);
+  white-space: nowrap;
+}
+.prose a.xref:hover code { background: color-mix(in oklch, var(--pen-wash) 60%, var(--pen) 12%); }
+
+.prose pre code { background: none; border: 0; padding: 0; font-size: 1em; word-break: normal; }
+
+/* 표 */
+.table-scroll { overflow-x: auto; margin-block: 1.6rem; }
+.prose table { border-collapse: collapse; width: 100%; font-size: var(--step--1); line-height: 1.6; }
+.prose th, .prose td {
+  text-align: left; vertical-align: top;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.prose th {
+  font-weight: 600; font-size: var(--step--1);
+  border-bottom: 1.5px solid var(--ink);
+  white-space: nowrap;
+}
+.prose tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
+.prose td code { white-space: nowrap; }
+
+/* ── 문서 하단 ─────────────────────────────────────────── */
+.doc-foot { max-width: var(--measure); margin-top: 4rem; }
+.quiz-cta { border-top: 1.5px solid var(--pen); padding-top: 1rem; }
+.quiz-cta strong {
+  display: block; font-family: var(--serif); font-weight: 400;
+  font-size: var(--step-0); color: var(--ink-soft); margin-bottom: 0.55rem;
+}
+.quiz-cta ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; }
+.quiz-cta a { color: var(--pen); text-decoration: none; font-size: var(--step-0); font-family: var(--serif); }
+.quiz-cta a:hover { text-decoration: underline; text-decoration-color: var(--pen); }
+.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem; font-size: var(--step--1); }
+.pager a { display: block; max-width: 48%; text-decoration: none; color: var(--ink-soft); }
+.pager a:hover { color: var(--pen); }
+.pager em { display: block; font-style: normal; color: var(--ink-faint); font-size: 0.86em; letter-spacing: 0.08em; }
+.pager strong { font-family: var(--serif); font-weight: 400; color: var(--ink); }
+.pager .next { text-align: right; margin-left: auto; }
+
+/* ── 표지 (홈) ─────────────────────────────────────────── */
+.cover { max-width: 60rem; margin: 0 auto; padding: clamp(2.5rem, 7vw, 5rem) var(--gut) 6rem; }
+.cover__rule { border-top: 3px double var(--ink); padding-top: 1.1rem; }
+.cover h1 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: var(--step-4); line-height: 1.1; letter-spacing: -0.03em;
+  margin: 0 0 0.6rem;
+}
+.cover__lede { font-size: var(--step-1); color: var(--ink-soft); max-width: 42ch; margin: 0 0 2.4rem; line-height: 1.7; }
+
+/* 답안지 상단 인적사항 칸 */
+.fields {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 0 1.6rem; border-block: 1px solid var(--ink); padding: 0.85rem 0; margin-bottom: 3.2rem;
+}
+.field { display: flex; align-items: baseline; gap: 0.5rem; padding: 0.22rem 0; }
+.field dt { font-size: var(--step--1); color: var(--ink-faint); letter-spacing: 0.06em; white-space: nowrap; }
+.field dd { margin: 0; font-family: var(--serif); font-size: var(--step-0); border-bottom: 1px solid var(--rule); flex: 1; }
+.field dd.pen { color: var(--pen); font-weight: 700; }
+
+/* 챕터 목록 — 카드 그리드가 아니라 괘선 목록 */
+.chapters { border-top: 1.5px solid var(--ink); }
+.chapter-row {
+  display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) auto;
+  gap: 0 1rem; align-items: start;
+  padding: 1.35rem 0; border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+}
+.chapter-row:hover { background: color-mix(in oklch, var(--paper-sunk) 60%, transparent); }
+.chapter-row__no {
+  font-family: var(--serif); font-weight: 700; font-size: var(--step-2);
+  line-height: 1; color: var(--pen); padding-top: 0.15rem;
+}
+.chapter-row__title { font-family: var(--serif); font-size: var(--step-1); line-height: 1.35; margin: 0 0 0.25rem; }
+.chapter-row__blurb { font-size: var(--step--1); color: var(--ink-soft); margin: 0; line-height: 1.6; max-width: 46ch; }
+.chapter-row__meta { font-size: var(--step--1); color: var(--ink-faint); text-align: right; white-space: nowrap; padding-top: 0.3rem; }
+.chapter-row__meta b { display: block; font-family: var(--serif); font-size: var(--step-0); color: var(--ink); font-weight: 400; }
+@media (max-width: 40rem) {
+  .chapter-row { grid-template-columns: 2.6rem minmax(0, 1fr); }
+  .chapter-row__meta { grid-column: 2; text-align: left; padding-top: 0.5rem; }
+}
+
+/* ── 퀴즈 ─────────────────────────────────────────────── */
+.quiz { max-width: 52rem; margin: 0 auto; padding: 2.6rem var(--gut) 6rem; }
+.quiz__head { border-bottom: 2px solid var(--ink); padding-bottom: 1rem; margin-bottom: 2.4rem; }
+.quiz__head h1 { font-family: var(--serif); font-size: var(--step-3); margin: 0.2rem 0 0; letter-spacing: -0.02em; }
+.quiz__head p { font-size: var(--step--1); color: var(--ink-faint); margin: 0.5rem 0 0; }
+
+.qcount { font-size: var(--step--1); color: var(--ink-faint); letter-spacing: 0.1em; }
+
+.question { margin-bottom: 1rem; }
+.question__stem {
+  display: flex; gap: 0.7rem; align-items: baseline;
+  font-size: var(--step-1); line-height: 1.62; margin-bottom: 1.5rem;
+}
+.question__no { font-family: var(--serif); font-weight: 700; color: var(--pen); flex: none; }
+
+.choices { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.choice {
+  position: relative;
+  display: flex; gap: 0.75rem; align-items: baseline;
+  width: 100%; text-align: left;
+  font: inherit; font-size: var(--step-0); line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  padding: 0.75rem 1rem 0.75rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.16s var(--ease), background-color 0.16s var(--ease);
+}
+.choice:hover:not(:disabled) { border-color: var(--ink-faint); }
+.choice:disabled { cursor: default; }
+.choice__mark {
+  font-family: var(--serif); font-weight: 700; color: var(--ink-faint);
+  flex: none; width: 1.2em;
+}
+/* 채점 표시가 들어갈 자리를 비운다 — 긴 보기가 동그라미 위로 겹치지 않게 */
+.choice[data-state="correct"], .choice[data-state="wrong"] { padding-right: 3.1rem; }
+.choice[data-state="correct"] { border-color: var(--pen); background: var(--pen-wash); }
+.choice[data-state="correct"] .choice__mark { color: var(--pen); }
+.choice[data-state="wrong"] { border-color: var(--pen-soft); }
+.choice[data-state="wrong"] .choice__text { text-decoration: line-through; text-decoration-color: var(--pen); color: var(--ink-soft); }
+.choice[data-state="muted"] { opacity: 0.55; }
+
+/* 채점 표시 — 빨간 펜 */
+.grade {
+  position: absolute; right: 0.55rem; top: 50%; translate: 0 -50%;
+  width: 2rem; height: 2rem; pointer-events: none;
+}
+.grade path, .grade circle { fill: none; stroke: var(--pen); stroke-width: 2.2; stroke-linecap: round; }
+.grade--draw path, .grade--draw circle { stroke-dasharray: 120; stroke-dashoffset: 120; animation: ink 0.42s var(--ease) forwards; }
+.grade--draw circle { animation-duration: 0.5s; }
+@keyframes ink { to { stroke-dashoffset: 0; } }
+
+.explain {
+  margin-top: 1.3rem; padding: 1rem 1.15rem;
+  border: 1px solid var(--rule); border-left: 3px solid var(--pen);
+  background: var(--paper-sunk);
+  font-size: var(--step--1); line-height: 1.75;
+}
+.explain__label {
+  font-family: var(--serif); font-weight: 700; color: var(--pen);
+  letter-spacing: 0.1em; font-size: var(--step--1); display: block; margin-bottom: 0.4rem;
+}
+.explain a { color: var(--ink); }
+
+.quiz__nav { display: flex; align-items: center; gap: 0.9rem; margin-top: 2rem; flex-wrap: wrap; }
+.btn {
+  font: inherit; font-size: var(--step-0); font-family: var(--sans);
+  padding: 0.6rem 1.35rem; cursor: pointer;
+  border: 1.5px solid var(--ink); background: var(--ink); color: var(--paper);
+  transition: opacity 0.16s var(--ease);
+  text-decoration: none; display: inline-block;
+}
+.btn:hover { opacity: 0.84; }
+.btn--ghost { background: none; color: var(--ink); border-color: var(--rule); }
+.btn--ghost:hover { border-color: var(--ink); opacity: 1; }
+.btn:disabled { opacity: 0.35; cursor: default; }
+
+/* 진행 막대 — 채점된 답안지 눈금 */
+.ticks { display: flex; gap: 3px; margin-top: 0.9rem; flex-wrap: wrap; }
+.tick { width: 0.95rem; height: 0.3rem; background: var(--rule); }
+.tick[data-v="o"] { background: var(--pen); }
+.tick[data-v="x"] { background: var(--pen-soft); }
+.tick[data-v="now"] { background: var(--ink); }
+
+/* 결과 */
+.score { text-align: left; border-block: 3px double var(--ink); padding: 2rem 0; margin-bottom: 2rem; }
+.score__n { font-family: var(--serif); font-size: var(--step-4); line-height: 1; color: var(--pen); font-weight: 700; }
+.score__d { font-family: var(--serif); font-size: var(--step-2); color: var(--ink-faint); }
+.score__label { font-size: var(--step--1); color: var(--ink-faint); letter-spacing: 0.1em; margin-bottom: 0.7rem; }
+.score__note { font-size: var(--step-0); color: var(--ink-soft); margin-top: 1rem; max-width: 46ch; line-height: 1.7; }
+
+.wrong-list { list-style: none; padding: 0; margin: 0; border-top: 1.5px solid var(--ink); }
+.wrong-list li { border-bottom: 1px solid var(--rule); padding: 1rem 0; }
+.wrong-list__q { font-size: var(--step-0); line-height: 1.6; margin: 0 0 0.45rem; }
+.wrong-list__a { font-size: var(--step--1); color: var(--ink-soft); margin: 0 0 0.4rem; }
+.wrong-list__a b { color: var(--pen); font-weight: 600; }
+.wrong-list__src { font-size: var(--step--1); }
+.wrong-list__src a { color: var(--ink-faint); }
+
+.empty { border: 1px dashed var(--rule); padding: 2.2rem 1.4rem; text-align: left; color: var(--ink-soft); font-size: var(--step-0); line-height: 1.7; }
+.empty strong { display: block; font-family: var(--serif); font-size: var(--step-1); color: var(--ink); margin-bottom: 0.5rem; }
+
+.note { font-size: var(--step--1); color: var(--ink-faint); line-height: 1.7; }
+
+
+/* ── 힌트 ─────────────────────────────────────────────── */
+.question__row { display: flex; align-items: flex-start; gap: 0.9rem; }
+.question__row .question__stem { flex: 1; margin-bottom: 0; }
+
+.hint { position: relative; flex: none; padding-top: 0.28rem; }
+.hint__btn {
+  font: inherit; font-family: var(--sans); font-size: var(--step--1);
+  color: var(--pencil); background: var(--pencil-wash);
+  border: 1px dashed color-mix(in oklch, var(--pencil) 45%, transparent);
+  padding: 0.14rem 0.6rem; border-radius: 999px; cursor: help;
+  white-space: nowrap;
+}
+.hint__btn::before { content: "?"; font-weight: 600; margin-right: 0.3rem; }
+.hint__body {
+  position: absolute; right: 0; top: calc(100% + 0.4rem); z-index: 5;
+  width: min(21rem, 62vw);
+  background: var(--paper-raised);
+  border: 1px solid var(--pencil);
+  border-left: 3px solid var(--pencil);
+  padding: 0.7rem 0.85rem;
+  font-size: var(--step--1); line-height: 1.68; color: var(--ink-soft);
+  opacity: 0; visibility: hidden; translate: 0 -0.3rem;
+  transition: opacity 0.16s var(--ease), translate 0.16s var(--ease), visibility 0.16s;
+  box-shadow: 0 1px 0 var(--rule);
+}
+.hint:hover .hint__body,
+.hint:focus-within .hint__body,
+.hint[data-pinned] .hint__body { opacity: 1; visibility: visible; translate: 0 0; }
+.hint[data-pinned] .hint__btn { background: var(--pencil); color: var(--paper); border-style: solid; }
+@media (max-width: 34rem) {
+  .question__row { flex-direction: column; gap: 0.5rem; }
+  .hint { align-self: flex-start; padding-top: 0; }
+  .hint__body { right: auto; left: 0; width: min(21rem, 86vw); }
+}
+
+/* ── 주제 목록 (공부 차례 / 문제 목록 공용) ─────────────── */
+.topics__chapter { margin-bottom: 2.9rem; }
+.topics__head {
+  display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
+  font-family: var(--serif); font-weight: 700; font-size: var(--step-1);
+  margin: 0 0 0.35rem; padding-bottom: 0.5rem; border-bottom: 1.5px solid var(--ink);
+}
+.topics__no { color: var(--pen); }
+.topics__study { margin-left: auto; font-family: var(--sans); font-size: var(--step--1); font-weight: 400; color: var(--pen); text-decoration: none; }
+.topics__blurb { font-size: var(--step--1); color: var(--ink-faint); margin: 0.55rem 0 0.2rem; }
+.topics__list { list-style: none; margin: 0; padding: 0; }
+.topics__foot { font-size: var(--step--1); color: var(--ink-faint); margin: 0.8rem 0 0; line-height: 1.8; }
+.topics__foot a { color: var(--pen); text-decoration: none; }
+
+.topic-row {
+  display: flex; align-items: baseline; gap: 1rem;
+  padding: 0.72rem 0; border-bottom: 1px solid var(--rule-soft);
+  text-decoration: none;
+}
+.topic-row:hover { background: color-mix(in oklch, var(--paper-sunk) 70%, transparent); }
+.topic-row__main { flex: 1; min-width: 0; }
+.topic-row__title { font-family: var(--serif); font-size: var(--step-0); display: block; line-height: 1.4; }
+.topic-row__blurb { font-size: var(--step--1); color: var(--ink-faint); display: block; line-height: 1.55; }
+.topic-row__meta { flex: none; font-size: var(--step--1); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.topic-row__meta b { font-family: var(--serif); font-weight: 400; color: var(--ink-soft); }
+.topic-row__meta b[data-all] { color: var(--pen); }
+
+/* ── 표지 갈림길 ──────────────────────────────────────── */
+.gateway { display: grid; gap: 0; border-top: 1.5px solid var(--ink); margin-bottom: 3.4rem; }
+@media (min-width: 44rem) { .gateway { grid-template-columns: 1fr 1fr; } }
+.gateway__card {
+  display: block; padding: 1.5rem 1.4rem 1.6rem 0;
+  border-bottom: 1px solid var(--rule); text-decoration: none;
+}
+@media (min-width: 44rem) { .gateway__card + .gateway__card { padding-left: 2rem; border-left: 1px solid var(--rule); } }
+.gateway__card:hover .gateway__t { color: var(--pen); }
+.gateway__no {
+  display: block; font-family: var(--serif); font-weight: 700; font-size: var(--step-2);
+  color: var(--pen); line-height: 1; margin-bottom: 0.6rem;
+}
+.gateway__t { display: block; font-family: var(--serif); font-size: var(--step-1); line-height: 1.4; margin-bottom: 0.25rem; }
+.gateway__d { display: block; font-size: var(--step--1); color: var(--ink-faint); line-height: 1.6; max-width: 34ch; }
+
+.cover__h2 {
+  font-family: var(--serif); font-size: var(--step--1); font-weight: 400;
+  letter-spacing: 0.22em; color: var(--ink-faint); margin: 0 0 0.6rem;
+}
+.score__sub { font-family: var(--serif); font-size: var(--step-1); margin: 0 0 0.9rem; }
