@@ -10,6 +10,81 @@
 
 ---
 
+---
+
+## 📖 실행하지 않고 읽기만 할 경우
+
+노트북이 느리거나 세팅할 시간이 없으면 **`reference/` 의 4개 파일을 이 순서로 읽는 것만으로도
+대부분을 얻는다.** 300줄이 안 된다.
+
+### 읽는 순서와 각 파일에서 볼 것
+
+| 순서 | 파일 | 여기서 확인할 것 |
+| --- | --- | --- |
+| 1 | [`Domain.cs`](reference/Domain.cs) | 엔티티(class)와 DTO(record)가 **왜 따로 있는지**. `InternalMemo` 가 DTO 에 없는 것 |
+| 2 | [`AppDbContext.cs`](reference/AppDbContext.cs) | `HasQueryFilter` 한 줄이 **모든 쿼리를 바꾸는 것** |
+| 3 | [`PetService.cs`](reference/PetService.cs) | 업무 규칙 3개가 **서비스 계층에만** 있는 것. `AsNoTracking`, Projection |
+| 4 | [`Program.cs`](reference/Program.cs) | DI 등록 / 미들웨어 / 엔드포인트 **세 블록의 역할이 다른 것** |
+
+### 요청 하나가 코드를 통과하는 경로
+
+`POST /api/pets` 에 `{"name":"코코","species":"dog","ownerId":"8f3a..."}` 를 보냈을 때.
+
+```
+① Program.cs  app.UseExceptionHandler(...)         ← try 블록을 연다
+② Program.cs  pets.MapPost("/", async (CreatePetRequest req, IPetService svc, ...) => ...)
+                  ↑ JSON 이 CreatePetRequest 로 역직렬화됨
+                  ↑ IPetService 를 DI 컨테이너가 주입 (PetService 생성 → AppDbContext 생성)
+③ PetService.CreateAsync()
+     규칙 1: 보호자 존재 확인  → 없으면 NotFoundException
+     규칙 2: 생년월일 미래 검사 → DomainValidationException
+     규칙 3: 이름 중복 검사    → ConflictException
+     db.Pets.Add(pet)          ← 메모리에만
+     db.SaveChangesAsync()     ← 여기서 INSERT (트랜잭션 자동)
+④ Program.cs  Results.Created($"/api/pets/{pet.Id}", pet)   ← 201 + Location 헤더
+⑤ 미들웨어를 역순으로 통과하며 응답
+⑥ DI 컨테이너가 Scoped 객체 정리 → AppDbContext.Dispose()
+```
+
+**③에서 던진 예외가 ①에서 상태코드로 바뀐다.** 이 왕복이 이 실습의 핵심 구조다.
+서비스는 HTTP 를 모르고(`404` 라는 숫자가 `PetService.cs` 에 없다),
+컨트롤러는 업무 규칙을 모른다(`Program.cs` 에 "중복 이름 금지"가 없다).
+
+### 각 경우에 실제로 나가는 응답
+
+| 요청 | 상태 | 응답 본문 | 만드는 곳 |
+| --- | --- | --- | --- |
+| 정상 생성 | `201` | `{"id":"...","name":"코코",...}` + `Location: /api/pets/...` | `Results.Created` |
+| 이름 중복 | `409` | `{"status":409,"title":"충돌이 발생했습니다","detail":"'코코' 은(는) 이미 등록된 이름입니다.","traceId":"..."}` | `ConflictException` → 핸들러 |
+| 없는 보호자 | `404` | `{"status":404,"title":"찾을 수 없습니다","detail":"보호자 8f3a... 를 찾을 수 없습니다."}` | `NotFoundException` |
+| 생년월일 미래 | `400` | `{"status":400,"title":"입력이 올바르지 않습니다","detail":"생년월일이 미래입니다."}` | `DomainValidationException` |
+| `name` 빈 문자열 | `400` | `{"errors":{"Name":["The field Name must be a string with a minimum length of 1..."]}}` | **DataAnnotations 자동 검증** |
+| 조회 실패 | `404` | (본문 없음) | `Results.NotFound()` |
+| 삭제 성공 | `204` | (본문 없음) | `Results.NoContent()` |
+| 예상 못 한 예외 | `500` | `{"status":500,"title":"서버 오류","detail":null,"traceId":"0HN7..."}` | `_ =>` 분기 |
+
+**마지막 줄의 `"detail": null` 을 주목해라.** 500 에서만 detail 을 비운다.
+`ex.Message` 를 그대로 내보내면 연결 문자열이나 내부 경로가 샐 수 있어서,
+`traceId` 만 주고 실제 내용은 서버 로그에서 찾게 한다. *(`Program.cs` 의 주석 참고)*
+
+**`name` 빈 문자열만 응답 형태가 다른 것**도 포인트다. 이건 내 코드가 아니라
+`[Required, StringLength(50, MinimumLength = 1)]` 어트리뷰트를 보고 **프레임워크가 만든** 응답이다.
+형식 검증(DTO 어트리뷰트)과 업무 규칙 검증(서비스)이 다른 층에 있다는 뜻이다.
+
+### 읽고 나서 스스로 답해보기
+
+1. `PetService.cs` 어디에도 `404` 라는 숫자가 없다. 그런데 404 가 나간다. 어떻게?
+2. `AppDbContext.cs` 의 `HasQueryFilter(p => !p.IsDeleted)` 한 줄이 없으면 무슨 일이 생기나?
+3. `DeleteAsync` 에서 `pet.IsDeleted = true` 만 하고 `db.Update(pet)` 를 안 부른다. 왜 저장되나?
+4. `CreatePetRequest` 에 `Id` 필드를 추가하면 어떤 공격이 가능해지나?
+5. `ListAsync` 의 `Select(...)` 를 `Include(p => p.Owner)` 로 바꾸면 SQL 이 어떻게 달라지나?
+   *(→ `02-csharp-dotnet/03-ef-core.md` 3-2절 ②와 ③ 비교)*
+
+> 이 5개에 답할 수 있으면 **실행한 것과 거의 같은 값을 얻은 것이다.**
+> 나머지(아래 1~5절)는 손으로 해볼 때의 안내다.
+
+---
+
 ## 0. 준비
 
 > 💡 **이 실습은 집 윈도우에서 하는 걸 권한다.** .NET 은 윈도우가 1급 시민이고,

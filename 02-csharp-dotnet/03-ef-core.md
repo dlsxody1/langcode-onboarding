@@ -157,6 +157,200 @@ await db.Pets.Where(p => p.CreatedAt < cutoff).ExecuteDeleteAsync(ct);
 
 ---
 
+## 3-2. LINQ 가 SQL 로 어떻게 번역되는가 — 대조표
+
+**EF Core 를 이해한다는 건 이 대응 관계가 머리에 들어 있다는 뜻이다.**
+LINQ 를 외우는 게 아니라, LINQ 를 보면 SQL 이 보이는 상태가 목표다.
+
+> ⚠️ 아래 SQL 은 PostgreSQL(Npgsql) 기준의 **전형적인 형태**다. EF Core 버전·프로바이더에 따라
+> 별칭 이름이나 괄호 배치는 달라진다. 구조를 보는 용도로 읽어라.
+
+### ① 기본 조회
+
+```csharp
+await db.Pets.Where(p => p.Species == "dog").ToListAsync();
+```
+```sql
+SELECT p."Id", p."Name", p."Species", p."BirthDate", p."InternalMemo",
+       p."IsDeleted", p."CreatedAt", p."OwnerId"
+FROM pets AS p
+WHERE p."Species" = 'dog' AND NOT p."IsDeleted"    -- ← 글로벌 쿼리 필터가 자동으로 붙는다
+```
+
+**`NOT IsDeleted` 를 내가 안 썼는데 붙어 있다.** `HasQueryFilter` 의 효과다.
+멀티테넌시의 `tenant_id` 도 정확히 이 방식으로 강제된다. *(→ `01-backend-basics/04-auth.md`)*
+
+또 하나 — **`SELECT *` 가 아니라 컬럼을 전부 나열**한다. 즉 `InternalMemo` 같은
+안 쓸 컬럼까지 네트워크로 가져온다. 그래서 다음 항목이 중요하다.
+
+### ② Projection — 필요한 컬럼만
+
+```csharp
+await db.Pets.Select(p => new PetDto(p.Id, p.Name, p.Species, p.BirthDate, p.Owner.Name))
+             .ToListAsync();
+```
+```sql
+SELECT p."Id", p."Name", p."Species", p."BirthDate", o."Name"
+FROM pets AS p
+INNER JOIN owners AS o ON p."OwnerId" = o."Id"
+WHERE NOT p."IsDeleted"
+```
+
+- **컬럼이 5개만 나간다** (①은 8개)
+- `Include` 를 안 썼는데 **JOIN 이 생겼다** — `p.Owner.Name` 을 쓴 것만으로 EF 가 알아서 조인한다
+- 결과가 엔티티가 아니라 DTO 라서 **변경 추적도 안 한다** (`AsNoTracking` 불필요)
+
+**이래서 "Projection 이 거의 항상 정답"이라고 하는 것이다.**
+
+### ③ Include 와의 차이
+
+```csharp
+await db.Pets.Include(p => p.Owner).ToListAsync();
+```
+```sql
+SELECT p."Id", p."Name", p."Species", p."BirthDate", p."InternalMemo",
+       p."IsDeleted", p."CreatedAt", p."OwnerId",
+       o."Id", o."Name", o."Phone"                 -- ← Owner 의 모든 컬럼
+FROM pets AS p
+INNER JOIN owners AS o ON p."OwnerId" = o."Id"
+WHERE NOT p."IsDeleted"
+```
+
+같은 JOIN 인데 **양쪽 테이블의 전 컬럼**을 가져오고, 엔티티 두 종류를 **전부 추적**한다.
+`Owner.Name` 하나만 필요했다면 ②보다 명백히 손해다.
+
+### ④ 페이지네이션
+
+```csharp
+await db.Pets.AsNoTracking()
+    .OrderByDescending(p => p.CreatedAt).ThenBy(p => p.Id)
+    .Skip(40).Take(20)
+    .Select(p => new PetDto(...))
+    .ToListAsync();
+```
+```sql
+SELECT ...
+FROM pets AS p
+INNER JOIN owners AS o ON p."OwnerId" = o."Id"
+WHERE NOT p."IsDeleted"
+ORDER BY p."CreatedAt" DESC, p."Id"
+LIMIT 20 OFFSET 40
+```
+
+`Skip/Take` → `OFFSET/LIMIT`. **`ThenBy(p => p.Id)` 가 `ORDER BY` 두 번째 키로 들어간 걸 보라.**
+이게 없으면 `CreatedAt` 이 같은 행들의 순서가 매번 달라져 **페이지 간에 항목이 중복되거나 누락된다.**
+
+### ⑤ 존재 확인 — 행을 가져오지 않는다
+
+```csharp
+await db.Pets.AnyAsync(p => p.OwnerId == id && p.Name == name);
+```
+```sql
+SELECT EXISTS (
+    SELECT 1 FROM pets AS p
+    WHERE p."OwnerId" = @id AND p."Name" = @name AND NOT p."IsDeleted")
+```
+
+`SELECT 1` 이다. 데이터를 안 가져온다.
+**`(await db.Pets.CountAsync(...)) > 0` 이나 `.ToList().Any()` 로 쓰면 훨씬 비싸다.**
+
+### ⑥ 변경 추적 — UPDATE 는 바뀐 컬럼만
+
+```csharp
+var pet = await db.Pets.FirstAsync(p => p.Id == id);   // SELECT
+pet.Name = "루비";                                      // SQL 없음
+pet.IsDeleted = true;                                   // SQL 없음
+await db.SaveChangesAsync();                            // 여기서 UPDATE
+```
+```sql
+-- 1) FirstAsync 시점
+SELECT p."Id", p."Name", ... FROM pets AS p
+WHERE p."Id" = @id AND NOT p."IsDeleted" LIMIT 1
+
+-- 2) SaveChangesAsync 시점 — 트랜잭션으로 감싸서
+UPDATE pets SET "Name" = @p0, "IsDeleted" = @p1 WHERE "Id" = @id;
+--          ↑ 안 바꾼 Species, BirthDate 는 UPDATE 문에 없다
+```
+
+EF 가 조회 시점의 원본 값을 기억해 두고 **저장 시점에 비교해서 달라진 컬럼만** 문장을 만든다.
+`db.Update(pet)` 를 부를 필요가 없는 이유이자, `AsNoTracking()` 을 쓰면 이게 **안 되는** 이유다.
+
+### ⑦ 흔히 틀리는 것 — 인덱스를 죽이는 LINQ
+
+```csharp
+db.Pets.Where(p => p.Name.ToLower() == q.ToLower())
+```
+```sql
+WHERE LOWER(p."Name") = LOWER(@q)      -- ❌ Name 인덱스를 못 쓴다. Seq Scan
+```
+
+```csharp
+db.Pets.Where(p => EF.Functions.ILike(p.Name, q))     // PostgreSQL
+```
+```sql
+WHERE p."Name" ILIKE @q                 -- 여전히 앞 와일드카드면 못 쓰지만, 함수 래핑은 없앴다
+```
+
+**컬럼에 함수를 씌우는 순간 인덱스가 죽는다.** *(→ `01-backend-basics/03-database.md` 1절)*
+근본 해결은 함수 인덱스를 따로 만들거나, 정규화된 컬럼(`name_normalized`)을 하나 두는 것.
+
+### ⑧ 지연 실행 — `ToList()` 를 어디 찍느냐로 SQL 이 달라진다
+
+```csharp
+db.Pets.ToList().Where(p => p.Species == "dog")    // ❌
+```
+```sql
+SELECT ... FROM pets AS p WHERE NOT p."IsDeleted"
+-- 전 행을 앱 메모리로 가져온 뒤, C# 에서 필터링. 10만 행이면 10만 행을 다 읽는다
+```
+
+```csharp
+db.Pets.Where(p => p.Species == "dog").ToList()    // ✅
+```
+```sql
+SELECT ... FROM pets AS p WHERE p."Species" = 'dog' AND NOT p."IsDeleted"
+```
+
+**`IQueryable` 인 동안은 조건이 SQL 로 간다. `IEnumerable` 이 되는 순간 메모리 필터링이다.**
+`.ToList()`, `.ToArray()`, `.AsEnumerable()` 이 그 전환점이다.
+
+### ⑨ 번역이 안 되는 경우
+
+```csharp
+db.Pets.Where(p => MyHelper.IsAdult(p.BirthDate))   // ❌ 내 C# 메서드는 SQL 로 못 바꾼다
+```
+
+런타임에 이 예외가 난다.
+
+```
+System.InvalidOperationException: The LINQ expression 'DbSet<Pet>()
+    .Where(p => MyHelper.IsAdult(p.BirthDate))' could not be translated.
+Either rewrite the query in a form that can be translated, or switch to client
+evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable',
+'ToList', or 'ToListAsync'.
+```
+
+> **이 에러 메시지를 기억해 둬라.** EF Core 에서 가장 자주 만나는 예외 중 하나다.
+> "`ToList()` 를 넣으라"는 안내를 그대로 따르면 **전 행을 메모리로 가져오게 되므로**,
+> 대부분의 경우 조건을 LINQ 로 풀어 쓰는 게 맞는 대응이다.
+> (EF Core 3.0 부터 이런 경우를 조용히 메모리 평가하지 않고 예외로 막는다 — 좋은 변경이다)
+
+### 요약 — 이것만 기억하면 된다
+
+| LINQ | SQL | 함정 |
+| --- | --- | --- |
+| `Where` | `WHERE` | 컬럼에 함수 씌우면 인덱스 죽음 |
+| `Select(new Dto(...))` | 필요한 컬럼만 + 자동 JOIN | **기본으로 이걸 써라** |
+| `Include` | JOIN + 전 컬럼 + 추적 | 수정할 게 아니면 과하다 |
+| `OrderBy.Skip.Take` | `ORDER BY ... LIMIT ... OFFSET` | 타이브레이커 없으면 중복 |
+| `Any` | `SELECT EXISTS(SELECT 1 ...)` | `Count() > 0` 보다 싸다 |
+| `Count` | `SELECT COUNT(*)` | |
+| `First` / `FirstOrDefault` | `LIMIT 1` | `First` 는 없으면 **예외** |
+| 필드 변경 + `SaveChanges` | 바뀐 컬럼만 `UPDATE` | `AsNoTracking` 이면 안 됨 |
+| `ToList()` 위치 | 여기서 SQL 발행 | 앞에 찍으면 메모리 필터링 |
+
+---
+
 ## 4. N+1 잡기
 
 ```csharp
@@ -185,6 +379,66 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 ```
 
 콘솔에 SQL 이 줄줄이 찍힌다. **화면 하나 띄웠는데 쿼리가 40줄 나오면 그게 N+1 이다.**
+
+### 콘솔에 실제로 이렇게 찍힌다
+
+펫 20마리를 등록해 두고 목록 API 를 **한 번** 호출했을 때. (로그 형태는 EF Core 버전마다 조금 다르다)
+
+**N+1 인 코드:**
+
+```
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[], CommandType='Text']
+      SELECT p."Id", p."Name", p."Species", ... FROM pets AS p WHERE NOT p."IsDeleted"
+
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='8f3a...'], CommandType='Text']
+      SELECT o."Id", o."Name", o."Phone" FROM owners AS o WHERE o."Id" = @__p_0 LIMIT 1
+
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='c21b...'], CommandType='Text']
+      SELECT o."Id", o."Name", o."Phone" FROM owners AS o WHERE o."Id" = @__p_0 LIMIT 1
+
+      ... (똑같은 SELECT 가 18번 더) ...
+```
+
+**같은 모양의 `SELECT ... FROM owners ... LIMIT 1` 이 파라미터만 바뀌며 20번 반복**되는 것.
+이 패턴이 눈에 들어오면 N+1 을 찾은 것이다.
+
+**Projection 으로 고친 코드:**
+
+```
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[@__p_0='20'], CommandType='Text']
+      SELECT p."Id", p."Name", p."Species", p."BirthDate", o."Name"
+      FROM pets AS p
+      INNER JOIN owners AS o ON p."OwnerId" = o."Id"
+      WHERE NOT p."IsDeleted"
+      ORDER BY p."CreatedAt" DESC, p."Id"
+      LIMIT @__p_0
+```
+
+**쿼리 1개.** 21번 → 1번.
+
+### 왜 개발 환경에서는 안 잡히나
+
+위 로그의 괄호 안 숫자를 보라. **각 쿼리가 1ms 다.** 20번 해도 20ms 라 체감이 없다.
+
+운영에서는 셋이 겹친다.
+
+| | 로컬 | 운영 |
+| --- | --- | --- |
+| 네트워크 지연 | 0ms (같은 머신) | 1~5ms (DB 가 다른 호스트) |
+| 데이터 양 | 20건 | 2,000건 |
+| 동시 요청 | 1명 | 200명 |
+
+2,000건 × 3ms = **6초**. 여기에 동시 요청 200개가 각각 커넥션을 붙들면
+`Timeout expired... prior to obtaining a connection from the pool` 이 뜬다.
+*(→ `01-backend-basics/03-database.md` 4절)*
+
+**그래서 로컬에서 SQL 로그를 켜고 개수를 세는 것 말고는 방어 수단이 없다.**
+AI 에게 LINQ 를 짜달라고 하면 문법적으로 완벽한 코드를 주지만
+**그게 쿼리를 몇 번 발행하는지는 알려주지 않는다.** 이건 사람이 눈으로 봐야 한다.
 
 ### 카테시안 폭발
 

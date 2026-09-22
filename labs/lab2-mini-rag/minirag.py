@@ -346,24 +346,38 @@ def build_prompt(question: str, hits: list[Hit], budget: int = 4000) -> str:
 # 7. 평가 — 측정하지 않으면 조용히 나빠진다
 # ─────────────────────────────────────────────────────────────
 
-def _is_gold(hit: Hit, gold_phrase: str) -> bool:
-    """정답 판정: 그 청크 안에 '답이 적힌 문구'가 들어 있는가.
+def _is_gold(hit: Hit, gold_phrases: list[str]) -> bool:
+    """정답 판정: 그 청크 안에 '답이 적힌 문구'가 하나라도 들어 있는가.
 
-    문서 단위로 채점하면 문서가 3개뿐인 이 실습에서는 전부 만점이 나와 아무것도 구분하지 못한다.
-    청크 단위로, 그것도 '답이 실제로 들어 있는가'로 채점해야 청킹 전략 비교가 의미를 갖는다.
+    두 가지 설계 판단이 들어 있다.
+
+    ① 문서가 아니라 '청크' 단위로 채점한다.
+       문서 단위로 하면 문서가 3개뿐인 이 실습에서는 전부 만점이 나와 아무것도 구분하지 못한다.
+
+    ② 정답 문구를 '리스트'로 받는다.
+       한 질문에 답이 되는 청크가 여러 개일 수 있다. 예를 들어 "두 시간만 쓰고 싶다"는
+       규정 제17조(반반차)로도, 인사팀 FAQ 로도 답할 수 있다.
+       정답을 하나로만 잡아두면 멀쩡한 검색을 '실패'로 채점하게 되고,
+       그러면 있지도 않은 문제를 고치려고 시간을 쓰게 된다.
+       ← 평가셋을 처음 만들 때 실제로 가장 흔히 저지르는 실수다.
     """
-    return gold_phrase in hit.chunk.text
+    return any(g in hit.chunk.text for g in gold_phrases)
 
 
-def recall_at_k(hits: list[Hit], gold_phrase: str, k: int) -> float:
-    return 1.0 if any(_is_gold(h, gold_phrase) for h in hits[:k]) else 0.0
+def recall_at_k(hits: list[Hit], gold_phrases: list[str], k: int) -> float:
+    return 1.0 if any(_is_gold(h, gold_phrases) for h in hits[:k]) else 0.0
 
 
-def mrr(hits: list[Hit], gold_phrase: str) -> float:
+def mrr(hits: list[Hit], gold_phrases: list[str]) -> float:
     for rank, h in enumerate(hits, 1):
-        if _is_gold(h, gold_phrase):
+        if _is_gold(h, gold_phrases):
             return 1.0 / rank
     return 0.0
+
+
+def _gold_of(case: dict) -> list[str]:
+    g = case.get("gold_phrases") or case.get("gold_phrase")
+    return g if isinstance(g, list) else [g]
 
 
 def run_eval(rag: MiniRag, cases: list[dict], k: int = 5) -> dict:
@@ -371,10 +385,11 @@ def run_eval(rag: MiniRag, cases: list[dict], k: int = 5) -> dict:
     for mode in ("vector", "bm25", "hybrid"):
         r, m, misses = 0.0, 0.0, []
         for c in cases:
+            gold = _gold_of(c)
             hits = rag.search(c["question"], mode=mode, k=max(k, 10))
-            hit = recall_at_k(hits, c["gold_phrase"], k)
+            hit = recall_at_k(hits, gold, k)
             r += hit
-            m += mrr(hits, c["gold_phrase"])
+            m += mrr(hits, gold)
             if hit == 0.0:
                 misses.append(c["question"])
         n = len(cases) or 1
