@@ -50,6 +50,7 @@ export const CHAPTERS: Chapter[] = [
     dir: "03-rag",
     docs: [
       { slug: "intro", file: "README.md", title: "들어가며", kicker: "왜 파인튜닝이 아닌가" },
+      { slug: "foundations", file: "00-foundations.md", title: "기초: 벡터와 유사도", kicker: "임베딩 · 코사인 유사도" },
       { slug: "pipeline", file: "01-pipeline.md", title: "파이프라인" },
       { slug: "chunking-embedding", file: "02-chunking-embedding.md", title: "청킹과 임베딩" },
       { slug: "retrieval-quality", file: "03-retrieval-quality.md", title: "검색 품질" },
