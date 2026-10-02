@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import { CHAPTERS, type Chapter, type DocMeta } from "./chapters";
+import { annotateGlossary } from "./glossary";
 
 export * from "./chapters";
 
@@ -89,6 +90,6 @@ export function renderDoc(chapter: Chapter, doc: DocMeta): { html: string; headi
     return `<div class="table-scroll">${baseTable(token)}</div>`;
   };
 
-  const html = marked.parse(raw, { renderer, gfm: true, async: false }) as string;
+  const html = annotateGlossary(marked.parse(raw, { renderer, gfm: true, async: false }) as string);
   return { html, headings };
 }

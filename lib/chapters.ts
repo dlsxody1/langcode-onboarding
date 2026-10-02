@@ -104,6 +104,7 @@ export const CHAPTERS: Chapter[] = [
       { slug: "resilience", file: "03-resilience.md", title: "장애에 버티는 패턴" },
       { slug: "observability", file: "04-observability.md", title: "관측성" },
       { slug: "infra", file: "05-infra.md", title: "인프라 지도" },
+      { slug: "cosmos-db", file: "06-cosmos-db.md", title: "Cosmos DB", kicker: "파티션 키 · RU · 일관성" },
     ],
   },
 ];

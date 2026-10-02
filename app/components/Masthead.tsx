@@ -23,6 +23,9 @@ export function Masthead() {
         <Link href="/review" aria-current={on("/review")}>
           오답
         </Link>
+        <Link href="/glossary" aria-current={on("/glossary")}>
+          용어
+        </Link>
       </nav>
     </header>
   );

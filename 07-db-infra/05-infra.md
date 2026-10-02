@@ -1,6 +1,6 @@
 # 인프라 지도
 
-인프라를 직접 구축할 일은 당장 없을 수 있다. 하지만 **"이 요청이 어디를 거쳐 어디서 실행되는가"** 를 그릴 수 없으면,
+인프라를 직접 구축할 일은 당장 없을 수 있다. 하지만 **"이 요청이 어디를 거쳐 어디서 실행되는가"** 를 그릴 수 없으면
 "로컬에서는 되는데 운영에서 안 돼요"를 혼자 풀 수 없다. 이 문서는 그 지도를 그린다.
 
 ---
@@ -22,6 +22,17 @@ CDN / WAF            ② 정적 파일은 여기서 바로 응답. 공격 패턴
                      ④ 같은 코드가 여러 대에서 동시에 돈다
 ```
 
+그림에 나온 말들을 먼저 풀어 둔다.
+
+| 용어 | 뜻 |
+| --- | --- |
+| DNS | 도메인 이름을 IP 주소로 바꿔 주는 전화번호부. 결과를 한동안 캐시한다 |
+| CDN | 전 세계에 흩어 둔 캐시 서버. 사용자와 가까운 곳에서 파일을 대신 내려 준다 (`02-caching.md` 1절) |
+| WAF | Web Application Firewall. SQL 인젝션 같은 알려진 공격 패턴의 요청을 앞에서 걸러 낸다 |
+| TLS 종료 | HTTPS 암호화를 여기서 풀고 안쪽 서버로는 내부망 통신으로 넘긴다. 인증서도 여기에 둔다 |
+| 로드밸런서 | 들어온 요청을 여러 서버에 나눠 준다. 죽은 서버는 빼고 보낸다 (6절 헬스 체크) |
+| 게이트웨이 | 로드밸런서 역할에 인증 · 레이트 리밋 · 경로별 라우팅 같은 공통 기능을 더한 진입점 |
+
 | 구간 | 여기서 생기는 전형적인 문제 |
 | --- | --- |
 | ① DNS | 도메인을 바꿨는데 캐시 때문에 일부 사용자만 옛 주소로 간다 |
@@ -29,6 +40,12 @@ CDN / WAF            ② 정적 파일은 여기서 바로 응답. 공격 패턴
 | ③ 로드밸런서 | **SSE 스트리밍이 중간에 끊긴다** — 유휴 타임아웃·버퍼링 설정 (`05-realtime-ui/`) |
 | ③ 로드밸런서 | 서버가 보는 클라이언트 IP 가 전부 로드밸런서 IP 다 → `X-Forwarded-For` 를 읽어야 한다 |
 | ④ 서버 여러 대 | 메모리에 둔 것이 서버마다 다르다 (다음 절) |
+
+`X-Forwarded-For` 는 중간 프록시가 "원래 요청을 보낸 클라이언트 IP"를 적어 넘기는 헤더다.
+ASP.NET Core 에서는 `app.UseForwardedHeaders()` 미들웨어가 이 헤더를 읽어 `HttpContext.Connection.RemoteIpAddress` 를 진짜 IP 로 바꿔 준다.
+이 헤더는 클라이언트가 마음대로 써 보낼 수도 있다. 그래서 **신뢰하는 프록시(KnownProxies · KnownNetworks)를 지나온 값만** 믿도록 설정한다.
+
+> ❓ 입사 후 확인: 운영 환경에서 Forwarded Headers 미들웨어가 켜져 있나? 앞단 프록시는 무엇인가(Front Door? Application Gateway? Ingress?)
 
 ---
 
@@ -46,6 +63,9 @@ CDN / WAF            ② 정적 파일은 여기서 바로 응답. 공격 패턴
 | 업로드한 파일을 로컬 디스크에 | 다른 서버에서 못 찾는다 | Blob Storage |
 | `static` 변수에 저장한 상태 | 서버마다 다르고, 재시작하면 초기화 | 위 중 하나 |
 | SignalR 연결 | 서버 A 에 붙은 사용자에게 B 가 못 보낸다 | Redis 백플레인 · Azure SignalR Service |
+
+**무상태(stateless)** 는 서버가 요청과 요청 사이에 **자기 메모리에 아무것도 기억하지 않는** 성질이다. 같은 요청을 1번 서버가 받든 3번 서버가 받든 결과가 같다.
+순수 함수에 비유할 수 있다. 바깥 상태(DB · Redis)는 읽고 쓰지만 함수 안에 숨겨 둔 변수는 없다. 반대로 메모리에 기억을 쌓아 두는 서버는 상태가 있다(stateful)고 한다.
 
 **원칙: 서버는 언제든 죽고, 새로 뜨고, 개수가 바뀐다고 가정한다.**
 요청을 처리하는 데 필요한 상태는 전부 **서버 바깥**(DB · Redis · Blob)에 둔다. 그러면 서버는 그냥 "코드를 실행하는 상자"가 된다.
@@ -72,6 +92,7 @@ ENTRYPOINT ["dotnet", "MyApi.dll"]
 ```
 
 프론트로 치면 `npm run build` 결과물과 Node 런타임을 같이 포장한 것이다.
+2단계 빌드(multi-stage build)를 쓰는 이유는 크기와 보안이다. 컴파일러와 소스 코드는 첫 단계에만 있다. 최종 이미지에는 실행에 필요한 파일만 들어간다.
 
 | 용어 | 뜻 |
 | --- | --- |
@@ -79,6 +100,10 @@ ENTRYPOINT ["dotnet", "MyApi.dll"]
 | 컨테이너 | 이미지를 실행한 것. **꺼지면 안에 쓴 파일은 사라진다** → 2절 무상태 |
 | `docker compose` | 여러 컨테이너(API + Postgres + Redis)를 한 번에 띄우는 로컬 개발용 도구 |
 | Kubernetes (AKS) | 컨테이너 수백 개를 배치·재시작·확장하는 오케스트레이터 |
+
+이미지와 컨테이너의 관계는 **클래스와 인스턴스**와 같다. 이미지 하나로 컨테이너를 여러 개 띄울 수 있고 각 컨테이너 안에서 바뀐 것은 이미지에 반영되지 않는다.
+레지스트리는 이미지를 올리고 받는 저장소다. npm 레지스트리에 패키지를 `publish` 하고 `install` 하는 것과 같은 구조다. `myapi:1.4.2` 처럼 **태그**로 버전을 구분한다.
+컨테이너는 가상 머신(VM)과 달리 운영체제를 통째로 띄우지 않고 호스트의 커널을 나눠 쓴다. 그래서 몇 초 만에 뜨고 가볍다.
 
 README 의 `docker run ... pgvector/pgvector:pg17` 이 바로 이것이다. Postgres 를 설치하지 않고 이미지를 받아 실행했다.
 
@@ -96,6 +121,8 @@ README 의 `docker run ... pgvector/pgvector:pg17` 이 바로 이것이다. Post
 | **Container Apps** | 컨테이너를 올리면 확장·HTTPS 를 알아서 | 컨테이너 기반, Kubernetes 는 부담스러울 때 |
 | **AKS** (Kubernetes) | 직접 다 제어 | 서비스가 많고 전담 인원이 있을 때 |
 | **Functions** | 이벤트가 오면 함수 하나만 실행 | 큐 메시지 처리, 예약 작업 |
+
+프론트 경험에 대 보면 App Service · Container Apps 는 Vercel 에 가깝고, Functions 는 Vercel 의 서버리스 함수나 AWS Lambda 에 가깝다.
 
 ### 데이터를 두는 곳
 
@@ -119,9 +146,12 @@ README 의 `docker run ... pgvector/pgvector:pg17` 이 바로 이것이다. Post
 | **Application Insights** | 로그·트레이스·메트릭 (`04-observability.md`) |
 | **Front Door / API Management** | 전역 진입점 · WAF · 레이트 리밋 · API 게이트웨이 |
 
-**"관리형(managed)"의 의미:** 백업·패치·장애 조치·복제를 클라우드가 해 준다. 비싸지만, 그 일을 사람이 하는 비용보다는 싸다.
+**"관리형(managed)"의 의미:** 백업·패치·장애 조치·복제를 클라우드가 해 준다. 비싸지만 그 일을 사람이 하는 비용보다는 싸다.
+장애 조치(failover)는 주 서버가 죽었을 때 대기 서버로 자동 전환하는 것이다.
 
 > ❓ 입사 후 확인: API 는 어디서 도나(App Service? Container Apps? AKS?) 고객사 온프레미스 설치는 어떤 형태로 나가나(컨테이너 이미지? 설치 패키지?)
+
+온프레미스(on-premises)는 클라우드가 아니라 **고객사가 직접 가진 서버**에 설치해서 돌리는 방식이다. 보안 규정 때문에 데이터를 밖으로 못 내보내는 고객사가 이걸 요구한다.
 
 ---
 
@@ -139,6 +169,7 @@ README 의 `docker run ... pgvector/pgvector:pg17` 이 바로 이것이다. Post
 | 운영 | 환경 변수 · App Configuration | **Key Vault** |
 
 `02-csharp-dotnet/02-aspnet-core.md` 4절의 설정 시스템이 이 값들을 하나로 합쳐 준다. 코드는 어디서 왔는지 몰라도 된다.
+Next.js 의 `.env.local` 과 Vercel 환경 변수를 떠올리면 된다. 다른 점은 비밀값을 환경 변수에 평문으로 두지 않고 Key Vault 라는 전용 금고에서 꺼내 온다는 것이다.
 
 ### Managed Identity — 비밀번호 자체를 없앤다
 
@@ -150,7 +181,50 @@ README 의 `docker run ... pgvector/pgvector:pg17` 이 바로 이것이다. Post
 Azure 가 서버(App Service 등)에 **신분증**을 발급하고, DB · Key Vault · Blob 이 그 신분증을 확인한다.
 **코드와 설정 어디에도 비밀번호가 없다.** 유출될 비밀번호가 없으니 교체할 일도 없다. 새로 짜는 Azure 코드에서는 이게 기본값이다.
 
+신분증은 Entra ID 가 발급하는 짧은 수명의 토큰이다. 앱은 비밀번호 대신 이 토큰을 들고 Key Vault · Blob · DB 에 접근한다. 만료되면 Azure SDK 가 알아서 새로 받는다.
+코드에서는 보통 `DefaultAzureCredential` 로 쓴다.
+
+```csharp
+// Key Vault 의 비밀값을 설정 시스템에 합친다 (Azure.Extensions.AspNetCore.Configuration.Secrets + Azure.Identity)
+builder.Configuration.AddAzureKeyVault(
+    new Uri("https://my-vault.vault.azure.net/"),
+    new DefaultAzureCredential());
+
+// Key Vault 의 비밀 이름 "ConnectionStrings--Default" 가 설정 키 "ConnectionStrings:Default" 로 들어온다
+var cs = builder.Configuration.GetConnectionString("Default");
+```
+
+`DefaultAzureCredential` 은 실행 환경에 따라 자격 증명을 알아서 고른다. Azure 위에서는 Managed Identity 를 쓰고, 로컬에서는 개발자가 `az login` 이나 Visual Studio 로 로그인한 계정을 쓴다. 그래서 같은 코드가 로컬과 운영에서 둘 다 동작한다.
+
 **Git 에 비밀값을 커밋했다면** 커밋을 지우는 걸로 끝나지 않는다. 이미 누군가 받아 갔다고 가정하고 **즉시 키를 교체(rotate)** 한다.
+
+### 설정 값 검증 — 잘못된 설정은 시작할 때 터지게
+
+설정 키 이름에 오타가 있거나 운영 환경에 값을 안 넣으면 C# 설정 객체는 **조용히 기본값(`null`, `0`)** 을 갖는다. 그러면 첫 요청이 들어와서야 엉뚱한 곳에서 에러가 난다.
+옵션 클래스에 규칙을 달고 **앱이 시작할 때 검사**하게 하면 잘못된 배포가 아예 뜨지 않는다. 6절의 헬스 체크와 합치면 이런 배포는 트래픽을 받기 전에 걸러진다.
+
+```csharp
+public sealed class ErpOptions
+{
+    [Required, Url] public string BaseUrl { get; init; } = "";
+    [Range(1, 120)] public int TimeoutSeconds { get; init; } = 10;
+}
+
+builder.Services.AddOptions<ErpOptions>()
+    .BindConfiguration("Erp")          // appsettings 의 "Erp" 섹션을 묶는다
+    .ValidateDataAnnotations()         // [Required] · [Range] 검사
+    .ValidateOnStart();                // 첫 사용 때가 아니라 앱 시작 때 검사
+```
+
+zod 스키마로 `process.env` 를 앱 시작 시 한 번 파싱해 두는 것과 같은 습관이다.
+
+옵션을 꺼내 쓰는 인터페이스는 세 가지다.
+
+| 인터페이스 | 값이 언제 정해지나 | 쓰는 곳 |
+| --- | --- | --- |
+| `IOptions<T>` | 앱 시작 후 처음 읽을 때 한 번 | 대부분의 경우 |
+| `IOptionsSnapshot<T>` | 요청마다 다시 읽는다 (Scoped) | 요청 단위로 바뀐 설정을 반영해야 할 때 |
+| `IOptionsMonitor<T>` | 설정 파일이 바뀌면 알림을 받는다 (Singleton) | 재시작 없이 바뀌어야 하는 값 |
 
 ---
 
@@ -172,6 +246,8 @@ feature 브랜치 ─PR─▶ main ─▶ CI ─▶ dev ─▶ staging ─▶ pr
 
 ### 배포와 DB 마이그레이션의 순서
 
+**롤링 배포(rolling deployment)** 는 서버를 한꺼번에 바꾸지 않고 몇 대씩 차례로 새 버전으로 교체하는 방식이다. 서버 3대라면 1대를 내리고 새 버전으로 띄우고, 헬스 체크가 통과하면 다음 1대로 넘어간다. 서비스는 멈추지 않지만 그동안 구버전과 신버전이 같은 DB 를 같이 쓴다.
+
 배포 중에는 **구버전 서버와 신버전 서버가 동시에 돈다**(롤링 배포). 그래서:
 
 ```
@@ -191,7 +267,24 @@ app.MapHealthChecks("/health");
 ```
 
 로드밸런서는 이 주소를 주기적으로 찔러서 **응답이 없는 서버로는 요청을 보내지 않는다.**
-새 버전이 뜨자마자 죽으면 트래픽이 안 가므로, 배포 실패가 장애로 번지지 않는다.
+새 버전이 뜨자마자 죽으면 트래픽이 안 가므로 배포 실패가 장애로 번지지 않는다.
+
+헬스 체크를 두 가지로 나누기도 한다. Kubernetes · Container Apps 같은 환경이 이 구분을 쓴다.
+
+| 종류 | 묻는 것 | 실패하면 |
+| --- | --- | --- |
+| liveness (살아 있나) | 프로세스가 멈추지 않고 응답하나 | 컨테이너를 재시작한다 |
+| readiness (받을 준비가 됐나) | DB · Redis 같은 의존성까지 연결됐나 | 재시작하지 않고 트래픽만 잠시 뺀다 |
+
+```csharp
+builder.Services.AddHealthChecks()
+    .AddNpgSql(connectionString, tags: ["ready"]);
+
+app.MapHealthChecks("/health/live",  new HealthCheckOptions { Predicate = _ => false });              // 의존성 검사 없이 "응답만 하면 OK"
+app.MapHealthChecks("/health/ready", new HealthCheckOptions { Predicate = c => c.Tags.Contains("ready") });
+```
+
+liveness 에 DB 검사를 넣으면 DB 가 잠깐 느려졌을 때 멀쩡한 서버 전부가 재시작되는 사고가 난다. 그래서 의존성 검사는 readiness 에만 둔다.
 
 ---
 
@@ -208,13 +301,24 @@ PostgreSQL 기본 max_connections = 100
 **서버를 늘렸더니 DB 가 커넥션을 거부한다.** 수평 확장할 때 가장 흔히 놓치는 계산이다.
 대응: 풀 크기를 서버 수에 맞춰 줄이거나, 앞에 **PgBouncer** 같은 커넥션 풀러를 둔다.
 
+(`max_connections` 100 은 PostgreSQL 자체의 기본값이다. Azure Flexible Server 는 서버 크기(SKU)에 따라 기본값이 다르다.)
+
+PostgreSQL 은 커넥션 하나마다 서버 프로세스를 하나씩 띄운다. 그래서 커넥션 수를 무작정 늘릴 수 없다. 메모리를 많이 먹고 오히려 느려진다.
+**PgBouncer** 는 앱과 PostgreSQL 사이에 서서 커넥션을 대신 관리하는 프로그램이다. 앱 서버들이 커넥션을 1,000개 열어도 PgBouncer 는 실제 DB 쪽 커넥션을 수십 개만 유지하고, 그걸 돌려 쓴다.
+Npgsql 의 커넥션 풀이 **서버 한 대 안에서** 커넥션을 재사용한다면, PgBouncer 는 **서버 여러 대에 걸쳐** 재사용한다. Azure Flexible Server 에는 PgBouncer 가 내장돼 있어서 설정으로 켤 수 있다.
+
+주의할 점이 하나 있다. PgBouncer 를 트랜잭션 단위로 커넥션을 돌려 쓰는 모드(transaction pooling)로 쓰면, 트랜잭션이 끝날 때마다 DB 커넥션이 다른 클라이언트에게 넘어간다. 그래서 `SET` 으로 바꾼 세션 설정, `LISTEN`, advisory lock 처럼 **세션에 붙는 기능**은 다음 쿼리까지 이어지지 않는다.
+
+> ❓ 입사 후 확인: 운영 DB 앞에 PgBouncer(또는 내장 풀러)가 있나? 있다면 어떤 풀링 모드인가?
+
 ### 읽기 복제본 (Read Replica)
 
 ```
 쓰기 ──▶ Primary ──(복제, 수십 ms ~ 수 초 지연)──▶ Replica ◀── 읽기
 ```
 
-읽기를 복제본으로 보내면 Primary 부하가 준다. 대가는 **복제 지연**이다.
+**읽기 복제본**은 주 DB(Primary)의 변경 내용을 계속 받아 적는 읽기 전용 사본이다. 조회가 많은 서비스에서 읽기를 여러 사본으로 나눠 주 DB 의 부담을 던다.
+읽기를 복제본으로 보내면 Primary 부하가 준다. 대가는 **복제 지연**이다. 주 DB 에 쓴 내용이 복제본에 도착하기까지 걸리는 시간이다.
 
 ```
 사용자가 이름을 수정 (Primary 에 씀)
@@ -233,6 +337,13 @@ PostgreSQL 기본 max_connections = 100
 | **RPO** | 최대 얼마만큼의 데이터를 잃어도 되나 (5분? 하루?) |
 | **RTO** | 복구하는 데 최대 얼마나 걸려도 되나 |
 
+두 용어를 예로 풀면 이렇다.
+
+- **RPO**(Recovery Point Objective, 복구 시점 목표) 5분: 사고가 나면 **최대 5분 전 데이터까지는 살린다**는 약속이다. 그러려면 최소 5분마다 백업이나 복제가 돼 있어야 한다. 하루 한 번 백업만 있으면 RPO 는 하루다.
+- **RTO**(Recovery Time Objective, 복구 시간 목표) 1시간: 사고가 나고 **1시간 안에 서비스를 다시 돌린다**는 약속이다. 백업이 있어도 복원에 6시간이 걸린다면 RTO 1시간은 못 지킨다.
+
+RPO 는 "얼마나 과거로 돌아가나(데이터 손실량)", RTO 는 "얼마나 오래 멈춰 있나(중단 시간)"다. 둘 다 짧을수록 비싸다. 그래서 고객사 계약서에 숫자로 들어간다.
+
 **복구해 본 적 없는 백업은 백업이 아니다.** 실제로 복원이 되는지 주기적으로 확인한다.
 
 > ❓ 입사 후 확인: 운영 DB 에 개발자가 직접 접근할 수 있나? 데이터를 고쳐야 할 때의 절차는? 백업 보관 기간은?
@@ -245,6 +356,7 @@ PostgreSQL 기본 max_connections = 100
 [ ] 서버 메모리에 상태를 두지 않았나? (세션 · 캐시 · 카운터 · 큐 · 파일 · static)    → 2절
 [ ] 환경마다 다른 값을 코드에 박아 두지 않았나?                                   → 5절
 [ ] 비밀값이 환경에 실제로 들어가 있나? (Key Vault 권한 · Managed Identity)        → 5절
+[ ] 설정 값이 빠졌을 때 앱이 시작 단계에서 실패하나? (ValidateOnStart)             → 5절
 [ ] 마이그레이션이 운영에 적용됐나? 구버전 코드와 공존 가능한가?                    → 6절
 [ ] 로드밸런서·프록시가 스트리밍을 버퍼링하거나 끊지 않나?                         → 1절
 [ ] 클라이언트 IP 를 X-Forwarded-For 로 읽고 있나?                              → 1절
@@ -262,3 +374,6 @@ PostgreSQL 기본 max_connections = 100
 6. API 서버를 3대에서 10대로 늘렸더니 DB 에러가 났다. 무엇을 계산해 봐야 하나?
 7. 이름을 수정하고 저장했는데 목록에는 옛 이름이 보인다. 읽기 복제본과 어떤 관계가 있나?
 8. Git 에 API 키를 커밋했다는 걸 발견했다. 커밋을 지우면 끝나나?
+9. 운영 환경에 `Erp:BaseUrl` 설정을 빠뜨리고 배포했다. `ValidateOnStart` 가 있을 때와 없을 때 무엇이 다른가?
+10. liveness 헬스 체크에 DB 연결 검사를 넣었다. DB 가 30초 동안 느려지면 무슨 일이 생기나?
+11. "RPO 5분, RTO 1시간"을 사용자 입장의 말로 풀어 보라. 하루 한 번 백업만 있다면 어느 쪽을 못 지키나?

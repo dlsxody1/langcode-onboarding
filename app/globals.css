@@ -510,3 +510,85 @@ a:hover { text-decoration-color: var(--pen); }
   letter-spacing: 0.22em; color: var(--ink-faint); margin: 0 0 0.6rem;
 }
 .score__sub { font-family: var(--serif); font-size: var(--step-1); margin: 0 0 0.9rem; }
+
+
+/* ── 용어 툴팁 ─────────────────────────────────────────────
+   문제지의 연필 힌트(.hint)와 같은 연필색. 빨간 펜은 채점에만 쓴다.
+   JS 없이 hover / focus 로 연다. tabindex 가 있어 터치에서는 탭하면 열린다. */
+.term {
+  position: relative;
+  text-decoration: underline dotted var(--pencil);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  cursor: help;
+  border-radius: 2px;
+}
+.term:focus-visible { outline: 2px solid var(--pencil); outline-offset: 2px; }
+.term__tip {
+  position: absolute; left: 0; bottom: calc(100% + 0.45rem); z-index: 20;
+  width: min(20rem, 78vw);
+  display: block;
+  background: var(--paper-raised);
+  border: 1px solid var(--pencil);
+  border-left: 3px solid var(--pencil);
+  padding: 0.65rem 0.8rem;
+  font-family: var(--sans); font-size: var(--step--1); font-weight: 400;
+  line-height: 1.66; color: var(--ink-soft);
+  text-decoration: none; white-space: normal; text-align: left;
+  box-shadow: 0 1px 0 var(--rule);
+  opacity: 0; visibility: hidden; translate: 0 0.25rem;
+  transition: opacity 0.14s var(--ease), translate 0.14s var(--ease), visibility 0.14s;
+  pointer-events: none;
+}
+.term__tip strong { display: block; color: var(--ink); font-weight: 600; margin-bottom: 0.15rem; }
+.term__tip a {
+  display: inline-block; margin-top: 0.35rem;
+  color: var(--pencil); font-size: 0.92em; text-decoration: none;
+}
+.term__tip a:hover { text-decoration: underline; }
+.term:hover > .term__tip,
+.term:focus-within > .term__tip { opacity: 1; visibility: visible; translate: 0 0; pointer-events: auto; }
+/* 툴팁과 단어 사이 틈으로 마우스가 지나가도 닫히지 않게 다리를 놓는다 */
+.term__tip::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 0.5rem; }
+
+/* 좁은 화면: 단어 위치에 띄우면 화면 밖으로 나가므로 하단에 고정한다 */
+@media (max-width: 40rem) {
+  .term__tip {
+    position: fixed; left: var(--gut); right: var(--gut); bottom: 1rem; top: auto;
+    width: auto;
+  }
+  .term__tip::after { display: none; }
+}
+
+/* ── 용어 사전 페이지 ───────────────────────────────────── */
+.glossary__index {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem;
+  padding: 0.8rem 0; margin-bottom: 1.6rem;
+  border-block: 1px solid var(--rule);
+  font-family: var(--serif); font-size: var(--step-1);
+}
+.glossary__index a { color: var(--ink-soft); text-decoration: none; }
+.glossary__index a:hover { color: var(--pencil); }
+.glossary__group { margin-bottom: 2.4rem; scroll-margin-top: 1.5rem; }
+.glossary__group h2 {
+  font-family: var(--serif); font-size: var(--step-2); font-weight: 700;
+  margin: 0 0 0.6rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 1.5rem;
+}
+.glossary__group dl { margin: 0; }
+.glossary__item {
+  display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr; gap: 0.3rem 1.4rem;
+  padding: 0.75rem 0; border-bottom: 1px solid var(--rule-soft);
+  scroll-margin-top: 1.5rem;
+}
+.glossary__item:target { background: var(--pencil-wash); }
+.glossary__item dt { font-weight: 600; color: var(--ink); }
+.glossary__item dd { margin: 0; color: var(--ink-soft); line-height: 1.72; }
+.glossary__item dd a {
+  display: block; margin-top: 0.25rem;
+  font-size: var(--step--1); color: var(--pencil); text-decoration: none;
+}
+.glossary__item dd a:hover { text-decoration: underline; }
+@media (max-width: 34rem) {
+  .glossary__item { grid-template-columns: 1fr; }
+}

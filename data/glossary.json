@@ -1,0 +1,1918 @@
+[
+  {
+    "id": "csharp",
+    "term": "C#",
+    "aliases": [],
+    "def": "마이크로소프트가 만든 정적 타입 언어. TypeScript 를 만든 사람(앤더스 헤일스버그)이 설계해서 문법이 꽤 닮았다. 회사 백엔드 코드가 이걸로 쓰여 있다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "dotnet",
+    "term": ".NET",
+    "aliases": [],
+    "def": "C# 코드를 실행하는 런타임과 표준 라이브러리 묶음. Node.js 가 JS 를 돌리듯 .NET 이 C# 을 돌린다. 지금은 윈도우·맥·리눅스 모두에서 동작한다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "aspnet-core",
+    "term": "ASP.NET Core",
+    "aliases": [],
+    "def": ".NET 의 웹 서버 프레임워크. Express·NestJS 자리에 해당한다. 라우팅·미들웨어·DI·인증을 기본으로 제공한다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "blazor",
+    "term": "Blazor",
+    "aliases": [],
+    "def": "C# 로 웹 UI 를 만드는 .NET 프레임워크. React 대신 C# 컴포넌트를 쓴다고 보면 된다. 프론트를 Next.js 로 하는 팀이라면 관리자 도구 정도에서만 만난다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "azure",
+    "term": "Azure",
+    "aliases": [],
+    "def": "마이크로소프트의 클라우드. AWS 와 같은 자리다. 서버·DB·스토리지·AI 모델을 빌려 쓴다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "cosmos-db",
+    "term": "Cosmos DB",
+    "aliases": [
+      "CosmosDB"
+    ],
+    "def": "Azure 의 관리형 문서형(NoSQL) DB. JSON 문서를 파티션 키로 나눠 저장하고, 처리량을 RU 로 미리 산다. 여러 리전 복제와 저지연 읽기가 강점이다.",
+    "doc": "07-db-infra/cosmos-db"
+  },
+  {
+    "id": "power-bi",
+    "term": "Power BI",
+    "aliases": [],
+    "def": "마이크로소프트의 대시보드·리포트 도구. DB 를 연결해 차트를 만든다. 개발자보다는 기획·영업이 보는 숫자 화면에 쓰인다.",
+    "doc": "07-db-infra/cosmos-db"
+  },
+  {
+    "id": "sendgrid",
+    "term": "SendGrid",
+    "aliases": [],
+    "def": "이메일 발송 API 서비스. 회원가입 인증·알림 메일을 직접 메일 서버 없이 HTTP 호출 한 번으로 보낸다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "partition-key",
+    "term": "파티션 키",
+    "aliases": [],
+    "def": "Cosmos DB 가 데이터를 여러 서버에 나눠 담는 기준 필드. 컨테이너를 만들 때 정하고 바꿀 수 없다. 자주 하는 조회에 들어가는 값으로 고른다.",
+    "doc": "07-db-infra/cosmos-db"
+  },
+  {
+    "id": "request-unit",
+    "term": "RU (Request Unit)",
+    "aliases": [
+      "RU",
+      "Request Unit"
+    ],
+    "def": "Cosmos DB 의 처리 비용 단위. 1KB 문서를 id 와 파티션 키로 읽으면 약 1 RU. 초당 RU 를 넘으면 429 가 돌아온다.",
+    "doc": "07-db-infra/cosmos-db"
+  },
+  {
+    "id": "change-feed",
+    "term": "Change Feed",
+    "aliases": [],
+    "def": "Cosmos DB 컨테이너에 일어난 변경을 순서대로 흘려주는 스트림. 이걸 구독해 검색 인덱스나 임베딩을 따라 갱신한다.",
+    "doc": "07-db-infra/cosmos-db"
+  },
+  {
+    "id": "middleware",
+    "term": "미들웨어",
+    "aliases": [],
+    "def": "모든 요청이 컨트롤러에 닿기 전후에 줄줄이 지나가는 공통 처리 함수. Express 의 app.use 와 거의 같고, 등록 순서가 곧 실행 순서다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "reverse-proxy",
+    "term": "리버스 프록시",
+    "aliases": [],
+    "def": "바깥 요청을 먼저 받아 뒤쪽 서버로 넘겨주는 서버. nginx, Azure App Gateway 등. HTTPS 를 풀고 여러 서버로 나눠 보내는 일을 맡는다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "kestrel",
+    "term": "Kestrel",
+    "aliases": [],
+    "def": "ASP.NET Core 앱 안에 들어 있는 HTTP 서버. dotnet run 하면 뜨는 것으로, next dev 가 띄우는 Node 서버와 같은 자리다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "endpoint",
+    "term": "엔드포인트",
+    "aliases": [],
+    "def": "'이 경로 + 이 메서드면 이 함수'로 연결된 최종 처리기. 컨트롤러 메서드(액션) 하나, Next.js route.ts 의 GET 함수 하나에 해당한다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "model-binding",
+    "term": "모델 바인딩",
+    "aliases": [],
+    "def": "URL 경로·쿼리스트링·바디에서 값을 꺼내 타입을 맞춰 메서드 파라미터에 채워 주는 과정. /pets/42 의 \"42\" 가 int id 로 들어간다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "idempotency",
+    "term": "멱등성",
+    "aliases": [
+      "멱등"
+    ],
+    "def": "같은 요청을 여러 번 보내도 결과 상태가 한 번 보낸 것과 같은 성질. PUT·DELETE 는 멱등, POST 는 두 번 보내면 두 건이 생긴다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "race-condition",
+    "term": "경쟁 상태",
+    "aliases": [
+      "race condition"
+    ],
+    "def": "여러 스레드가 같은 값을 동시에 읽고 쓰다가 결과가 실행 타이밍에 따라 달라지는 버그. 두 요청이 _count++ 를 하면 1 만 늘 수 있다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "thread-pool",
+    "term": "스레드 풀",
+    "aliases": [],
+    "def": "서버가 미리 만들어 두고 요청마다 빌려 쓰는 스레드 묶음. 동기 코드로 스레드를 오래 묶으면 풀이 바닥나 요청이 줄을 선다(고갈).",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "throughput",
+    "term": "처리량",
+    "aliases": [
+      "throughput"
+    ],
+    "def": "단위 시간에 처리하는 요청 수. 한 요청의 응답 속도와는 다른 지표로, C# 서버의 await 는 주로 이것을 올리려고 쓴다.",
+    "doc": "01-backend-basics/request-lifecycle"
+  },
+  {
+    "id": "dependency-injection",
+    "term": "의존성 주입",
+    "aliases": [
+      "DI"
+    ],
+    "def": "필요한 객체를 클래스 안에서 new 하지 않고 생성자 파라미터로 받는 방식. 테스트 때 가짜로 바꿔 끼우기 쉽고 생성 방법이 바뀌어도 쓰는 쪽은 그대로다.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "di-container",
+    "term": "DI 컨테이너",
+    "aliases": [],
+    "def": "Program.cs 에 등록된 '인터페이스 → 구현' 목록을 보고 필요한 객체를 의존 순서대로 만들어 꽂아 주는 프레임워크 부품. IServiceProvider.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "service-lifetime",
+    "term": "생명주기 (Transient·Scoped·Singleton)",
+    "aliases": [
+      "생명주기",
+      "Scoped",
+      "Singleton",
+      "Transient"
+    ],
+    "def": "DI 컨테이너가 객체를 언제 새로 만드나. Transient 는 달라고 할 때마다, Scoped 는 HTTP 요청마다 하나, Singleton 은 앱 전체에 하나.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "captive-dependency",
+    "term": "captive dependency",
+    "aliases": [],
+    "def": "오래 사는 객체(Singleton)가 짧게 살아야 할 객체(Scoped DbContext)를 생성자로 받아 앱이 끝날 때까지 붙잡는 버그. 스코프를 직접 열어 해결한다.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "thread-safe",
+    "term": "스레드 안전",
+    "aliases": [],
+    "def": "여러 스레드가 동시에 불러도 값이 꼬이지 않는 성질. Singleton 으로 등록하는 클래스는 이래야 하고, DbContext 는 스레드 안전하지 않다.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "unit-of-work",
+    "term": "Unit of Work",
+    "aliases": [],
+    "def": "한 작업 동안 쌓인 변경을 마지막에 한 번에 저장(커밋)하는 패턴. EF Core 에서는 DbContext 와 SaveChangesAsync 가 이 역할을 한다.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "entity",
+    "term": "엔티티",
+    "aliases": [],
+    "def": "DB 테이블 한 행을 그대로 옮긴 C# 클래스. EF Core 가 이걸 보고 테이블을 읽고 쓴다. API 응답에는 엔티티 대신 DTO 를 쓴다.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "over-posting",
+    "term": "over-posting",
+    "aliases": [],
+    "def": "요청 DTO 에 TenantId·Id 처럼 클라이언트가 정하면 안 되는 필드를 둬서, 클라이언트가 그 값을 채워 남의 데이터를 건드릴 수 있는 취약점.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "keyed-services",
+    "term": "keyed services",
+    "aliases": [],
+    "def": ".NET 8 부터 같은 인터페이스의 구현 여러 개를 이름(키)으로 구분해 등록하고 꺼내 쓰는 DI 기능. 고객사별 어댑터 선택에 쓸 수 있다.",
+    "doc": "01-backend-basics/layers-and-di"
+  },
+  {
+    "id": "b-tree",
+    "term": "B-Tree",
+    "aliases": [],
+    "def": "정렬된 값을 여러 단의 나무 모양으로 쌓은 인덱스 구조. 100만 행이어도 3~4단이라 페이지 몇 개만 읽고 원하는 행을 찾는다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "composite-index",
+    "term": "복합 인덱스",
+    "aliases": [],
+    "def": "컬럼 여러 개를 순서대로 묶은 인덱스. (성, 이름) 순 전화번호부처럼 앞 컬럼 없이 뒤 컬럼만으로는 찾지 못한다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "selectivity",
+    "term": "선택도",
+    "aliases": [],
+    "def": "조건 하나로 행이 얼마나 많이 걸러지나. 이메일처럼 값이 다양하면 높고, 값이 3개뿐인 status 는 낮다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "execution-plan",
+    "term": "실행 계획",
+    "aliases": [
+      "query plan"
+    ],
+    "def": "DB 가 SQL 을 어떤 순서와 방법(전체 훑기, 인덱스 등)으로 처리할지 세운 계획표. PostgreSQL 은 EXPLAIN ANALYZE 로 확인한다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "partial-index",
+    "term": "부분 인덱스",
+    "aliases": [],
+    "def": "WHERE status = 'queued' 처럼 조건에 맞는 행만 담은 인덱스. 늘 일부만 찾는 대기열 조회에 맞고, 작아서 빠르고 쓰기 부담도 적다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "isolation-level",
+    "term": "격리 수준",
+    "aliases": [],
+    "def": "동시에 도는 트랜잭션끼리 서로의 변경을 얼마나 보게 할지 정하는 설정. PostgreSQL 기본은 Read Committed 다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "optimistic-concurrency",
+    "term": "낙관적 동시성",
+    "aliases": [],
+    "def": "락 없이 진행하다가 저장 순간 '읽은 뒤 누가 바꿨나'를 버전 값으로 확인하는 방식. 바뀌었으면 예외를 내고 409 로 알린다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "n-plus-one",
+    "term": "N+1",
+    "aliases": [],
+    "def": "목록 쿼리 1번 뒤에 항목마다 쿼리를 1번씩 더 보내 쿼리가 N+1 번이 되는 문제. 로컬에선 안 느껴지고 운영에서 터진다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "change-tracking",
+    "term": "변경 추적",
+    "aliases": [
+      "change tracking"
+    ],
+    "def": "EF Core 가 가져온 엔티티의 원래 값을 기억해 두고 SaveChanges 때 비교해 바뀐 것만 UPDATE 하는 기능. 조회 전용이면 AsNoTracking 으로 끈다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "deferred-execution",
+    "term": "지연 실행",
+    "aliases": [],
+    "def": "LINQ 쿼리는 ToListAsync 같은 실행 메서드를 부를 때까지 SQL 을 보내지 않는다. 쿼리 빌더에 조건을 이어 붙이다 마지막에 await 하는 것과 같다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "connection-pool",
+    "term": "커넥션 풀",
+    "aliases": [],
+    "def": "DB 연결을 미리 열어 두고 쿼리할 때 빌렸다 반납하는 대여소. Npgsql 기본 최대 100개이고, 다 차면 다음 요청은 기다리다 타임아웃 난다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "keyset-pagination",
+    "term": "keyset 페이지네이션",
+    "aliases": [
+      "keyset"
+    ],
+    "def": "'마지막으로 본 값보다 다음 것 20개'로 페이지를 넘기는 방식. 몇 페이지째든 일정하게 빠르고, 새 데이터가 끼어도 중복·누락이 없다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "expand-contract",
+    "term": "확장/수축 패턴",
+    "aliases": [
+      "확장/수축"
+    ],
+    "def": "컬럼 변경을 '새 컬럼 추가 → 양쪽에 쓰기 → 새 컬럼 읽기 → 옛 컬럼 삭제'로 나눠 배포하는 방법. 구버전·신버전 앱이 함께 돌아도 안 깨진다.",
+    "doc": "01-backend-basics/database"
+  },
+  {
+    "id": "claim",
+    "term": "클레임",
+    "aliases": [],
+    "def": "토큰 안에 담긴 사용자에 대한 사실 한 줄. sub=user-123, tid=tenant-abc, role=Vet 같은 키-값으로, 서버는 이걸 보고 누구인지·무엇을 할 수 있는지 판단한다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "refresh-token",
+    "term": "Refresh Token",
+    "aliases": [],
+    "def": "짧게 사는 Access Token 이 만료됐을 때 새로 받는 데 쓰는 긴 수명 토큰. 서버에 저장해 두므로 지우면 바로 취소된다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "idp",
+    "term": "IdP",
+    "aliases": [],
+    "def": "Identity Provider. 사용자 계정을 관리하고 로그인을 대신 처리해 토큰을 발급하는 쪽. 구글, Microsoft Entra ID, 고객사 사내 계정 시스템 등.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "rbac",
+    "term": "RBAC",
+    "aliases": [],
+    "def": "역할 기반 접근 제어. 사용자에게 Admin·Editor 같은 역할을 주고 역할에 권한을 붙인다. '자기 문서만' 같은 데이터 의존 규칙은 표현 못 한다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "tenant",
+    "term": "테넌트",
+    "aliases": [],
+    "def": "한 시스템을 함께 쓰는 고객사 하나. 멀티테넌시는 여러 고객사가 같은 시스템을 쓰되 서로의 데이터는 절대 못 보게 만드는 구조다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "global-query-filter",
+    "term": "글로벌 쿼리 필터",
+    "aliases": [],
+    "def": "EF Core 에서 엔티티의 모든 쿼리에 자동으로 붙는 조건. tenant_id 조건을 걸어 두면 개발자가 빠뜨려도 SQL 에 붙는다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "rls",
+    "term": "RLS",
+    "aliases": [
+      "Row Level Security"
+    ],
+    "def": "Row Level Security. PostgreSQL 이 테이블에 직접 '이 조건의 행만 보여 준다'는 규칙을 거는 기능. 앱 코드가 실수해도 DB 가 막는다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "idor",
+    "term": "IDOR",
+    "aliases": [],
+    "def": "URL 의 ID 만 바꾸면 남의 데이터가 열리는 취약점. 로그인만 확인하고 '이게 이 사용자의 것인가'를 검사하지 않을 때 생긴다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "ssrf",
+    "term": "SSRF",
+    "aliases": [],
+    "def": "사용자가 준 URL 로 서버가 대신 요청하게 만들어 서버만 닿는 내부망·클라우드 메타데이터 주소를 엿보는 공격. 허용 목록으로 막는다.",
+    "doc": "01-backend-basics/auth"
+  },
+  {
+    "id": "idempotency-key",
+    "term": "Idempotency-Key",
+    "aliases": [],
+    "def": "클라이언트가 POST 에 붙이는 고유 키 헤더. 서버는 같은 키가 다시 오면 새로 실행하지 않고 처음 결과를 돌려줘 재시도를 안전하게 만든다.",
+    "doc": "01-backend-basics/long-running-jobs"
+  },
+  {
+    "id": "dead-letter-queue",
+    "term": "DLQ",
+    "aliases": [
+      "dead letter"
+    ],
+    "def": "Dead Letter Queue. 정해진 횟수만큼 재시도해도 실패한 메시지를 옮겨 두는 별도 큐. 원래 큐가 막히지 않게 하고 사람이 나중에 원인을 본다.",
+    "doc": "01-backend-basics/long-running-jobs"
+  },
+  {
+    "id": "exponential-backoff",
+    "term": "지수 백오프",
+    "aliases": [],
+    "def": "재시도 간격을 1·2·4·8초처럼 두 배씩 늘리는 것. 지터는 여기에 무작위 값을 섞어 모두가 같은 순간에 몰려 재시도하지 않게 한다.",
+    "doc": "01-backend-basics/long-running-jobs"
+  },
+  {
+    "id": "at-least-once",
+    "term": "at-least-once",
+    "aliases": [],
+    "def": "메시지를 최소 한 번은 전달하되 두 번 이상 갈 수도 있다는 큐의 약속. 그래서 같은 잡이 두 번 실행돼도 괜찮게 핸들러를 짜야 한다.",
+    "doc": "01-backend-basics/long-running-jobs"
+  },
+  {
+    "id": "circuit-breaker",
+    "term": "서킷 브레이커",
+    "aliases": [
+      "서킷브레이커"
+    ],
+    "def": "외부 API 가 계속 실패하면 일정 시간 호출 자체를 끊었다가 시험 삼아 다시 붙여 보는 장치. 누전 차단기에서 따온 이름이다.",
+    "doc": "01-backend-basics/long-running-jobs"
+  },
+  {
+    "id": "orm",
+    "term": "ORM",
+    "aliases": [],
+    "def": "DB 테이블의 행을 코드의 객체로 바꿔 주는 라이브러리. Prisma·TypeORM 과 같은 종류이고 .NET 에서는 EF Core 가 표준이다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "assembly",
+    "term": "어셈블리",
+    "aliases": [],
+    "def": "프로젝트 하나를 빌드해서 나온 .dll 파일. internal 은 같은 어셈블리 안에서만 보인다는 뜻이다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "dotnet-sdk",
+    "term": "SDK (.NET)",
+    "aliases": [
+      "SDK"
+    ],
+    "def": "dotnet build·dotnet ef 같은 개발 도구까지 포함한 묶음. 운영 서버에는 실행만 하는 런타임을 둔다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "lts",
+    "term": "LTS",
+    "aliases": [],
+    "def": "Long Term Support. 3년 지원하는 .NET 버전으로 짝수 버전(.NET 8, 10)이 해당한다. 기업 코드는 대개 LTS 에 머문다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "nuget",
+    "term": "NuGet",
+    "aliases": [],
+    "def": ".NET 의 패키지 매니저이자 패키지 저장소. npm 과 같은 자리다.",
+    "doc": "02-csharp-dotnet/intro"
+  },
+  {
+    "id": "value-type",
+    "term": "값 타입",
+    "aliases": [],
+    "def": "변수에 값 자체가 들어 있어 대입하면 통째로 복사되는 타입. int, bool, decimal, Guid, DateTime, struct 가 여기 속한다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "reference-type",
+    "term": "참조 타입",
+    "aliases": [],
+    "def": "변수에 객체가 있는 곳의 주소가 들어 있어 대입하면 같은 객체를 공유하는 타입. class, 배열, List, string 이 여기 속한다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "csharp-record",
+    "term": "record",
+    "aliases": [],
+    "def": "값 기반 비교(==)와 with 복사를 자동으로 만들어 주는 데이터용 타입. DTO 에 주로 쓴다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "nullable-reference-types",
+    "term": "nullable 참조 타입",
+    "aliases": [
+      "Nullable Reference Types"
+    ],
+    "def": "string 은 null 아님, string? 은 null 가능으로 읽게 하는 컴파일러 기능. 경고일 뿐 런타임에 막지는 않는다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "linq",
+    "term": "LINQ",
+    "aliases": [],
+    "def": "Where·Select 처럼 컬렉션을 거르고 바꾸는 메서드 묶음. 메모리 리스트에서는 반복문으로, EF Core 에서는 SQL 로 실행된다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "primary-constructor",
+    "term": "primary constructor",
+    "aliases": [],
+    "def": "C# 12 문법. 생성자 파라미터를 클래스 이름 옆에 바로 적고 클래스 전체에서 쓴다. DI 받는 서비스가 짧아진다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "sync-over-async",
+    "term": "sync-over-async",
+    "aliases": [],
+    "def": ".Result·.Wait() 로 비동기 작업을 동기로 기다리는 것. UI 앱에서는 데드락, ASP.NET Core 에서는 스레드 풀 고갈을 부른다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "thread-pool-starvation",
+    "term": "스레드 풀 고갈",
+    "aliases": [],
+    "def": "요청들이 스레드를 붙잡고 기다리느라 새 요청을 받을 스레드가 바닥나는 상태. 트래픽이 몰릴 때만 터져 찾기 어렵다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "top-level-statements",
+    "term": "top-level statements",
+    "aliases": [],
+    "def": "class Program 과 Main 없이 파일에 코드를 바로 쓰는 문법. 컴파일러가 보이지 않는 Program 클래스로 감싸 준다.",
+    "doc": "02-csharp-dotnet/csharp-for-ts-devs"
+  },
+  {
+    "id": "cancellation-token",
+    "term": "CancellationToken",
+    "aliases": [],
+    "def": "작업을 그만해도 된다는 신호를 담은 값. AbortSignal 과 같은 발상이며 클라이언트가 연결을 끊으면 취소 상태가 된다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "csharp-attribute",
+    "term": "어트리뷰트",
+    "aliases": [],
+    "def": "[HttpGet], [Required] 처럼 대괄호로 클래스·메서드·파라미터에 붙이는 메타데이터. TS 데코레이터와 비슷하다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "minimal-api",
+    "term": "Minimal API",
+    "aliases": [],
+    "def": "컨트롤러 클래스 없이 app.MapGet(경로, 람다) 로 엔드포인트를 만드는 방식. Express 라우트와 느낌이 비슷하다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "options-pattern",
+    "term": "Options 패턴",
+    "aliases": [],
+    "def": "설정 섹션을 클래스 하나에 묶어 IOptions<T> 로 주입받는 방식. 문자열 키 대신 타입 있는 설정을 쓴다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "user-secrets",
+    "term": "user-secrets",
+    "aliases": [],
+    "def": "개발 PC 사용자 폴더에 저장되는 개발 전용 비밀값 저장소. 저장소 밖이라 실수로 커밋되지 않는다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "structured-logging",
+    "term": "구조화 로깅",
+    "aliases": [],
+    "def": "\"Pet {PetId}\" 처럼 자리표시자로 로그를 남겨 PetId 를 검색 가능한 필드로 저장하는 방식. 문자열 보간을 쓰면 이 이점이 사라진다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "problem-details",
+    "term": "ProblemDetails",
+    "aliases": [],
+    "def": "HTTP API 에러 응답의 표준 JSON 모양(RFC 7807/9457). status, title, detail, instance 필드를 갖는다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "domain-exception",
+    "term": "도메인 예외",
+    "aliases": [],
+    "def": "NotFoundException 처럼 업무 상황을 이름으로 가진 예외. 서비스는 이것만 던지고 HTTP 상태코드 변환은 한 곳에서 한다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "result-pattern",
+    "term": "Result 패턴",
+    "aliases": [],
+    "def": "예상 가능한 실패를 예외 대신 성공·실패가 담긴 반환값으로 알리는 방식. TS 의 판별 유니온 반환과 같은 발상이다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "data-annotations",
+    "term": "DataAnnotations",
+    "aliases": [],
+    "def": "[Required], [StringLength] 처럼 형식 규칙을 타입 선언에 붙이는 검증 어트리뷰트 묶음. 위반하면 400 이 된다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "fluentvalidation",
+    "term": "FluentValidation",
+    "aliases": [],
+    "def": "RuleFor(x => x.Name).NotEmpty() 처럼 검증 규칙을 코드로 쓰는 라이브러리. zod 와 발상이 비슷하다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "testcontainers",
+    "term": "Testcontainers",
+    "aliases": [],
+    "def": "테스트 중에 진짜 DB(PostgreSQL 등)를 Docker 컨테이너로 띄웠다가 지우는 라이브러리. InMemory 가 못 잡는 오류를 잡는다.",
+    "doc": "02-csharp-dotnet/aspnet-core"
+  },
+  {
+    "id": "dbcontext",
+    "term": "DbContext",
+    "aliases": [],
+    "def": "EF Core 에서 DB 와의 대화 세션. 쿼리를 보내고 가져온 엔티티를 기억해 변경을 저장한다. 요청당 하나(Scoped)를 쓴다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "navigation-property",
+    "term": "네비게이션 프로퍼티",
+    "aliases": [],
+    "def": "외래 키로 이어진 다른 엔티티를 객체로 가리키는 프로퍼티(pet.Owner). Include 나 Projection 으로 읽어야 채워진다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "projection",
+    "term": "Projection",
+    "aliases": [],
+    "def": "Select 로 결과를 엔티티 대신 필요한 컬럼만 담은 DTO 로 바로 받는 것. 추적도 안 하고 JOIN 도 자동이다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "soft-delete",
+    "term": "소프트 삭제",
+    "aliases": [],
+    "def": "행을 지우지 않고 IsDeleted 같은 표시만 바꾸는 삭제. 되살릴 수 있고 감사 기록이 남는다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "expression-tree",
+    "term": "식 트리",
+    "aliases": [
+      "expression tree"
+    ],
+    "def": "람다를 실행 코드가 아닌 구조 데이터로 전달한 것. EF Core 는 이걸 읽어 SQL 로 다시 쓴다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "lazy-loading",
+    "term": "lazy loading",
+    "aliases": [
+      "지연 로딩"
+    ],
+    "def": "네비게이션 프로퍼티에 처음 접근할 때 몰래 SELECT 를 보내 채우는 기능. EF Core 는 기본으로 꺼져 있고 켜면 N+1 이 숨는다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "cartesian-explosion",
+    "term": "카테시안 폭발",
+    "aliases": [],
+    "def": "컬렉션 여러 개를 한 번에 JOIN 해서 결과 행이 곱으로 불어나는 현상. 펫 10 × 청구 20 이면 200행이 된다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "tiebreaker",
+    "term": "타이브레이커",
+    "aliases": [],
+    "def": "정렬 값이 같은 행들의 순서를 고정하려고 붙이는 두 번째 정렬 키. 보통 Id 를 쓴다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "dapper",
+    "term": "Dapper",
+    "aliases": [],
+    "def": "SQL 은 직접 쓰고 결과를 객체로 바꾸는 것만 해 주는 경량 라이브러리. 빠르지만 글로벌 쿼리 필터가 적용되지 않는다.",
+    "doc": "02-csharp-dotnet/ef-core"
+  },
+  {
+    "id": "clean-architecture",
+    "term": "클린 아키텍처",
+    "aliases": [],
+    "def": "업무 규칙(Domain)을 가운데 두고 DB·HTTP 같은 기술을 바깥에 두는 설계. 안쪽은 바깥쪽을 참조하지 않는다.",
+    "doc": "02-csharp-dotnet/reading-a-codebase"
+  },
+  {
+    "id": "dotnet-solution",
+    "term": "솔루션 (.sln)",
+    "aliases": [
+      "솔루션"
+    ],
+    "def": "여러 .csproj 프로젝트를 묶는 파일. 모노레포 워크스페이스 루트 설정과 같은 자리다.",
+    "doc": "02-csharp-dotnet/reading-a-codebase"
+  },
+  {
+    "id": "cqrs",
+    "term": "CQRS",
+    "aliases": [],
+    "def": "데이터를 바꾸는 요청(커맨드)과 읽는 요청(쿼리)을 다른 객체로 나누는 설계. MediatR 과 함께 자주 보인다.",
+    "doc": "02-csharp-dotnet/reading-a-codebase"
+  },
+  {
+    "id": "rag",
+    "term": "RAG",
+    "aliases": [
+      "Retrieval-Augmented Generation"
+    ],
+    "def": "질문마다 관련 문서를 검색해 프롬프트에 근거로 붙이고, LLM 이 그 근거로 답하게 하는 방식.",
+    "doc": "03-rag/intro"
+  },
+  {
+    "id": "fine-tuning",
+    "term": "파인튜닝",
+    "aliases": [
+      "fine-tuning"
+    ],
+    "def": "학습된 모델에 우리 데이터를 더 학습시켜 가중치를 바꾸는 방법. 말투·형식에는 강하지만 출처 표시와 권한 분리가 안 된다.",
+    "doc": "03-rag/intro"
+  },
+  {
+    "id": "retriever",
+    "term": "리트리버",
+    "aliases": [
+      "retriever"
+    ],
+    "def": "질문을 받아 관련 청크를 찾아오는 검색 담당 부품. RAG 실패의 대부분이 여기서 난다.",
+    "doc": "03-rag/intro"
+  },
+  {
+    "id": "embedding",
+    "term": "임베딩",
+    "aliases": [
+      "embedding"
+    ],
+    "def": "텍스트를 고정 길이 숫자 배열(벡터)로 바꾸는 일. 뜻이 비슷한 글은 비슷한 방향의 벡터가 된다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "cosine-similarity",
+    "term": "코사인 유사도",
+    "aliases": [],
+    "def": "두 벡터 사이 각도의 cos 값. 길이는 무시하고 방향만 비교하며, 1 이면 같은 방향, 0 이면 무관이다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "cosine-distance",
+    "term": "코사인 거리",
+    "aliases": [],
+    "def": "1 - 코사인 유사도. 작을수록 비슷하다. pgvector 의 <=> 연산자가 이 값을 돌려준다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "normalization",
+    "term": "정규화",
+    "aliases": [
+      "normalize"
+    ],
+    "def": "벡터를 자기 크기로 나눠 길이를 1 로 만드는 것. 그러면 코사인 유사도가 내적과 같아져 계산이 싸진다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "contrastive-learning",
+    "term": "대조 학습",
+    "aliases": [
+      "contrastive learning"
+    ],
+    "def": "비슷한 문장 쌍은 가깝게, 무관한 쌍은 멀게 배치하도록 반복 학습하는 방식. 임베딩 모델이 이렇게 만들어진다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "sparse-vector",
+    "term": "희소 벡터",
+    "aliases": [],
+    "def": "칸 대부분이 0 이고 축 하나가 단어 하나인 벡터. 같은 글자가 겹쳐야만 가깝게 나온다. TF-IDF 가 대표다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "dense-embedding",
+    "term": "밀집 임베딩",
+    "aliases": [
+      "밀집 벡터"
+    ],
+    "def": "거의 모든 칸에 값이 있는 고정 차원 벡터. 축에 이름은 없지만 뜻이 비슷하면 방향이 가까워진다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "tf-idf",
+    "term": "TF-IDF",
+    "aliases": [],
+    "def": "문서에 자주 나오고(TF) 코퍼스 전체에서는 드문(IDF) 단어에 큰 값을 주는 희소 벡터. 의미는 모른다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "top-k",
+    "term": "top-k",
+    "aliases": [
+      "top-N"
+    ],
+    "def": "점수 상위 k 개만 남기는 것. k 를 키우면 정답을 덜 놓치지만 노이즈와 토큰 비용이 늘어난다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "threshold",
+    "term": "임계값",
+    "aliases": [],
+    "def": "이 점수 밑이면 못 찾은 것으로 치는 기준선. 평가셋의 점수 분포를 보고 정하며 모델을 바꾸면 다시 잡는다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "pgvector",
+    "term": "pgvector",
+    "aliases": [],
+    "def": "PostgreSQL 에 vector 타입과 유사도 연산자, HNSW·IVFFlat 인덱스를 추가하는 확장.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "chunk",
+    "term": "청크",
+    "aliases": [],
+    "def": "긴 문서를 검색하기 좋은 크기로 자른 한 조각. 검색과 프롬프트 삽입이 모두 청크 단위로 이뤄진다.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "search-dilution",
+    "term": "검색 희석",
+    "aliases": [],
+    "def": "여러 주제가 섞인 청크의 벡터가 평균 방향이 되어 어느 질문과도 애매하게 비슷해지는 현상.",
+    "doc": "03-rag/foundations"
+  },
+  {
+    "id": "indexing",
+    "term": "인덱싱",
+    "aliases": [],
+    "def": "수집·파싱·청킹·임베딩을 거쳐 문서를 검색 가능한 형태로 미리 저장해 두는 단계.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "metadata",
+    "term": "메타데이터",
+    "aliases": [
+      "metadata"
+    ],
+    "def": "본문에 관한 정보. 부서·개정일·볼 수 있는 그룹 등으로, 검색 범위 필터와 출처 표시에 쓴다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "query-rewriting",
+    "term": "쿼리 재작성",
+    "aliases": [
+      "query rewriting",
+      "condensing",
+      "대화 맥락 압축"
+    ],
+    "def": "\"그럼 반차는?\" 같은 후속 질문을 직전 대화를 반영한 독립 질문으로 LLM 이 바꿔 쓰는 단계.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "acl",
+    "term": "ACL",
+    "aliases": [
+      "Access Control List"
+    ],
+    "def": "문서마다 볼 수 있는 그룹을 적어 둔 목록. 검색 전에 사용자의 그룹과 비교해 범위를 좁힌다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "pre-filtering",
+    "term": "검색 전 필터",
+    "aliases": [
+      "pre-filtering"
+    ],
+    "def": "권한·기간 조건으로 후보를 먼저 좁힌 뒤 벡터 검색하는 것. 검색 후에 거르면 결과가 0개가 될 수 있다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "context-window",
+    "term": "컨텍스트 윈도우",
+    "aliases": [],
+    "def": "모델이 한 번에 읽을 수 있는 최대 토큰 수. 근거 청크를 무한정 넣을 수 없는 이유다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "lost-in-the-middle",
+    "term": "Lost in the middle",
+    "aliases": [],
+    "def": "LLM 이 프롬프트의 처음과 끝은 잘 보고 가운데 내용을 흘리는 현상. 핵심 청크는 양 끝에 둔다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "grounding",
+    "term": "그라운딩",
+    "aliases": [
+      "grounding"
+    ],
+    "def": "찾아 준 문서 안에서만 답하도록 모델을 묶는 것. 출처 표시와 한 쌍으로 쓴다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "hallucination",
+    "term": "환각",
+    "aliases": [
+      "hallucination"
+    ],
+    "def": "근거 없이 그럴듯한 내용을 지어내는 현상. \"모른다고 답해도 된다\"를 허용하는 것이 가장 싼 대응이다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "ann",
+    "term": "ANN",
+    "aliases": [
+      "근사 최근접 탐색"
+    ],
+    "def": "모든 벡터와 비교하는 대신 가까울 만한 후보만 골라 비교하는 근사 검색. 정확도를 조금 내주고 속도를 얻는다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "hnsw",
+    "term": "HNSW",
+    "aliases": [],
+    "def": "벡터를 층이 있는 그래프로 연결해 두고 가까운 쪽으로 따라가며 찾는 ANN 인덱스. 속도 대비 정확도가 좋다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "ivfflat",
+    "term": "IVFFlat",
+    "aliases": [],
+    "def": "벡터를 클러스터 묶음으로 나눠 두고 질문과 가까운 묶음만 뒤지는 ANN 인덱스. 구축이 빠르고 메모리가 적다.",
+    "doc": "03-rag/pipeline"
+  },
+  {
+    "id": "chunking",
+    "term": "청킹",
+    "aliases": [
+      "chunking"
+    ],
+    "def": "문서를 검색 단위로 자르는 일. 조항·헤딩 같은 구조를 따라 한 청크에 한 주제가 담기게 자르는 것이 핵심이다.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "overlap",
+    "term": "오버랩",
+    "aliases": [
+      "overlap"
+    ],
+    "def": "이웃한 두 청크가 겹치는 구간. 경계에서 문맥이 끊기는 걸 줄이지만 크면 중복 청크가 top-k 를 차지한다.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "semantic-chunking",
+    "term": "의미 기반 청킹",
+    "aliases": [
+      "Semantic chunking",
+      "의미 기반"
+    ],
+    "def": "인접 문장 간 임베딩 유사도가 뚝 떨어지는 지점, 곧 주제가 바뀌는 곳에서 자르는 청킹 방식.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "small-to-big",
+    "term": "부모-자식 청킹",
+    "aliases": [
+      "Small-to-Big",
+      "부모-자식"
+    ],
+    "def": "작은 청크로 검색하고 프롬프트에는 그 청크가 속한 큰 단락을 넣는 패턴. 정확도와 문맥을 둘 다 얻는다.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "contextual-retrieval",
+    "term": "Contextual Retrieval",
+    "aliases": [],
+    "def": "LLM 으로 청크마다 문서 속 맥락 설명을 한두 문장 생성해 앞에 붙인 뒤 임베딩하는 기법.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "incremental-indexing",
+    "term": "증분 인덱싱",
+    "aliases": [
+      "incremental indexing"
+    ],
+    "def": "문서가 바뀌면 해시를 비교해 바뀐 청크만 재임베딩하고 사라진 청크는 삭제하는 운영 방식.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "semantic-search",
+    "term": "의미 검색",
+    "aliases": [
+      "semantic search"
+    ],
+    "def": "글자가 아니라 뜻이 비슷한 것을 찾는 검색. 표현이 달라도 같은 개념이면 찾아낸다.",
+    "doc": "03-rag/chunking-embedding"
+  },
+  {
+    "id": "bm25",
+    "term": "BM25",
+    "aliases": [],
+    "def": "단어의 희귀도·빈도·문서 길이로 점수를 매기는 키워드 검색 알고리즘. 제품코드·사번 같은 정확한 글자에 강하다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "hybrid-search",
+    "term": "하이브리드 검색",
+    "aliases": [
+      "hybrid search",
+      "하이브리드"
+    ],
+    "def": "키워드 검색과 벡터 검색을 둘 다 돌려 결과를 합치는 방식. 서로 다른 실패를 메워 주어 기본값이 된다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "rrf",
+    "term": "RRF",
+    "aliases": [
+      "Reciprocal Rank Fusion"
+    ],
+    "def": "검색기별 순위를 1/(k+순위)로 바꿔 더하는 결합법. 점수 범위가 달라도 정규화 없이 합칠 수 있다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "morpheme-analyzer",
+    "term": "형태소 분석기",
+    "aliases": [],
+    "def": "\"휴가를\"을 \"휴가/를\"처럼 쪼개 주는 도구. 한국어 키워드 검색에서 조사 차이를 없애려고 쓴다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "reranking",
+    "term": "리랭킹",
+    "aliases": [
+      "리랭커",
+      "reranking"
+    ],
+    "def": "1차 검색으로 넓게 가져온 후보를 더 정교한 모델로 다시 채점해 순서를 바꾸고 k 를 줄이는 단계.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "bi-encoder",
+    "term": "bi-encoder",
+    "aliases": [],
+    "def": "질문과 문서를 따로 벡터로 만든 뒤 비교하는 구조. 문서 벡터를 미리 계산해 둘 수 있어 빠르다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "cross-encoder",
+    "term": "cross-encoder",
+    "aliases": [],
+    "def": "질문과 청크를 한 번에 모델에 넣어 관련도를 매기는 구조. 정확하지만 쌍마다 계산해야 해 리랭킹에만 쓴다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "hyde",
+    "term": "HyDE",
+    "aliases": [
+      "Hypothetical Document Embeddings"
+    ],
+    "def": "질문 대신 LLM 이 쓴 가상 답변을 임베딩해 검색하는 기법. 문서와 문체가 비슷해져 잘 매칭된다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "query-routing",
+    "term": "쿼리 라우팅",
+    "aliases": [
+      "query routing"
+    ],
+    "def": "질문 유형에 따라 검색 전략이나 가중치를 다르게 보내는 것. 식별자 질문은 BM25 쪽에 무게를 둔다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "eval-set",
+    "term": "평가셋",
+    "aliases": [],
+    "def": "질문과 정답 청크를 짝지어 둔 시험지. 청킹·모델·프롬프트를 바꿀 때마다 같은 평가셋으로 점수를 비교한다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "recall-at-k",
+    "term": "Recall@k",
+    "aliases": [
+      "Recall@1",
+      "Recall@3",
+      "Recall@5"
+    ],
+    "def": "정답 청크가 상위 k 개 안에 들어온 비율. k 가 전체 청크 수에 비해 크면 의미가 없어진다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "mrr",
+    "term": "MRR",
+    "aliases": [
+      "Mean Reciprocal Rank"
+    ],
+    "def": "질문마다 1/(첫 정답의 순위)를 구해 평균 낸 값. 1등이면 1.0, 4등이면 0.25 로 순위 품질을 본다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "ndcg",
+    "term": "nDCG",
+    "aliases": [
+      "nDCG@k"
+    ],
+    "def": "관련도 등급을 순위가 낮을수록 할인해 더한 뒤 이상적인 순서의 값으로 나눈 지표. 1.0 이 완벽한 순서다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "faithfulness",
+    "term": "Faithfulness",
+    "aliases": [
+      "충실성"
+    ],
+    "def": "답변의 모든 주장이 근거 청크에서 확인되는지 보는 지표. 사실이어도 근거에 없으면 통과하지 못한다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "llm-as-judge",
+    "term": "LLM-as-judge",
+    "aliases": [],
+    "def": "다른 LLM 에게 답변 채점을 맡기는 평가 방법. 사람 평가와 한 번은 대조해 봐야 믿을 수 있다.",
+    "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "multi-tenancy",
+    "term": "멀티테넌시",
+    "aliases": [
+      "multi-tenancy"
+    ],
+    "def": "한 시스템을 여러 고객사(테넌트)가 함께 쓰는 구조. 모든 검색에 tenant_id 조건이 빠짐없이 붙어야 한다.",
+    "doc": "03-rag/enterprise-rag"
+  },
+  {
+    "id": "prompt-injection",
+    "term": "프롬프트 인젝션",
+    "aliases": [
+      "prompt injection"
+    ],
+    "def": "LLM 이 읽는 문서·메일 속에 지시문을 숨겨 원래 지시 대신 따르게 하는 공격. 완전 방어가 없어 여러 겹으로 완화한다.",
+    "doc": "03-rag/enterprise-rag"
+  },
+  {
+    "id": "ttl",
+    "term": "TTL",
+    "aliases": [],
+    "def": "캐시에 넣은 값을 믿고 쓰는 유효 시간. 권한 캐시의 TTL 이 길면 부서 이동이 늦게 반영된다.",
+    "doc": "03-rag/enterprise-rag"
+  },
+  {
+    "id": "data-governance",
+    "term": "데이터 거버넌스",
+    "aliases": [
+      "data governance"
+    ],
+    "def": "데이터를 어디에 두고 누가 쓰며 언제 지울지에 대한 규칙. 엔터프라이즈에서는 모델 선택보다 먼저 정해진다.",
+    "doc": "03-rag/enterprise-rag"
+  },
+  {
+    "id": "agent-loop",
+    "term": "에이전트 루프",
+    "aliases": [
+      "agent loop"
+    ],
+    "def": "모델에게 묻고, 모델이 요청한 도구를 실행해 결과를 붙여 다시 묻는 반복. 모델이 도구 요청 없이 최종 답을 내면 끝난다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "tool-calling",
+    "term": "Tool calling",
+    "aliases": [
+      "function calling"
+    ],
+    "def": "모델이 \"이 함수를 이 인자로 불러 달라\"는 JSON 을 내고 실제 실행은 우리 코드가 하는 구조. function calling 과 같은 말이다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "tool-use-result",
+    "term": "tool_use / tool_result",
+    "aliases": [
+      "tool_result"
+    ],
+    "def": "tool_use 는 모델이 보낸 도구 호출 요청, tool_result 는 우리가 실행 결과를 담아 돌려주는 메시지다. id 로 서로 짝을 맞춘다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "json-schema",
+    "term": "JSON Schema",
+    "aliases": [],
+    "def": "JSON 데이터가 어떤 모양이어야 하는지를 JSON 으로 적는 표준. 도구 인자의 타입·필수 여부를 모델에게 알려 줄 때 쓴다. TS 타입이나 zod 스키마와 같은 역할.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "llm-token",
+    "term": "토큰 (LLM)",
+    "aliases": [
+      "토큰(token)"
+    ],
+    "def": "모델이 글을 읽고 쓰는 단위로, 단어보다 잘게 쪼갠 조각이다. 요금·속도·입력 한도가 모두 토큰 수로 계산된다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "orchestration",
+    "term": "오케스트레이션",
+    "aliases": [
+      "orchestration",
+      "오케스트레이터"
+    ],
+    "def": "여러 단계나 에이전트 중 누가 언제 일하고 누구의 결과를 누구에게 넘길지 정하는 조율 작업. 그 역할을 맡은 쪽이 오케스트레이터다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "react-pattern",
+    "term": "ReAct",
+    "aliases": [],
+    "def": "Reason + Act. 생각 → 행동(도구 호출) → 관찰(결과 읽기)을 반복하는 가장 기본적인 에이전트 패턴.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "multi-agent",
+    "term": "멀티 에이전트",
+    "aliases": [],
+    "def": "역할별로 도구와 지시를 좁힌 에이전트 여럿을 오케스트레이터가 조율하는 구조. 정확도는 오르지만 통신 비용과 디버깅 난이도가 커진다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "human-in-the-loop",
+    "term": "Human-in-the-loop",
+    "aliases": [],
+    "def": "부작용 있는 도구를 실행하기 전에 멈추고 사람의 승인을 받는 방식. 엔터프라이즈 에이전트에서는 필수다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "side-effect",
+    "term": "부작용 (side effect)",
+    "aliases": [
+      "부작용(side effect)",
+      "부작용"
+    ],
+    "def": "실행하면 바깥 상태가 바뀌는 동작. 조회는 해당하지 않고 메일 발송, 결재 승인, 삭제처럼 되돌리기 어려운 것이 해당한다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "non-deterministic",
+    "term": "비결정적",
+    "aliases": [],
+    "def": "같은 입력에도 매번 다른 결과나 경로가 나올 수 있는 성질. 에이전트는 다시 돌리면 앞과 다른 실행이 된다.",
+    "doc": "04-agent/what-is-an-agent"
+  },
+  {
+    "id": "maf",
+    "term": "MAF (Microsoft Agent Framework)",
+    "aliases": [
+      "MAF"
+    ],
+    "def": "Semantic Kernel 과 AutoGen 을 합친 마이크로소프트의 에이전트 프레임워크. 도구 스키마 생성, 도구 호출 루프, 대화 상태를 대신 처리한다.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "semantic-kernel",
+    "term": "Semantic Kernel",
+    "aliases": [],
+    "def": "MAF 이전의 마이크로소프트 AI 프레임워크. Kernel, Plugin, Planner 같은 개념이 MAF 의 에이전트, 도구, 워크플로우에 거의 1:1 로 대응한다.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "agent-instructions",
+    "term": "instructions",
+    "aliases": [],
+    "def": "에이전트의 시스템 프롬프트. 모든 대화 맨 앞에 붙어 역할과 금지 사항을 정한다. 같은 모델도 instructions 와 도구가 다르면 다른 에이전트가 된다.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "agent-thread",
+    "term": "Thread (대화 상태)",
+    "aliases": [
+      "Thread"
+    ],
+    "def": "에이전트의 대화 기록을 담는 객체. 모델이 이전 대화를 기억하지 못하니 매 호출에 다시 넣는다. 서버가 여러 대면 공유 저장소에 둬야 한다.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "handoff",
+    "term": "핸드오프",
+    "aliases": [],
+    "def": "지금 대화를 맡은 에이전트가 다른 에이전트가 더 적합하다고 판단해 대화 전체를 넘기는 오케스트레이션 패턴. 전화 돌려주기와 비슷하다.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "iasyncenumerable",
+    "term": "IAsyncEnumerable",
+    "aliases": [
+      "async generator"
+    ],
+    "def": "값이 시간차를 두고 하나씩 도착하는 C# 목록. JS 의 async generator 와 for await 에 대응하며 await foreach 로 받는다. 스트리밍 응답에 쓴다.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "provider-neutral-abstraction",
+    "term": "프로바이더 중립 추상 (IChatClient)",
+    "aliases": [
+      "프로바이더 중립 추상"
+    ],
+    "def": "Microsoft.Extensions.AI 의 IChatClient 처럼 OpenAI, Azure OpenAI, Anthropic 등을 같은 인터페이스로 바꿔 끼우게 해 주는 추상.",
+    "doc": "04-agent/maf"
+  },
+  {
+    "id": "mcp",
+    "term": "MCP (Model Context Protocol)",
+    "aliases": [
+      "MCP"
+    ],
+    "def": "AI 앱과 도구 제공 프로그램이 주고받는 메시지 형식을 정한 표준 프로토콜. 도구를 한 번 만들면 여러 앱과 모델에서 쓸 수 있다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "mcp-host",
+    "term": "MCP 호스트",
+    "aliases": [
+      "호스트(host)"
+    ],
+    "def": "사용자가 실제로 쓰는 AI 앱. Claude Code 나 우리 에이전트 백엔드처럼 모델을 부르고 MCP 서버들을 붙여 쓰는 쪽이다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "mcp-client",
+    "term": "MCP 클라이언트",
+    "aliases": [
+      "클라이언트(client)"
+    ],
+    "def": "호스트 안에서 MCP 서버 하나와의 연결을 맡는 부품. 서버 하나당 클라이언트가 하나씩 생긴다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "mcp-server",
+    "term": "MCP 서버",
+    "aliases": [
+      "서버(server)"
+    ],
+    "def": "도구·리소스·프롬프트를 MCP 로 제공하는 별도 프로그램. GitHub, 사내 DB, 고객사 시스템을 감싼 서버 등이 있다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "json-rpc",
+    "term": "JSON-RPC",
+    "aliases": [
+      "JSON-RPC 2.0"
+    ],
+    "def": "호출할 함수 이름(method)과 인자(params)를 JSON 으로 보내고 같은 id 로 결과를 받는 단순한 원격 호출 규격. MCP 메시지가 이 형식이다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "mcp-transport",
+    "term": "전송 방식 (transport)",
+    "aliases": [
+      "전송 방식(transport)",
+      "전송 방식"
+    ],
+    "def": "MCP 메시지를 실제로 나르는 통로. 메시지 형식은 같고 로컬 프로세스용 stdio 와 원격 서버용 Streamable HTTP 중에서 고른다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "stdio",
+    "term": "stdio",
+    "aliases": [],
+    "def": "표준 입력·출력. 호스트가 MCP 서버를 자식 프로세스로 띄워 stdin/stdout 으로 JSON 을 주고받는다. stdout 에 로그를 찍으면 프로토콜이 깨진다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "streamable-http",
+    "term": "Streamable HTTP",
+    "aliases": [],
+    "def": "MCP 서버를 웹 서버로 띄워 POST 로 메시지를 받고 JSON 이나 SSE 스트림으로 답하는 원격 전송 방식. 엔터프라이즈 배포에 맞다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "mcp-resources",
+    "term": "Resources (MCP)",
+    "aliases": [
+      "Resources",
+      "Resource"
+    ],
+    "def": "MCP 서버가 제공하는 읽을 수 있는 데이터. 모델이 부르는 Tool 과 달리 앱이 컨텍스트에 넣을지 결정한다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "confused-deputy",
+    "term": "혼동된 대리인",
+    "aliases": [],
+    "def": "에이전트가 사용자보다 높은 권한으로 도구를 실행해 권한 없는 사용자가 데이터를 보게 되는 문제. 사용자 신원을 도구 실행까지 넘겨 막는다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "vendor-lock-in",
+    "term": "벤더 락인",
+    "aliases": [
+      "벤더 락인(vendor lock-in)"
+    ],
+    "def": "특정 회사 제품에 깊이 묶여 다른 제품으로 옮기기 어려운 상태. 도구를 MCP 로 만들면 모델을 바꿔도 도구 계층은 그대로 둘 수 있다.",
+    "doc": "04-agent/mcp"
+  },
+  {
+    "id": "sse",
+    "term": "SSE (Server-Sent Events)",
+    "aliases": [
+      "SSE",
+      "Server-Sent Events"
+    ],
+    "def": "응답을 끝내지 않고 열어 둔 채 서버가 텍스트 이벤트를 계속 써 보내는 HTTP 방식. 서버 → 클라이언트 단방향이고 LLM 스트리밍의 표준이다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "websocket",
+    "term": "WebSocket",
+    "aliases": [],
+    "def": "HTTP 로 시작한 연결을 업그레이드해 양쪽이 아무 때나 메시지를 보내는 양방향 프로토콜. 협업 편집이나 음성 스트림에 맞다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "eventsource",
+    "term": "EventSource",
+    "aliases": [],
+    "def": "브라우저 내장 SSE 클라이언트. 이벤트를 잘라 주고 끊기면 자동 재연결한다. GET 만 되고 Authorization 같은 커스텀 헤더를 붙일 수 없다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "last-event-id",
+    "term": "Last-Event-ID",
+    "aliases": [],
+    "def": "SSE 재연결 때 브라우저가 마지막으로 받은 이벤트 id 를 실어 보내는 헤더. 서버는 그 다음 번호부터 보내 이어받기를 한다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "heartbeat",
+    "term": "하트비트",
+    "aliases": [
+      "하트비트(heartbeat)"
+    ],
+    "def": "연결이 살아 있음을 알리려 주기적으로 보내는 의미 없는 데이터. SSE 에서는 주석 줄로 보내 프록시가 유휴 연결을 끊지 못하게 한다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "response-buffering",
+    "term": "버퍼링",
+    "aliases": [
+      "버퍼링(buffering)"
+    ],
+    "def": "데이터를 바로 보내지 않고 일정량이 찰 때까지 모아 두는 것. 스트리밍에서는 글자가 끝에 한꺼번에 오게 만들어 flush 와 프록시 설정으로 끈다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "chunked-transfer",
+    "term": "청크 전송 인코딩",
+    "aliases": [
+      "청크 전송 인코딩(chunked transfer encoding)"
+    ],
+    "def": "HTTP/1.1 에서 전체 길이를 모르는 응답을 \"길이 + 조각\" 단위로 이어 보내는 방식. 조각 경계는 SSE 이벤트 경계와 상관없다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "backpressure",
+    "term": "배압 (backpressure)",
+    "aliases": [
+      "배압(backpressure)",
+      "배압"
+    ],
+    "def": "받는 쪽이 느릴 때 보내는 쪽이 속도를 늦추게 되는 현상. await 로 쓰기를 기다리면 서버가 데이터를 메모리에 무한정 쌓지 않는다.",
+    "doc": "05-realtime-ui/sse-vs-websocket"
+  },
+  {
+    "id": "raf-batching",
+    "term": "rAF 배칭",
+    "aliases": [],
+    "def": "한 프레임 사이에 온 토큰을 ref 에 모았다가 requestAnimationFrame 으로 화면 갱신 직전에 한 번만 setState 하는 기법. 렌더를 프레임당 1회로 묶는다.",
+    "doc": "05-realtime-ui/streaming-ui"
+  },
+  {
+    "id": "throttle",
+    "term": "throttle",
+    "aliases": [],
+    "def": "이벤트가 계속 와도 최대 N ms 에 한 번만 실행하는 기법. 스트리밍 텍스트의 렌더 빈도를 고정할 때 쓴다.",
+    "doc": "05-realtime-ui/streaming-ui"
+  },
+  {
+    "id": "debounce",
+    "term": "debounce",
+    "aliases": [],
+    "def": "입력이 N ms 동안 멈춘 뒤에야 한 번 실행하는 기법. 검색창에는 맞지만 스트리밍에 쓰면 답이 끝날 때까지 화면이 갱신되지 않는다.",
+    "doc": "05-realtime-ui/streaming-ui"
+  },
+  {
+    "id": "stale-closure",
+    "term": "오래된 클로저",
+    "aliases": [
+      "오래된 클로저(stale closure)"
+    ],
+    "def": "한 번 등록한 콜백이 등록 시점의 상태 값을 계속 기억하는 문제. 콜백 안에서 최신 값이 필요하면 ref 로 읽는다.",
+    "doc": "05-realtime-ui/streaming-ui"
+  },
+  {
+    "id": "optimistic-update",
+    "term": "낙관적 반영",
+    "aliases": [
+      "낙관적 반영(optimistic update)"
+    ],
+    "def": "서버 응답을 기다리지 않고 성공을 가정해 화면부터 바꾸고 실패하면 되돌리는 방식. 좋아요 숫자가 바로 오르는 것이 그 예다.",
+    "doc": "05-realtime-ui/streaming-ui"
+  },
+  {
+    "id": "single-source-of-truth",
+    "term": "단일 진실 원천",
+    "aliases": [
+      "단일 진실 원천(single source of truth)"
+    ],
+    "def": "같은 데이터를 바꾸는 길을 하나로 두는 원칙. 화면과 에이전트가 같은 API 를 타야 검증·감사 로그·권한 체크가 똑같이 적용된다.",
+    "doc": "05-realtime-ui/streaming-ui"
+  },
+  {
+    "id": "vertical-slice",
+    "term": "수직 슬라이스",
+    "aliases": [],
+    "def": "기능 하나를 DB 스키마부터 API, 화면까지 한 사람이 끝까지 맡는 방식. 층 사이를 오가는 대기 시간이 없어진다.",
+    "doc": "06-fullstack-workflow/how-it-works"
+  },
+  {
+    "id": "openapi",
+    "term": "OpenAPI",
+    "aliases": [],
+    "def": "API 의 경로, 파라미터, 응답 형태를 JSON·YAML 로 적는 표준 형식. Swagger 의 후신으로, 여기서 프론트 타입을 자동 생성한다.",
+    "doc": "06-fullstack-workflow/how-it-works"
+  },
+  {
+    "id": "bff",
+    "term": "BFF (Backend For Frontend)",
+    "aliases": [
+      "BFF",
+      "Backend For Frontend"
+    ],
+    "def": "특정 화면이나 클라이언트에 맞춰 여러 데이터를 모아 한 번에 돌려주는 엔드포인트나 서버 계층. 화면 하나에 API 다섯 번 호출을 하나로 줄인다.",
+    "doc": "06-fullstack-workflow/how-it-works"
+  },
+  {
+    "id": "over-fetching",
+    "term": "오버페칭",
+    "aliases": [
+      "오버페칭(over-fetching)"
+    ],
+    "def": "화면에 필요 없는 데이터까지 받아 오는 것. 목록용·상세용 DTO 를 나눠 줄인다.",
+    "doc": "06-fullstack-workflow/how-it-works"
+  },
+  {
+    "id": "cursor-pagination",
+    "term": "커서 페이지네이션",
+    "aliases": [
+      "커서(cursor) 페이지네이션"
+    ],
+    "def": "\"마지막으로 본 항목 다음부터 N개\"처럼 기준점으로 자르는 페이지네이션. 중간에 새 항목이 들어와도 중복·누락이 없어 무한 스크롤에 맞다.",
+    "doc": "06-fullstack-workflow/how-it-works"
+  },
+  {
+    "id": "multi-tenant",
+    "term": "멀티테넌트",
+    "aliases": [],
+    "def": "여러 고객사(테넌트)가 같은 서버와 DB를 나눠 쓰는 구조. 모든 데이터와 캐시 키에 tenant_id를 붙여 서로 섞이지 않게 해야 한다.",
+    "doc": "07-db-infra/intro"
+  },
+  {
+    "id": "primary-key",
+    "term": "기본 키 (PK)",
+    "aliases": [
+      "기본 키",
+      "PK"
+    ],
+    "def": "행 하나를 유일하게 가리키는 컬럼. 중복도 NULL도 안 된다. React 리스트의 key처럼 이 값만 알면 정확히 한 행을 집어낸다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "foreign-key",
+    "term": "외래 키 (FK)",
+    "aliases": [
+      "외래 키",
+      "FK"
+    ],
+    "def": "다른 테이블에 실제로 있는 키만 들어갈 수 있게 DB가 검사하는 컬럼. 없는 보호자를 가리키는 펫 같은 고아 행을 막는다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "clustered-index",
+    "term": "클러스터드 인덱스",
+    "aliases": [
+      "clustered index"
+    ],
+    "def": "행 자체를 키 순서로 정렬해 저장하는 방식. 테이블당 하나다. SQL Server는 기본 설정에서 PK를 클러스터드 인덱스로 만든다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "page-split",
+    "term": "페이지 분할 · 단편화",
+    "aliases": [
+      "페이지 분할",
+      "단편화"
+    ],
+    "def": "정렬된 인덱스 중간에 새 키가 끼어들면 꽉 찬 8KB 페이지를 둘로 쪼갠다. 반쯤 빈 페이지가 흩어진 상태가 단편화다. 랜덤 UUID PK에서 흔하다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "left-join",
+    "term": "LEFT JOIN",
+    "aliases": [],
+    "def": "왼쪽 테이블의 행은 전부 남기고 짝이 없으면 오른쪽 컬럼을 NULL로 채우는 JOIN. INNER JOIN을 쓰면 짝 없는 행이 조용히 사라진다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "collation",
+    "term": "콜레이션",
+    "aliases": [
+      "collation"
+    ],
+    "def": "문자열을 비교·정렬하는 규칙 묶음. 대소문자를 같게 볼지, 어떤 문자 집합을 담을지가 여기서 정해진다. SQL Server varchar 한글 깨짐의 원인이 된다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "cardinality",
+    "term": "카디널리티",
+    "aliases": [
+      "cardinality"
+    ],
+    "def": "컬럼에 들어 있는 서로 다른 값의 개수. email은 높고 status는 낮다. 메트릭 태그에서는 값 종류가 많으면 시계열이 폭증한다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "gin-index",
+    "term": "GIN 인덱스",
+    "aliases": [
+      "GIN"
+    ],
+    "def": "배열·jsonb·전문 검색처럼 값 하나에 원소가 여러 개 든 컬럼을 검색하는 PostgreSQL 인덱스. acl_groups && ARRAY[...] 같은 조건에 쓴다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "covering-index",
+    "term": "커버링 인덱스",
+    "aliases": [
+      "Index Only Scan"
+    ],
+    "def": "조회에 필요한 컬럼까지 INCLUDE로 인덱스에 담아 둔 것. 테이블을 들르지 않는 Index Only Scan이 가능해진다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "not-exists",
+    "term": "NOT IN · NOT EXISTS",
+    "aliases": [
+      "NOT EXISTS",
+      "NOT IN"
+    ],
+    "def": "서브쿼리 결과에 NULL이 하나라도 있으면 NOT IN은 0행을 돌려준다. 없는 것을 찾을 때는 NOT EXISTS를 쓴다.",
+    "doc": "07-db-infra/relational-basics"
+  },
+  {
+    "id": "cache-hit-miss",
+    "term": "cache hit / miss",
+    "aliases": [
+      "cache hit",
+      "cache miss"
+    ],
+    "def": "캐시에 값이 있어 바로 꺼내면 hit, 없어서 DB 같은 원본까지 다녀오면 miss다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "cache-aside",
+    "term": "cache-aside",
+    "aliases": [],
+    "def": "앱이 캐시를 먼저 보고, 없으면 DB에서 읽어 캐시에 채우는 패턴. 쓸 때는 DB를 갱신한 뒤 캐시를 지운다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "cache-invalidation",
+    "term": "캐시 무효화",
+    "aliases": [
+      "무효화"
+    ],
+    "def": "원본이 바뀌었을 때 캐시 값을 일부러 버리는 것. queryClient.invalidateQueries()와 같은 역할이다. 관련 키를 빠뜨리기 쉽다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "cache-stampede",
+    "term": "캐시 스탬피드",
+    "aliases": [
+      "스탬피드"
+    ],
+    "def": "인기 키가 만료되는 순간 동시에 몰린 miss 요청이 전부 DB로 쏟아지는 현상. 요청 합치기와 TTL 편차로 막는다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "single-flight",
+    "term": "single-flight",
+    "aliases": [],
+    "def": "같은 키로 진행 중인 요청이 있으면 새로 보내지 않고 그 결과를 같이 기다리는 방식. 같은 Promise를 공유하는 것과 같다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "hybridcache",
+    "term": "HybridCache",
+    "aliases": [],
+    "def": ".NET 9와 함께 나온 캐시 라이브러리. 서버 메모리(L1)와 Redis 같은 분산 캐시(L2)를 묶고, 서버 한 대 안의 스탬피드를 막아 준다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "no-cache-no-store",
+    "term": "no-cache · no-store",
+    "aliases": [
+      "no-cache",
+      "no-store"
+    ],
+    "def": "no-cache는 저장하되 쓰기 전에 서버에 바뀌었는지 묻는다. 저장 자체를 막는 것은 no-store다. 이름이 헷갈리는 대표 헤더다.",
+    "doc": "07-db-infra/caching"
+  },
+  {
+    "id": "cascading-failure",
+    "term": "장애 전파",
+    "aliases": [],
+    "def": "한 곳의 고장이 그곳을 기다리는 쪽으로 번져 무관한 기능까지 멈추는 현상. 기다리는 동안 커넥션·스레드가 바닥나는 게 원인이다.",
+    "doc": "07-db-infra/resilience"
+  },
+  {
+    "id": "jitter",
+    "term": "지터",
+    "aliases": [
+      "jitter"
+    ],
+    "def": "재시도 대기 시간에 섞는 무작위 편차. 같은 순간 실패한 클라이언트들이 같은 순간 다시 몰려오지 않도록 재시도를 흩뜨린다.",
+    "doc": "07-db-infra/resilience"
+  },
+  {
+    "id": "rate-limit",
+    "term": "레이트 리밋",
+    "aliases": [
+      "레이트 리미터"
+    ],
+    "def": "정해진 시간 동안 받을 요청 수에 상한을 두고 넘치면 429로 거절하는 것. ASP.NET Core 내장 리미터는 카운터가 서버마다 따로다.",
+    "doc": "07-db-infra/resilience"
+  },
+  {
+    "id": "token-bucket",
+    "term": "토큰 버킷",
+    "aliases": [],
+    "def": "양동이에 일정 속도로 토큰이 차고 요청마다 하나씩 쓰는 레이트 리밋 방식. 짧은 버스트는 받아 주고 평균 속도를 제한한다.",
+    "doc": "07-db-infra/resilience"
+  },
+  {
+    "id": "bulkhead",
+    "term": "벌크헤드",
+    "aliases": [],
+    "def": "배의 칸막이처럼 기능별로 동시 처리 수·커넥션을 나눠, 한 외부 연동이 막혀도 다른 기능은 자원을 쓸 수 있게 하는 격리 패턴.",
+    "doc": "07-db-infra/resilience"
+  },
+  {
+    "id": "graceful-degradation",
+    "term": "우아한 실패",
+    "aliases": [
+      "Graceful degradation"
+    ],
+    "def": "일부 기능이 고장 났을 때 전체를 에러로 만들지 않고 덜 좋은 결과라도 내놓는 설계. 리랭커가 죽으면 1차 검색 결과로 답한다.",
+    "doc": "07-db-infra/resilience"
+  },
+  {
+    "id": "log-scope",
+    "term": "로그 스코프",
+    "aliases": [
+      "BeginScope"
+    ],
+    "def": "BeginScope로 열어 둔 범위 안의 모든 로그에 TenantId 같은 필드를 자동으로 붙이는 기능. React Context와 비슷하다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "trace",
+    "term": "트레이스 (trace)",
+    "aliases": [
+      "트레이스",
+      "trace id"
+    ],
+    "def": "요청 하나가 여러 서비스를 지나가는 전체 여정. 고유한 trace id 하나로 흩어진 로그와 구간을 한 줄로 꿴다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "span",
+    "term": "스팬 (span)",
+    "aliases": [
+      "스팬"
+    ],
+    "def": "트레이스 안의 구간 하나. DB 쿼리 한 번, 리랭커 호출 한 번처럼 시작과 끝이 있고 부모-자식으로 이어져 트리를 이룬다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "traceparent",
+    "term": "traceparent",
+    "aliases": [],
+    "def": "trace id와 span id를 서비스 사이에 전달하는 W3C 표준 HTTP 헤더. 언어가 달라도 같은 트레이스를 이어받을 수 있다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "percentile-latency",
+    "term": "p95 · p99",
+    "aliases": [
+      "p95",
+      "p99"
+    ],
+    "def": "응답 시간을 빠른 순으로 줄 세웠을 때 95%·99% 지점의 값. 평균이 가리는 느린 꼬리를 드러낸다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "ttft",
+    "term": "TTFT",
+    "aliases": [],
+    "def": "Time To First Token. LLM 요청 후 첫 글자가 화면에 나오기까지의 시간이다. 스트리밍 응답의 체감 속도를 좌우한다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "opentelemetry",
+    "term": "OpenTelemetry",
+    "aliases": [
+      "OTel"
+    ],
+    "def": "로그·메트릭·트레이스를 만드는 오픈 표준. 코드는 한 번만 계측하고 보낼 곳(Application Insights, Grafana 등)은 설정에서 고른다.",
+    "doc": "07-db-infra/observability"
+  },
+  {
+    "id": "stateless",
+    "term": "무상태",
+    "aliases": [
+      "stateless"
+    ],
+    "def": "서버가 요청 사이에 자기 메모리에 아무것도 기억하지 않는 성질. 상태를 DB·Redis·Blob에 두어야 서버를 늘리고 줄일 수 있다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "container-image",
+    "term": "컨테이너 · 이미지",
+    "aliases": [
+      "컨테이너 이미지"
+    ],
+    "def": "이미지는 앱·런타임·의존성을 묶은 읽기 전용 포장이고 컨테이너는 그것을 실행한 것이다. 클래스와 인스턴스 관계와 같다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "x-forwarded-for",
+    "term": "X-Forwarded-For",
+    "aliases": [],
+    "def": "로드밸런서·프록시가 원래 클라이언트 IP를 적어 넘기는 헤더. 신뢰하는 프록시를 지나온 값만 믿도록 설정한다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "managed-identity",
+    "term": "Managed Identity",
+    "aliases": [],
+    "def": "Azure가 서버에 발급하는 신분증. 앱은 비밀번호 대신 짧은 수명의 토큰으로 DB·Key Vault·Blob에 접근한다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "options-validation",
+    "term": "설정 값 검증 (ValidateOnStart)",
+    "aliases": [
+      "ValidateOnStart"
+    ],
+    "def": "옵션 클래스의 [Required] 같은 규칙을 앱 시작 때 검사하게 하는 설정. 값이 빠진 배포는 트래픽을 받기 전에 실패한다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "rolling-deployment",
+    "term": "롤링 배포",
+    "aliases": [],
+    "def": "서버를 몇 대씩 차례로 새 버전으로 바꾸는 배포. 서비스는 안 멈추지만 그동안 구버전과 신버전이 같은 DB를 같이 쓴다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "health-check",
+    "term": "헬스 체크",
+    "aliases": [
+      "liveness",
+      "readiness"
+    ],
+    "def": "로드밸런서가 주기적으로 찔러 보는 상태 확인 주소. liveness는 살아 있는지, readiness는 의존성까지 준비됐는지 묻는다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "read-replica",
+    "term": "읽기 복제본",
+    "aliases": [
+      "Read Replica",
+      "복제 지연"
+    ],
+    "def": "주 DB의 변경을 받아 적는 읽기 전용 사본. 읽기 부하를 덜지만 복제 지연 때문에 방금 쓴 값이 바로 안 보일 수 있다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "pgbouncer",
+    "term": "PgBouncer",
+    "aliases": [],
+    "def": "앱과 PostgreSQL 사이에서 커넥션을 대신 관리하는 풀러. 앱 서버 여러 대의 커넥션을 적은 수의 실제 DB 커넥션으로 돌려 쓴다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "pitr",
+    "term": "PITR",
+    "aliases": [],
+    "def": "Point-In-Time Recovery. 'DB를 어제 14:32 상태로'처럼 특정 시점으로 되돌리는 복구 방식. 관리형 DB는 대부분 기본 제공한다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "rpo",
+    "term": "RPO",
+    "aliases": [],
+    "def": "복구 시점 목표. 사고 시 최대 얼마만큼의 데이터를 잃어도 되는지다. RPO 5분이면 최대 5분 전 데이터까지는 살려야 한다.",
+    "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "rto",
+    "term": "RTO",
+    "aliases": [],
+    "def": "복구 시간 목표. 사고 후 서비스를 다시 돌리기까지 허용되는 최대 시간이다. 백업이 있어도 복원이 오래 걸리면 못 지킨다.",
+    "doc": "07-db-infra/infra"
+  }
+]
