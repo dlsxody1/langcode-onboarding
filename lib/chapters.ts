@@ -91,6 +91,21 @@ export const CHAPTERS: Chapter[] = [
       { slug: "how-it-works", file: "01-how-fullstack-works-now.md", title: "요즘 풀스택은 어떻게 일하는가" },
     ],
   },
+  {
+    id: "07-db-infra",
+    no: "07",
+    title: "DB · 인프라 · 백엔드 패턴",
+    blurb: "서버가 여러 대이고 남의 시스템이 느릴 때. 데이터는 어디에, 어떤 모양으로.",
+    dir: "07-db-infra",
+    docs: [
+      { slug: "intro", file: "README.md", title: "들어가며", kicker: "01 챕터와의 관계" },
+      { slug: "relational-basics", file: "01-relational-basics.md", title: "관계형 DB 기초" },
+      { slug: "caching", file: "02-caching.md", title: "캐싱" },
+      { slug: "resilience", file: "03-resilience.md", title: "장애에 버티는 패턴" },
+      { slug: "observability", file: "04-observability.md", title: "관측성" },
+      { slug: "infra", file: "05-infra.md", title: "인프라 지도" },
+    ],
+  },
 ];
 
 export function getChapter(id: string) {

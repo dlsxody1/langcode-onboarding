@@ -3,6 +3,8 @@
 **EF Core 에서 생기는 문제의 90% 는 EF Core 문제가 아니라 이 층의 문제다.**
 ORM 은 SQL 을 숨겨주지만, 느린 쿼리를 빠르게 만들어주지는 않는다.
 
+> 테이블 · 키 · JOIN · NULL 이 낯설면 `07-db-infra/01-relational-basics.md` 를 먼저 읽는다.
+
 ---
 
 ## 1. 인덱스

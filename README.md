@@ -20,6 +20,7 @@
 
 - `04-agent/` — MAF·MCP·tool calling. "에이전트"라는 말이 코드에서 정확히 뭘 가리키는지
 - `05-realtime-ui/` — 스트리밍 응답 UI. 내가 이미 잘하는 영역이지만, 채팅 화면 특유의 함정이 따로 있다
+- `07-db-infra/` — 관계형 DB 기초 · 캐싱 · 장애 대응 패턴 · 관측성 · 인프라. 서버가 여러 대이고 남의 시스템이 느릴 때
 
 ## 읽는 순서
 
@@ -153,6 +154,7 @@ winget install Docker.DockerDesktop
 04-agent/              에이전트란 · MAF · MCP
 05-realtime-ui/        SSE vs WebSocket · 스트리밍 UI 렌더링
 06-fullstack-workflow/ 요즘 풀스택이 실제로 일하는 방식
+07-db-infra/           관계형 DB 기초 · 캐싱 · 장애 대응 · 관측성 · 인프라 지도
 labs/lab1-dotnet-crud/ 실습: ASP.NET Core + EF Core CRUD API
 labs/lab2-mini-rag/    실습: 의존성 없는 미니 RAG 엔진 (Python)
 ```
