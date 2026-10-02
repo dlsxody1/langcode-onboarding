@@ -16,6 +16,7 @@ __pycache__/
 
 # 로컬 비밀값
 .env
+.env*.local
 appsettings.Development.local.json
 
 # Next.js

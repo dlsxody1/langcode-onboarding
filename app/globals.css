@@ -592,3 +592,33 @@ a:hover { text-decoration-color: var(--pen); }
 @media (max-width: 34rem) {
   .glossary__item { grid-template-columns: 1fr; }
 }
+
+
+/* ── 실습 탭 (lab3 미니 RAG) ──────────────────────────────── */
+.lab__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+.lab__who { display: flex; align-items: center; gap: 0.7rem; }
+.lab__who form { margin: 0; }
+.lab__out { padding: 0.3rem 0.8rem; font-size: var(--step--1); }
+/* 배지 — 채점 도장처럼 */
+.lab__badge {
+  font-family: var(--serif); font-size: var(--step--1); font-weight: 700;
+  padding: 0.1rem 0.55rem; border: 1.5px solid var(--pen); color: var(--pen);
+}
+.lab__badge[data-audience="customer"] { border-color: var(--pencil); color: var(--pencil); }
+.lab__badge[data-audience="none"] { border-color: var(--ink-faint); color: var(--ink-faint); }
+
+.lab-login { display: grid; gap: 1rem; max-width: 24rem; }
+.lab-login label { display: grid; gap: 0.3rem; }
+.lab-login label span { font-size: var(--step--1); color: var(--ink-faint); letter-spacing: 0.06em; }
+.lab-login input, .lab-ask input {
+  font: inherit; font-size: var(--step-0); color: var(--ink);
+  background: var(--paper-raised); border: 0; border-bottom: 1.5px solid var(--ink);
+  padding: 0.5rem 0.2rem;
+}
+.lab-login input:focus, .lab-ask input:focus { outline: none; border-bottom-color: var(--pen); }
+.lab-login button { justify-self: start; }
+.lab-login__error { margin: 0; color: var(--pen); font-size: var(--step--1); }
+
+.lab-ask { display: flex; gap: 0.7rem; margin: 2.4rem 0 0.8rem; }
+.lab-ask input { flex: 1; min-width: 0; }
+.lab-ask input:disabled { opacity: 0.6; }

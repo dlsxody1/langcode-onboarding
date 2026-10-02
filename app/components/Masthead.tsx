@@ -26,6 +26,9 @@ export function Masthead() {
         <Link href="/glossary" aria-current={on("/glossary")}>
           용어
         </Link>
+        <Link href="/lab" aria-current={on("/lab")}>
+          실습
+        </Link>
       </nav>
     </header>
   );

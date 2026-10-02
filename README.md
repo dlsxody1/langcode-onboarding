@@ -157,4 +157,5 @@ winget install Docker.DockerDesktop
 07-db-infra/           관계형 DB 기초 · 캐싱 · 장애 대응 · 관측성 · 인프라 지도
 labs/lab1-dotnet-crud/ 실습: ASP.NET Core + EF Core CRUD API
 labs/lab2-mini-rag/    실습: 의존성 없는 미니 RAG 엔진 (Python)
+labs/lab3-rag/         실습: 온보딩 문서로 만드는 미니 사내 RAG 챗봇 (사이트의 "실습" 탭)
 ```
