@@ -1914,5 +1914,83 @@
     "aliases": [],
     "def": "복구 시간 목표. 사고 후 서비스를 다시 돌리기까지 허용되는 최대 시간이다. 백업이 있어도 복원이 오래 걸리면 못 지킨다.",
     "doc": "07-db-infra/infra"
+  },
+  {
+    "id": "agentic-rag",
+    "term": "Agentic RAG",
+    "aliases": [],
+    "def": "검색을 고정 단계가 아니라 모델이 골라 쓰는 도구로 만든 RAG. 검색 여부 · 검색어 · 재검색 · 되묻기를 모델이 판단한다. 검색 내부 품질은 여전히 일반 RAG 와 같다.",
+    "doc": "04-agent/agentic-rag"
+  },
+  {
+    "id": "forced-tool-call",
+    "term": "강제 호출 (tool_choice)",
+    "aliases": [
+      "tool_choice",
+      "강제 호출"
+    ],
+    "def": "이번 턴에 특정 도구를 반드시 부르게 하는 API 옵션. 첫 검색을 강제하면 '검색 없이 답하지 않는다'가 프롬프트가 아니라 구조로 보장된다.",
+    "doc": "04-agent/agentic-rag"
+  },
+  {
+    "id": "structured-output",
+    "term": "구조화 출력",
+    "aliases": [
+      "structured output",
+      "response_format"
+    ],
+    "def": "모델 출력을 JSON 스키마 모양으로 강제하는 것. 프롬프트로 강제하면 파서 안전망이 필요하고, API 로 강제하면 스키마를 벗어난 출력이 생성되지 않는다.",
+    "doc": "04-agent/agentic-rag"
+  },
+  {
+    "id": "temperature",
+    "term": "temperature",
+    "aliases": [],
+    "def": "모델이 다음 토큰을 얼마나 무작위로 고를지 정하는 값. 0 에 가까울수록 가장 확률 높은 토큰만 고른다. 시스템 분기를 정하는 판정·라우팅 호출은 0 으로 둔다.",
+    "doc": "04-agent/agentic-rag"
+  },
+  {
+    "id": "fast-path",
+    "term": "fast-path",
+    "aliases": [],
+    "def": "버튼 클릭이나 도메인 고유어처럼 뻔한 입력을 LLM 왕복 없이 규칙으로 바로 분기하는 경로. 지연과 비용을 줄이고 고유어 오판을 막는다.",
+    "doc": "04-agent/agentic-rag"
+  },
+  {
+    "id": "slot-filling",
+    "term": "Slot filling",
+    "aliases": [
+      "슬롯 채우기"
+    ],
+    "def": "실행에 필요한 인자(날짜, 인원 등)를 대화에서 추출하고 빈 것은 되물어 채우는 방식. 추출은 LLM, 검증은 코드가 맡는다.",
+    "doc": "04-agent/orchestration"
+  },
+  {
+    "id": "model-tiering",
+    "term": "모델 티어링",
+    "aliases": [
+      "model tiering"
+    ],
+    "def": "호출 성격에 따라 모델 등급을 나눠 쓰는 것. 매 요청 실행되는 분류·판정·라우팅은 경량 모델, 최종 답변은 상위 모델.",
+    "doc": "04-agent/orchestration"
+  },
+  {
+    "id": "sliding-window-memory",
+    "term": "슬라이딩 윈도우 (대화 이력)",
+    "aliases": [
+      "슬라이딩 윈도우"
+    ],
+    "def": "대화 이력 중 최근 N 턴만 잘라 모델에 넣는 방식. 비용이 일정해지는 대신 오래된 대화는 잊는다. 진행 중인 슬롯 같은 상태는 따로 저장해야 한다.",
+    "doc": "04-agent/orchestration"
+  },
+  {
+    "id": "semantic-ranker",
+    "term": "시맨틱 랭커",
+    "aliases": [
+      "semantic ranker",
+      "시맨틱 리랭커"
+    ],
+    "def": "Azure AI Search 의 재정렬 기능. 1차 검색 상위 결과를 언어 모델로 다시 채점한다. 이름과 달리 벡터 검색과는 무관하다.",
+    "doc": "03-rag/retrieval-quality"
   }
 ]

@@ -68,6 +68,8 @@ export const CHAPTERS: Chapter[] = [
       { slug: "what-is-an-agent", file: "01-what-is-an-agent.md", title: "에이전트란 무엇인가" },
       { slug: "maf", file: "02-maf.md", title: "MAF" },
       { slug: "mcp", file: "03-mcp.md", title: "MCP" },
+      { slug: "agentic-rag", file: "04-agentic-rag.md", title: "Agentic RAG", kicker: "검색을 도구로 · 구조화 출력" },
+      { slug: "orchestration", file: "05-orchestration.md", title: "오케스트레이션", kicker: "라우팅 · 멀티에이전트 · 메모리" },
     ],
   },
   {

@@ -18,7 +18,7 @@
 
 여기에 회사 특성상 필요한 두 가지를 더 붙였다.
 
-- `04-agent/` — MAF·MCP·tool calling. "에이전트"라는 말이 코드에서 정확히 뭘 가리키는지
+- `04-agent/` — MAF·MCP·tool calling·Agentic RAG·오케스트레이션. "에이전트"라는 말이 코드에서 정확히 뭘 가리키는지
 - `05-realtime-ui/` — 스트리밍 응답 UI. 내가 이미 잘하는 영역이지만, 채팅 화면 특유의 함정이 따로 있다
 - `07-db-infra/` — 관계형 DB 기초 · 캐싱 · 장애 대응 패턴 · 관측성 · 인프라. 서버가 여러 대이고 남의 시스템이 느릴 때
 
@@ -35,7 +35,7 @@
 | D-5 | `labs/lab1-dotnet-crud/` 의 **"📖 실행하지 않고 읽기만 할 경우"** + `reference/` 코드 4개 | 300줄 |
 | D-4 | `03-rag/` 01\~02 — **02의 3-2절·5-2절이 실측 데이터** | |
 | D-3 | `03-rag/` 03\~04 | |
-| D-2 | `04-agent/` 전체 | 짧다 |
+| D-2 | `04-agent/` 전체 | 04·05 는 `03-rag/` 를 읽은 뒤에 |
 | D-1 | `05-realtime-ui/` + `06-fullstack-workflow/` + `02-csharp-dotnet/04` | |
 
 ### 실습을 안 할 거라면
@@ -151,7 +151,7 @@ winget install Docker.DockerDesktop
 01-backend-basics/     요청 수명주기 · 계층과 DI · DB · 인증인가 · 비동기 작업
 02-csharp-dotnet/      TS 개발자용 C# · ASP.NET Core · EF Core · Spring 대조
 03-rag/                파이프라인 · 청킹/임베딩 · 검색품질 · 엔터프라이즈 RAG
-04-agent/              에이전트란 · MAF · MCP
+04-agent/              에이전트란 · MAF · MCP · Agentic RAG · 오케스트레이션
 05-realtime-ui/        SSE vs WebSocket · 스트리밍 UI 렌더링
 06-fullstack-workflow/ 요즘 풀스택이 실제로 일하는 방식
 07-db-infra/           관계형 DB 기초 · 캐싱 · 장애 대응 · 관측성 · 인프라 지도
