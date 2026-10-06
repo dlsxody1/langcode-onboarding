@@ -10,8 +10,9 @@
 | [03. 데이터베이스](03-database.md) | 인덱스·트랜잭션·N+1·커넥션풀 | EF Core 가 만들어내는 문제는 전부 이 층에서 생긴다 |
 | [04. 인증과 인가](04-auth.md) | 누구인가(authn) vs 뭘 할 수 있나(authz) | 엔터프라이즈 = 권한이 전부. RAG 권한 필터링의 전제 |
 | [05. 오래 걸리는 작업](05-long-running-jobs.md) | 에이전트 실행처럼 30초 넘는 일을 API 로 어떻게 | AI 제품 백엔드 설계의 기본기 |
+| [06. 아키텍처 패턴](06-architecture.md) | DDD · Clean Architecture · Mediator · CQRS · Vertical Slice · 모듈러 모놀리스 | 회사 코드의 프로젝트 구조와 참조 규칙이 이 위에 서 있다 |
 
-읽는 순서는 01 → 05 그대로다. SQL 이나 JOIN 이 아직 낯설면 03 앞에 `07-db-infra/01-relational-basics.md` 를 먼저 읽는다.
+읽는 순서는 01 → 06 그대로다. 06 은 02(계층과 DI)를 읽었다면 언제 읽어도 된다. SQL 이나 JOIN 이 아직 낯설면 03 앞에 `07-db-infra/01-relational-basics.md` 를 먼저 읽는다.
 각 문서 끝의 "스스로 답해보기"에 막힘 없이 답할 수 있으면 다음으로 넘어가도 된다.
 
 ## 먼저 잡고 갈 관점

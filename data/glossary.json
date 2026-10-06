@@ -680,8 +680,8 @@
     "id": "clean-architecture",
     "term": "클린 아키텍처",
     "aliases": [],
-    "def": "업무 규칙(Domain)을 가운데 두고 DB·HTTP 같은 기술을 바깥에 두는 설계. 안쪽은 바깥쪽을 참조하지 않는다.",
-    "doc": "02-csharp-dotnet/reading-a-codebase"
+    "def": "업무 규칙(Domain)을 가운데 두고 DB·HTTP 같은 기술을 바깥에 두는 설계. 참조는 항상 안쪽을 향하고, 안쪽은 바깥을 모른다. .NET 에서는 층마다 프로젝트를 나눠 컴파일러가 참조를 막게 한다.",
+    "doc": "01-backend-basics/architecture"
   },
   {
     "id": "dotnet-solution",
@@ -696,8 +696,8 @@
     "id": "cqrs",
     "term": "CQRS",
     "aliases": [],
-    "def": "데이터를 바꾸는 요청(커맨드)과 읽는 요청(쿼리)을 다른 객체로 나누는 설계. MediatR 과 함께 자주 보인다.",
-    "doc": "02-csharp-dotnet/reading-a-codebase"
+    "def": "데이터를 바꾸는 요청(커맨드)과 읽는 요청(쿼리)을 다른 객체·모델로 나누는 설계. 대부분은 핸들러만 나누는 단계에서 충분하고, 읽기 DB 를 따로 두는 건 그다음 단계다.",
+    "doc": "01-backend-basics/architecture"
   },
   {
     "id": "rag",
@@ -1514,8 +1514,8 @@
     "id": "vertical-slice",
     "term": "수직 슬라이스",
     "aliases": [],
-    "def": "기능 하나를 DB 스키마부터 API, 화면까지 한 사람이 끝까지 맡는 방식. 층 사이를 오가는 대기 시간이 없어진다.",
-    "doc": "06-fullstack-workflow/how-it-works"
+    "def": "기능 하나를 층을 가로질러 세로로 다루는 방식. 일하는 방식으로는 한 사람이 DB 부터 화면까지 끝까지 맡는 것이고, 코드 구조로는 계층별 폴더 대신 기능별 폴더에 요청·핸들러·검증·테스트를 모으는 것이다.",
+    "doc": "01-backend-basics/architecture"
   },
   {
     "id": "openapi",
@@ -1992,5 +1992,81 @@
     ],
     "def": "Azure AI Search 의 재정렬 기능. 1차 검색 상위 결과를 언어 모델로 다시 채점한다. 이름과 달리 벡터 검색과는 무관하다.",
     "doc": "03-rag/retrieval-quality"
+  },
+  {
+    "id": "ddd",
+    "term": "DDD",
+    "aliases": [
+      "도메인 주도 설계",
+      "Domain-Driven Design"
+    ],
+    "def": "업무 규칙을 그 데이터를 가진 객체 안에 가두고, 기획과 같은 단어로 코드를 짜는 설계 방법. 규칙이 많고 자주 바뀌는 핵심 영역에 쓴다.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "aggregate",
+    "term": "애그리거트",
+    "aliases": [
+      "Aggregate",
+      "애그리거트 루트"
+    ],
+    "def": "함께 바뀌어야 하는 객체 묶음. 바깥은 루트(예: Order)를 통해서만 안쪽(OrderItem)을 건드리고, 저장도 묶음 단위로 한다.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "value-object",
+    "term": "값 객체",
+    "aliases": [
+      "Value Object"
+    ],
+    "def": "식별자 없이 값 자체로 구별되고 바뀌지 않는 객체. 금액(Money)처럼 규칙을 타입에 담을 때 쓴다.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "bounded-context",
+    "term": "바운디드 컨텍스트",
+    "aliases": [
+      "Bounded Context"
+    ],
+    "def": "같은 단어가 같은 뜻으로 통하는 경계. '상품'이 카탈로그와 주문에서 다른 뜻이면 경계를 나누고 모델을 따로 둔다. 모듈 경계가 된다.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "dependency-inversion",
+    "term": "의존성 역전",
+    "aliases": [
+      "DIP",
+      "Dependency Inversion"
+    ],
+    "def": "안쪽(업무 규칙)이 인터페이스를 선언하고 바깥(DB 구현)이 그것을 구현하게 해서, 호출 방향과 참조 방향을 반대로 만드는 기법.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "mediator",
+    "term": "MediatR",
+    "aliases": [
+      "Mediator 패턴",
+      "미디에이터"
+    ],
+    "def": "요청 객체(IRequest)를 보내면 맞는 핸들러(IRequestHandler)를 찾아 실행해 주는 중재자. 컨트롤러는 Send 만 하고, 검증·로그 같은 공통 처리는 파이프라인에 한 번만 쓴다. 최근 버전부터 상용 라이선스라 사내 구현으로 대체하는 팀도 있다.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "modular-monolith",
+    "term": "모듈러 모놀리스",
+    "aliases": [
+      "Modular Monolith"
+    ],
+    "def": "실행 파일은 하나지만 코드는 도메인 모듈별로 엄격히 나눈 구조. 모듈끼리는 공개된 Contracts 나 이벤트로만 대화한다. 필요해지면 모듈 단위로 MSA 로 떼어 낼 수 있다.",
+    "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "eventual-consistency",
+    "term": "최종 일관성",
+    "aliases": [
+      "eventual consistency"
+    ],
+    "def": "지금 당장은 어긋날 수 있지만 곧 같아지는 일관성. 읽기 DB 를 따로 두는 CQRS 에서 쓰기 직후 조회에 잠깐 안 보이는 현상이 그 예다.",
+    "doc": "01-backend-basics/architecture"
   }
 ]

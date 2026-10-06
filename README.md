@@ -148,7 +148,7 @@ winget install Docker.DockerDesktop
 ## 레포 구조
 
 ```
-01-backend-basics/     요청 수명주기 · 계층과 DI · DB · 인증인가 · 비동기 작업
+01-backend-basics/     요청 수명주기 · 계층과 DI · DB · 인증인가 · 비동기 작업 · 아키텍처 패턴
 02-csharp-dotnet/      TS 개발자용 C# · ASP.NET Core · EF Core · Spring 대조
 03-rag/                파이프라인 · 청킹/임베딩 · 검색품질 · 엔터프라이즈 RAG
 04-agent/              에이전트란 · MAF · MCP · Agentic RAG · 오케스트레이션

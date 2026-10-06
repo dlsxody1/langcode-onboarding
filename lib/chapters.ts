@@ -26,6 +26,7 @@ export const CHAPTERS: Chapter[] = [
       { slug: "database", file: "03-database.md", title: "데이터베이스" },
       { slug: "auth", file: "04-auth.md", title: "인증과 인가" },
       { slug: "long-running-jobs", file: "05-long-running-jobs.md", title: "오래 걸리는 작업" },
+      { slug: "architecture", file: "06-architecture.md", title: "아키텍처 패턴", kicker: "DDD · Clean · CQRS · 모듈러 모놀리스" },
     ],
   },
   {
