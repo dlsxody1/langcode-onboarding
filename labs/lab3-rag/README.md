@@ -3,7 +3,7 @@
 이 사이트의 **"실습" 탭**(`/lab`)이다. 01–07 문서를 코퍼스로 검색하고, 근거와 함께 답한다.
 전체 계획은 [`PLAN.md`](./PLAN.md), 측정 기록은 [`RESULTS.md`](./RESULTS.md).
 
-**지금 상태: 1단계 완료** — 로그인 게이트, 가상 사내 문서 4개, 평가셋 126문항. 검색은 아직 없다.
+**지금 상태: 2단계 완료** — 로그인 게이트, 가상 사내 문서 4개, 평가셋 126문항, 파서(md·pdf·docx → 섹션 947개). 검색은 아직 없다.
 
 ## 파일 위치
 
@@ -23,6 +23,7 @@
 | 명령 | 하는 일 |
 | --- | --- |
 | `npm run lab:docs` | `src/` 원본으로 `travel-expense.pdf`, `benefits.docx` 다시 만들기 (Edge/Chrome 필요) |
+| `npm run lab:parse` | 코퍼스 전체 → `generated/parsed.json`. `-- --print travel` 로 섹션 확인, `-- --markdown travel` 로 PDF 가 어떻게 읽혔는지 확인 |
 | `npm run lab:eval-set` | 퀴즈 + 보강 문항 → `data/eval.jsonl`. 정답 문서·절 오타를 검증한다 |
 
 ## 처음 한 번: Supabase · Vercel 설정 (직접 할 일)

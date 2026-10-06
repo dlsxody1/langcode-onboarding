@@ -5,6 +5,7 @@ import path from "node:path";
 import { marked } from "marked";
 import { CHAPTERS, type Chapter, type DocMeta } from "./chapters";
 import { annotateGlossary } from "./glossary";
+import { HeadingIds, headingPlainText } from "./slug";
 
 export * from "./chapters";
 
@@ -19,30 +20,19 @@ for (const c of CHAPTERS) {
   }
 }
 
-function slugifyHeading(text: string) {
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s-]/gu, "")
-    .replace(/\s+/g, "-");
-}
-
 export type Heading = { depth: number; text: string; id: string };
 
 export function renderDoc(chapter: Chapter, doc: DocMeta): { html: string; headings: Heading[] } {
   const raw = fs.readFileSync(path.join(ROOT, chapter.dir, doc.file), "utf-8");
   const headings: Heading[] = [];
-  const seen = new Map<string, number>();
+  const ids = new HeadingIds();
 
   const renderer = new marked.Renderer();
 
   renderer.heading = function ({ tokens, depth }) {
     const text = this.parser.parseInline(tokens);
-    const plain = text.replace(/<[^>]+>/g, "");
-    let id = slugifyHeading(plain) || `h${headings.length}`;
-    const n = seen.get(id) ?? 0;
-    seen.set(id, n + 1);
-    if (n > 0) id = `${id}-${n}`;
+    const plain = headingPlainText(text);
+    const id = ids.next(plain, depth);
     if (depth === 2 || depth === 3) headings.push({ depth, text: plain, id });
     return `<h${depth} id="${id}"><a class="anchor" href="#${id}" aria-label="이 절 링크">§</a>${text}</h${depth}>\n`;
   };

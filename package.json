@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lab:docs": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/make-internal-docs.mts",
-    "lab:eval-set": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/build-eval-set.mts"
+    "lab:eval-set": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/build-eval-set.mts",
+    "lab:parse": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/parse.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -21,6 +22,8 @@
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.7",
     "docx": "^9.8.1",
-    "typescript": "^5.7.3"
+    "mammoth": "^1.13.0",
+    "typescript": "^5.7.3",
+    "unpdf": "^1.8.1"
   }
 }
