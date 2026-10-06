@@ -3,7 +3,7 @@
 이 사이트의 **"실습" 탭**(`/lab`)이다. 01–07 문서를 코퍼스로 검색하고, 근거와 함께 답한다.
 전체 계획은 [`PLAN.md`](./PLAN.md), 측정 기록은 [`RESULTS.md`](./RESULTS.md).
 
-**지금 상태: 3단계 완료** — 로그인 게이트, 가상 사내 문서 4개, 평가셋 126문항, 청크 1,215개(Supabase 동기화 + RLS), BM25 색인. 검색 API 는 4단계.
+**지금 상태: 4단계 완료** — 실습 탭에서 질문하면 BM25 근거 청크가 나온다(권한 2겹). 평가 기준선 R@3 0.893 · 누출 0건 → [`RESULTS.md`](./RESULTS.md). 답변 생성은 6단계.
 
 ## 파일 위치
 
@@ -27,6 +27,7 @@
 | `npm run lab:index` | 파싱 → 청킹 → `generated/index.json`(커밋) + `chunks.json`(커밋 안 함) |
 | `npm run lab:sync` | 청크·원본을 Supabase 로. 바뀐 청크만 보낸다. **secret 키 필요 (`.env.local` 의 `SUPABASE_SECRET_KEY`, 로컬 전용)** |
 | `npm run lab:sync -- --check` | 쓰지 않고 색인 ↔ DB 어긋남만 확인 |
+| `npm run lab:eval` | 평가: R@1·3·5, MRR, 종류·형식·함정별, 놓친 질문, 권한 누출. `-- --all` 전체, `-- --no-prefilter` 1차 필터 끈 실험 |
 | `npm run lab:eval-set` | 퀴즈 + 보강 문항 → `data/eval.jsonl`. 정답 문서·절 오타를 검증한다 |
 
 ## 처음 한 번: Supabase · Vercel 설정 (직접 할 일)
@@ -61,6 +62,10 @@ http://localhost:3000/lab → 로그인 화면으로 이동해야 한다.
 - `curl -X POST http://localhost:3000/api/lab/chat` → `401`
 - 데모 임직원 계정으로 로그인 → "임직원" 배지, 새로고침해도 유지, 로그아웃 → 다시 `/lab/login`
 - 로그인 상태에서 `/api/lab/chat` 에 POST → `501` + `audience`
+
+## 실험: 1차 권한 필터 끄기
+
+개발 서버를 `LAB_UNSAFE_SKIP_PREFILTER=1` 로 띄우고 고객 계정으로 "USB 메모리 써도 되나요?" 를 물으면, BM25 는 임직원 청크를 고르지만 RLS 가 원문 조회를 막는다. 화면에는 경고가, 서버 로그에는 `[lab3] 요청 5개 중 n개만 조회됨` 이 남는다. 운영 빌드(`NODE_ENV=production`)에서는 이 스위치가 무시된다.
 
 ## 알아둘 것
 

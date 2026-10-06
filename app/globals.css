@@ -622,3 +622,31 @@ a:hover { text-decoration-color: var(--pen); }
 .lab-ask { display: flex; gap: 0.7rem; margin: 2.4rem 0 0.8rem; }
 .lab-ask input { flex: 1; min-width: 0; }
 .lab-ask input:disabled { opacity: 0.6; }
+
+.lab-examples { display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; margin-bottom: 2rem; }
+.lab-examples button {
+  font: inherit; font-size: var(--step--1); color: var(--ink-soft); cursor: pointer;
+  background: none; border: 1px solid var(--rule); padding: 0.25rem 0.7rem;
+}
+.lab-examples button:hover { border-color: var(--pencil); color: var(--pencil); }
+
+.lab-results { margin-top: 1rem; }
+.lab-warn { font-size: var(--step--1); color: var(--pen); border-left: 2px solid var(--pen); padding-left: 0.6rem; }
+.lab-cards { list-style: none; margin: 1rem 0 0; padding: 0; border-top: 1.5px solid var(--ink); }
+.lab-card { border-bottom: 1px solid var(--rule); padding: 1rem 0; }
+.lab-card__head { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.lab-card__head strong { font-family: var(--serif); font-size: var(--step-1); font-weight: 700; }
+.lab-card__rank { font-family: var(--mono); color: var(--pen); font-size: var(--step--1); }
+.lab-card__flag { font-size: var(--step--1); color: var(--pen); border: 1px solid var(--pen); padding: 0 0.35rem; }
+.lab-card__score { margin-left: auto; font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint); }
+.lab-card__path { margin: 0.25rem 0 0; font-size: var(--step--1); color: var(--ink-soft); }
+.lab-card__meta { margin: 0.15rem 0 0.6rem; font-size: var(--step--1); color: var(--ink-faint); word-break: break-all; }
+.lab-card__meta code { font-family: var(--mono); font-size: 0.92em; }
+.lab-card__text {
+  margin: 0 0 0.5rem; padding: 0.7rem 0.9rem; background: var(--paper-sunk);
+  font-family: var(--sans); font-size: var(--step--1); line-height: 1.7;
+  white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere;
+  max-height: 14rem; overflow: auto;
+}
+.lab-card a { font-size: var(--step--1); color: var(--pencil); text-decoration: none; }
+.lab-card a:hover { text-decoration: underline; }

@@ -1,0 +1,24 @@
+# 실습 3 검색 품질 회귀 테스트.
+# 색인(generated/index.json)과 평가셋(data/eval.jsonl)이 커밋돼 있으므로 DB 없이 돈다.
+# R@3 가 기준 아래로 떨어지거나 권한 누출이 1건이라도 있으면 실패한다.
+name: lab3 eval
+
+on:
+  push:
+    paths: ["labs/lab3-rag/**", "lib/rag/**", ".github/workflows/lab3-eval.yml"]
+  pull_request:
+    paths: ["labs/lab3-rag/**", "lib/rag/**", ".github/workflows/lab3-eval.yml"]
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24 # .mts / .ts 를 빌드 없이 바로 실행 (type stripping)
+          cache: npm
+      - run: npm ci
+      # 평가셋을 다시 만들어 커밋된 것과 같은지 본다 (정답 문서·절 오타 검증 포함)
+      - run: npm run lab:eval-set && git diff --exit-code labs/lab3-rag/data/eval.jsonl
+      - run: npm run lab:eval -- --ci --min-recall3 0.85

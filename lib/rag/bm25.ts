@@ -55,3 +55,47 @@ export function buildBm25Index(
     postings: Object.fromEntries(postings),
   };
 }
+
+export type SearchHit = { chunkId: string; doc: string; score: number };
+
+export type SearchOptions = {
+  /** 이 사용자의 열람 범위. 범위 밖 청크는 점수를 매기기 전에 뺀다 (1차 필터) */
+  audience: Audience;
+  k: number;
+  /** 실험용: 1차 필터를 끈다. RLS(2차)만 남았을 때 무슨 일이 생기는지 보려는 것 — 운영에서 쓰지 않는다 */
+  unsafeSkipAudienceFilter?: boolean;
+};
+
+/**
+ * BM25 검색. 공식은 labs/lab2-mini-rag/minirag.py 의 BM25.score 와 같다.
+ *   idf   = ln(1 + (N - df + 0.5) / (df + 0.5))
+ *   score = Σ idf × tf × (k1 + 1) / (tf + k1 × (1 - b + b × len / avgLen))
+ *
+ * 질의 토큰은 중복을 뺀다 ("휴가 휴가" 라고 두 번 써도 점수가 두 배가 되지 않게).
+ * IDF 의 N 과 df 는 전체 코퍼스 기준이다. 권한으로 걸러도 점수의 척도는 그대로 둔다.
+ */
+export function searchBm25(index: Bm25Index, query: string, opts: SearchOptions): SearchHit[] {
+  const { k1, b, n, avgLen } = index.meta;
+  const allowed = (i: number) => opts.unsafeSkipAudienceFilter || index.chunks[i].aud.includes(opts.audience);
+  const scores = new Map<number, number>();
+
+  for (const term of new Set(tokenize(query))) {
+    // 일반 객체라서 "constructor" 같은 질의어는 프로토타입 함수가 나온다. 자기 속성만 본다
+    if (!Object.hasOwn(index.postings, term)) continue;
+    const list = index.postings[term];
+    const df = list.length / 2;
+    const idf = Math.log(1 + (n - df + 0.5) / (df + 0.5));
+    for (let j = 0; j < list.length; j += 2) {
+      const i = list[j];
+      if (!allowed(i)) continue; // 1차 필터: 후보 단계에서 제외
+      const tf = list[j + 1];
+      const norm = tf + k1 * (1 - b + (b * index.chunks[i].len) / (avgLen || 1));
+      scores.set(i, (scores.get(i) ?? 0) + (idf * tf * (k1 + 1)) / norm);
+    }
+  }
+
+  return [...scores.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, opts.k)
+    .map(([i, score]) => ({ chunkId: index.chunks[i].id, doc: index.chunks[i].doc, score }));
+}

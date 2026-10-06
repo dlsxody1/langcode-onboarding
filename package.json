@@ -9,7 +9,8 @@
     "lab:eval-set": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/build-eval-set.mts",
     "lab:parse": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/parse.mts",
     "lab:index": "npm run -s lab:parse && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/build-index.mts",
-    "lab:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/sync-supabase.mts"
+    "lab:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/sync-supabase.mts",
+    "lab:eval": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON labs/lab3-rag/scripts/eval.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

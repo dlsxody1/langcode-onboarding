@@ -209,13 +209,15 @@ type ParsedDoc = {
 
 **관련 문서:** `03-rag/03-retrieval-quality.md` 1·4절, `03-rag/04-enterprise-rag.md` 1절
 
-- [ ] `SearchEngine.search(query, { audience, k })`: BM25, audience 는 후보 단계에서 제외 (1차)
-- [ ] `ChunkStore.getByIds(ids)`: 사용자 세션으로 조회 → RLS 2차. 요청 수 ≠ 받은 수면 경고 로그
-- [ ] `npm run lab:eval`: Recall@1·@3, MRR, 놓친 질문, **챕터별**·형식별·audience 별, 퀴즈 원문 vs 패러프레이즈 문항 비교
-- [ ] 권한 누출 테스트: 고객 audience 로 전 문항 검색 시 임직원 청크 0개
-- [ ] `RESULTS.md` 기준선, GitHub Actions 연결
+- [x] `searchBm25(index, query, { audience, k })` (`lib/rag/bm25.ts`): audience 밖 청크는 점수 계산 전에 제외 (1차). 질의어는 `Object.hasOwn` 으로 조회
+- [x] `getChunksByIds` (`lib/rag/search.ts`): 사용자 세션으로 chunks + documents 조회 → RLS 2차. 요청 수 ≠ 받은 수면 `[lab3]` 경고 로그 + 응답 warnings
+- [x] `/api/lab/chat`: getUser 재확인 → profiles 의 audience → 질의 정규화(300자) → 검색 → 원문. 실습 탭에 근거 카드(제목·절 경로·쪽·버전·열람 범위·BM25 점수·chunkId·원문 링크)
+- [x] 색인은 import 대신 파일로 읽는다(1.3MB JSON 타입 생성 회피) + `next.config.ts` 의 `outputFileTracingIncludes`
+- [x] `npm run lab:eval`: R@1·3·5, MRR, 종류·형식·audience·함정별, 절 단위 R@3, 1등 점수 분포, 놓친 질문, 권한 누출
+- [x] 권한 누출 0건 / `--no-prefilter` 실험 시 67건
+- [x] `RESULTS.md` 기준선, `.github/workflows/lab3-eval.yml` (평가셋 재생성 diff + R@3 ≥ 0.85 + 누출 0)
 
-**완료 기준:** 평가 한 번에 지표 + 실패 목록 + 누출 0건이 나오고, CI 에서도 돈다.
+**완료 기준:** 평가 한 번에 지표 + 실패 목록 + 누출 0건이 나오고, CI 에서도 돈다. ✅ (CI 단계를 로컬에서 그대로 실행해 통과. 원격 실행은 push 후)
 
 **스스로 답해보기**
 - 1차 필터를 일부러 꺼 보면 어떤 로그가 찍히나?

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Masthead } from "@/app/components/Masthead";
 import { currentUser } from "@/lib/supabase/server";
+import { LabSearch } from "./LabSearch";
 
 export const metadata: Metadata = { title: "실습" };
 // 사용자마다 다른 화면이다. env 가 없는 빌드에서도 정적 페이지로 굳지 않게
@@ -43,15 +44,7 @@ export default async function LabPage() {
           </p>
         )}
 
-        <form className="lab-ask" aria-disabled="true">
-          <input type="text" placeholder="온보딩 문서에 대해 물어보세요 — 4단계 이후 연결" disabled />
-          <button className="btn" type="submit" disabled>
-            보내기
-          </button>
-        </form>
-        <p className="note">
-          0단계: 로그인 게이트만 동작한다. 검색·답변은 <code>labs/lab3-rag/PLAN.md</code> 4·6단계에서 붙는다.
-        </p>
+        {user.audience && <LabSearch audience={user.audience} />}
       </main>
     </>
   );
