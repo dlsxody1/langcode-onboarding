@@ -188,17 +188,18 @@ type ParsedDoc = {
 
 **관련 문서:** `03-rag/01-pipeline.md` 1·3절, `03-rag/02-chunking-embedding.md` 2·7·8절
 
-- [ ] 섹션 기반 청킹, 600자 초과 시 문장 경계로 분할
-- [ ] 청크 메타데이터: `chunkId`, `slug`, `headingPath`, `page`, `version`, `effectiveDate`, `audience[]`, `anchor`, `contentHash`
-- [ ] 검색용 텍스트에 `[문서 제목 > 절 제목]` 맥락 주입 (표시용 원문과 분리)
-- [ ] `build-index.ts` → `generated/index.json` (원문 미포함)
-- [ ] `0002_documents_chunks.sql`: 5절 테이블·RLS, `0003_logs_feedback.sql`
-- [ ] `sync-supabase.ts` (service_role, 로컬·CI 전용): upsert, Storage 업로드, 해시 같으면 건너뜀, 사라진 청크 삭제
-- [ ] 사이트 `prebuild` 에 `build-index` 연결 여부 결정 (index.json 을 커밋할지 빌드에서 만들지)
+- [x] 섹션 기반 청킹 (`scripts/chunk.mts`): 600자 초과 시 문단 → 문장 경계, 코드·목록은 줄 경계, 표는 행 경계 + 조각마다 캡션 → **청크 1,215개** (표 242, 600자 초과 1개 = 혼자 긴 코드 블록)
+- [x] chunkId = `문서#앵커~순번`. 다른 절을 고쳐도 이 절의 id 는 그대로 → 동기화가 바뀐 청크만 보낸다
+- [x] 검색용 텍스트에 `[문서 제목 > 절 경로]` 맥락 주입, 표시용 원문(text)과 분리
+- [x] `lib/rag/tokenizer.ts`(lab2 이식) · `lib/rag/bm25.ts` → `generated/index.json` 1.3MB, 원문 없음. 용어 2만여 개
+  - 버그 하나: 색인을 `{}` 로 만들면 문서의 "constructor" 가 `Object.prototype.constructor` 와 부딪힌다 → Map 으로 만들고, 읽을 때는 `Object.hasOwn`
+- [x] `0002_documents_chunks.sql`: documents · chunks + SELECT 정책만(쓰기는 secret 키만), 비공개 버킷 `originals` + "볼 수 있는 문서의 원본만" 정책 (documents RLS 를 이어 붙임). `0003_logs_feedback` 은 8단계로 미룸
+- [x] `sync-supabase.mts` (secret 키, 로컬 전용): 해시 비교로 +추가 ~변경 -삭제 =그대로, 원본 4개 업로드, `--check` 는 쓰지 않고 어긋남만 보고(exit 1)
+- [x] **index.json 은 커밋한다.** 사이트 빌드가 실습 도구(unpdf·mammoth)에 의존하지 않게 — 실습 탭 때문에 학습 사이트 배포가 깨지면 안 된다. 어긋남은 `lab:sync -- --check` 로 잡는다
 
-**완료 기준**
-- 문서 하나를 고치고 동기화하면 그 문서 청크만 바뀐다는 로그
-- 고객 역할로 `select * from chunks` 를 흉내 냈을 때 공개 문서(01–07)만 보인다
+**완료 기준** ✅
+- 문서 하나를 고치고 동기화하면 그 문서 청크만 바뀐다는 로그 → v4.2 제5조 한 줄 수정 시 `internal/security-policy-v4.2 +0 ~1 -0 =15`, 나머지 36개 문서는 건너뜀
+- 고객 역할로 `select * from chunks` 를 흉내 냈을 때 공개 문서(01–07)만 보인다 → 고객: 청크 1,160 · 임직원 전용 0 · 사내 문서 0 · 원본 0 / 임직원: 1,215 · 55 · 4 · 4
 
 **스스로 답해보기**
 - 색인 파일과 DB 에 데이터를 나눠 둔 이유는? 둘이 어긋나면 어떻게 감지하나?

@@ -27,3 +27,4 @@ next-env.d.ts
 
 # 실습 3 중간 산출물 (npm run lab:parse 로 다시 만든다)
 labs/lab3-rag/generated/parsed.json
+labs/lab3-rag/generated/chunks.json

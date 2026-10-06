@@ -3,7 +3,7 @@
 이 사이트의 **"실습" 탭**(`/lab`)이다. 01–07 문서를 코퍼스로 검색하고, 근거와 함께 답한다.
 전체 계획은 [`PLAN.md`](./PLAN.md), 측정 기록은 [`RESULTS.md`](./RESULTS.md).
 
-**지금 상태: 2단계 완료** — 로그인 게이트, 가상 사내 문서 4개, 평가셋 126문항, 파서(md·pdf·docx → 섹션 947개). 검색은 아직 없다.
+**지금 상태: 3단계 완료** — 로그인 게이트, 가상 사내 문서 4개, 평가셋 126문항, 청크 1,215개(Supabase 동기화 + RLS), BM25 색인. 검색 API 는 4단계.
 
 ## 파일 위치
 
@@ -24,6 +24,9 @@
 | --- | --- |
 | `npm run lab:docs` | `src/` 원본으로 `travel-expense.pdf`, `benefits.docx` 다시 만들기 (Edge/Chrome 필요) |
 | `npm run lab:parse` | 코퍼스 전체 → `generated/parsed.json`. `-- --print travel` 로 섹션 확인, `-- --markdown travel` 로 PDF 가 어떻게 읽혔는지 확인 |
+| `npm run lab:index` | 파싱 → 청킹 → `generated/index.json`(커밋) + `chunks.json`(커밋 안 함) |
+| `npm run lab:sync` | 청크·원본을 Supabase 로. 바뀐 청크만 보낸다. **secret 키 필요 (`.env.local` 의 `SUPABASE_SECRET_KEY`, 로컬 전용)** |
+| `npm run lab:sync -- --check` | 쓰지 않고 색인 ↔ DB 어긋남만 확인 |
 | `npm run lab:eval-set` | 퀴즈 + 보강 문항 → `data/eval.jsonl`. 정답 문서·절 오타를 검증한다 |
 
 ## 처음 한 번: Supabase · Vercel 설정 (직접 할 일)
@@ -34,6 +37,8 @@
 - [ ] **SQL Editor** 에서 차례로 실행
   1. `supabase/migrations/0001_profiles.sql`
   2. `supabase/seed.sql` (이메일을 바꿨다면 seed 도 같이 바꾼다)
+  3. `supabase/migrations/0002_documents_chunks.sql`
+- [ ] Secret keys 의 키를 `.env.local` 의 `SUPABASE_SECRET_KEY=` 에 넣고 `npm run lab:index && npm run lab:sync`
 - [ ] **Project Settings → API Keys** 에서 Project URL 과 publishable 키(또는 anon 키) 복사
 - [ ] 저장소 루트에서 `.env.local.example` → `.env.local` 로 복사하고 값 채우기
 - [ ] Vercel(이 사이트 프로젝트) → Settings → Environment Variables 에 **두 개만** 추가
