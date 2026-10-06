@@ -3,7 +3,7 @@
 이 사이트의 **"실습" 탭**(`/lab`)이다. 01–07 문서를 코퍼스로 검색하고, 근거와 함께 답한다.
 전체 계획은 [`PLAN.md`](./PLAN.md), 측정 기록은 [`RESULTS.md`](./RESULTS.md).
 
-**지금 상태: 4단계 완료** — 실습 탭에서 질문하면 BM25 근거 청크가 나온다(권한 2겹). 평가 기준선 R@3 0.893 · 누출 0건 → [`RESULTS.md`](./RESULTS.md). 답변 생성은 6단계.
+**지금 상태: 5단계 완료** — 용어 사전 + 수제 리랭커. R@1 0.705 → 0.783 · R@3 0.876 → 0.915 · 누출 0건 → [`RESULTS.md`](./RESULTS.md). 답변 생성은 6단계.
 
 ## 파일 위치
 
@@ -16,6 +16,7 @@
 | DB 스키마 · 시드 | `labs/lab3-rag/supabase/` |
 | 가상 사내 문서 | `labs/lab3-rag/corpus-internal/` (목록은 `manifest.json`, PDF·DOCX 원본은 `src/`) |
 | 평가셋 | `labs/lab3-rag/data/eval.jsonl` (생성물) ← `data/questions.ts` + `data/eval-extra.jsonl` |
+| 용어 사전 | `labs/lab3-rag/data/synonyms.json` (+ `data/glossary.json` 별칭). 고치면 재색인 없이 바로 반영 |
 | 스크립트 | `labs/lab3-rag/scripts/` — Node 24 가 `.mts` 를 바로 실행한다 (tsx 불필요) |
 
 ## 명령
@@ -28,6 +29,7 @@
 | `npm run lab:sync` | 청크·원본을 Supabase 로. 바뀐 청크만 보낸다. **secret 키 필요 (`.env.local` 의 `SUPABASE_SECRET_KEY`, 로컬 전용)** |
 | `npm run lab:sync -- --check` | 쓰지 않고 색인 ↔ DB 어긋남만 확인 |
 | `npm run lab:eval` | 평가: R@1·3·5, MRR, 종류·형식·함정별, 놓친 질문, 권한 누출. `-- --all` 전체, `-- --no-prefilter` 1차 필터 끈 실험 |
+| `npm run lab:eval -- --compare` | BM25 → +용어 사전 → +리랭크 비교, 좋아진·나빠진 질문. `--no-synonyms` `--no-rerank` 로 하나씩 끄기 |
 | `npm run lab:eval-set` | 퀴즈 + 보강 문항 → `data/eval.jsonl`. 정답 문서·절 오타를 검증한다 |
 
 ## 처음 한 번: Supabase · Vercel 설정 (직접 할 일)

@@ -4,6 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { searchBm25, type Audience, type Bm25Index, type SearchHit } from "./bm25.ts";
+import { rerank, type Signals } from "./rerank.ts";
+import { buildSynonymTable, expandQuery, type SynonymTable } from "./synonyms.ts";
 
 /**
  * 실습 3 런타임 검색. 두 겹의 권한:
@@ -21,10 +23,25 @@ export function loadIndex(): Bm25Index {
   return cached;
 }
 
+// 용어 사전: 실습 사전 + 학습 사이트 용어집. 둘 다 파일로 읽는다 (next.config.ts 의 outputFileTracingIncludes)
+let synonyms: SynonymTable | null = null;
+export function loadSynonyms(): SynonymTable {
+  if (!synonyms) {
+    const read = (rel: string) => JSON.parse(fs.readFileSync(path.join(process.cwd(), rel), "utf8"));
+    synonyms = buildSynonymTable(read("labs/lab3-rag/data/synonyms.json").entries, read("data/glossary.json"));
+  }
+  return synonyms;
+}
+
 export type Evidence = {
   rank: number;
   chunkId: string;
+  /** 리랭크 최종 점수 */
   score: number;
+  /** 리랭크 전 BM25 점수와 순위 */
+  bm25: number;
+  bm25Rank: number;
+  signals: Signals;
   docId: string;
   title: string;
   route: string;
@@ -80,14 +97,14 @@ export async function getChunksByIds(supabase: SupabaseClient, hits: SearchHit[]
     warnings.push(msg);
   }
 
-  const evidence: Evidence[] = [];
-  for (const h of hits) {
+  const evidence: Omit<Evidence, "rank" | "score" | "signals">[] = [];
+  hits.forEach((h, i) => {
     const r = rows.get(h.chunkId);
-    if (!r || !r.documents) continue;
+    if (!r || !r.documents) return;
     evidence.push({
-      rank: evidence.length + 1,
       chunkId: r.chunk_id,
-      score: Math.round(h.score * 100) / 100,
+      bm25: Math.round(h.score * 100) / 100,
+      bm25Rank: i + 1,
       docId: r.doc_id,
       title: r.documents.title,
       route: r.documents.route,
@@ -102,7 +119,7 @@ export async function getChunksByIds(supabase: SupabaseClient, hits: SearchHit[]
       status: r.documents.status,
       source: r.documents.source,
     });
-  }
+  });
   return { evidence, warnings };
 }
 
@@ -110,6 +127,18 @@ export async function getChunksByIds(supabase: SupabaseClient, hits: SearchHit[]
 export const skipAudienceFilterForExperiment =
   process.env.NODE_ENV !== "production" && process.env.LAB_UNSAFE_SKIP_PREFILTER === "1";
 
-export function search(query: string, audience: Audience, k: number) {
-  return searchBm25(loadIndex(), query, { audience, k, unsafeSkipAudienceFilter: skipAudienceFilterForExperiment });
+export const CANDIDATES = 20;
+
+/**
+ * 검색 파이프라인 (eval.mts 와 같은 순서):
+ *   용어 사전으로 질의 넓히기 → BM25 상위 20 (1차 권한 필터) → 원문 조회 (RLS 2차) → 리랭크 → 상위 k
+ * 리랭크를 원문 조회 뒤에 하는 이유: 근접도 신호에 본문이 필요하고, 본문은 RLS 를 통과해야만 읽힌다.
+ */
+export async function retrieve(supabase: SupabaseClient, question: string, audience: Audience, k: number) {
+  const { query, applied } = expandQuery(question, loadSynonyms());
+  const hits = searchBm25(loadIndex(), query, { audience, k: CANDIDATES, unsafeSkipAudienceFilter: skipAudienceFilterForExperiment });
+  const { evidence: rows, warnings } = await getChunksByIds(supabase, hits);
+  const ranked = rerank(query, rows).slice(0, k);
+  const evidence: Evidence[] = ranked.map((r, i) => ({ ...r, rank: i + 1, score: Math.round(r.score * 1000) / 1000 }));
+  return { expandedQuery: query, applied, evidence, warnings };
 }

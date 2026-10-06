@@ -1,0 +1,21 @@
+{
+  "$comment": "사내 용어 사전 (대표어 ← 다른 표현). 질의에 다른 표현이 있으면 대표어를 질의 끝에 덧붙인다. data/glossary.json 의 aliases 도 함께 읽는다. 평가 질문 문장을 그대로 넣지 않는다 — 용어 대응만 적는다 (시험지를 외우지 않기).",
+  "entries": [
+    { "canonical": "다중 인증", "variants": ["MFA", "2단계 인증", "이중 인증", "2차 인증"] },
+    { "canonical": "데이터 유출 방지", "variants": ["DLP"] },
+    { "canonical": "외부 저장장치", "variants": ["USB", "외장 하드", "외장하드", "이동식 저장"] },
+    { "canonical": "원격 접속", "variants": ["VPN", "사외 접속", "밖에서 접속"] },
+    { "canonical": "비밀번호", "variants": ["패스워드", "password"] },
+    { "canonical": "숙박비", "variants": ["호텔비", "호텔", "숙소비", "숙소"] },
+    { "canonical": "일비", "variants": ["출장 수당", "하루 경비"] },
+    { "canonical": "경비 정산", "variants": ["출장비 청구", "경비 청구", "영수증 제출"] },
+    { "canonical": "경조금", "variants": ["축의금", "조의금", "부의금", "경조사비", "결혼", "장례", "부고"] },
+    { "canonical": "반반차", "variants": ["2시간 휴가", "두 시간 휴가", "두 시간", "2시간만"] },
+    { "canonical": "반차", "variants": ["오전 휴가", "오후 휴가", "반일 휴가"] },
+    { "canonical": "연차휴가", "variants": ["연차", "월차"] },
+    { "canonical": "자기계발비", "variants": ["책값", "도서 구입", "도서비", "강의비", "교육비", "자격증"] },
+    { "canonical": "재택근무", "variants": ["집에서 일", "원격 근무", "원격근무"] },
+    { "canonical": "신규 입사자", "variants": ["새로 들어온 사람", "신입 사원", "신입"] },
+    { "canonical": "SSE", "variants": ["Server-Sent Events", "서버 전송 이벤트"] }
+  ]
+}

@@ -124,3 +124,11 @@
 {"id":"n3","kind":"customer","audience":"customer","expect":"none","question":"결혼하면 경조금 얼마 나와요?","gold":[],"trap":"acl","note":"임직원 전용 benefits 에만 있다"}
 {"id":"n4","kind":"none","audience":"employee","expect":"none","question":"법인 차량 빌리려면 어떻게 해?","gold":[],"note":"어느 문서에도 없다"}
 {"id":"n5","kind":"none","audience":"employee","expect":"none","question":"올해 성과급 지급일이 언제야?","gold":[],"note":"어느 문서에도 없다"}
+{"id":"h1","kind":"internal","audience":"employee","expect":"found","question":"2차 인증 앱이 깔린 폰을 잃어버렸어요","gold":[{"doc":"internal/security-policy-v4.2","section":"제5조"}],"trap":"heldout","note":"5단계 사전을 만든 뒤 추가한 문항. 사전 튜닝에 쓰지 않는다"}
+{"id":"h2","kind":"internal","audience":"employee","expect":"found","question":"외장하드에 작업 파일 백업해도 되나요?","gold":[{"doc":"internal/security-policy-v4.2","section":"제8조"}],"trap":"heldout","note":"held-out"}
+{"id":"h3","kind":"internal","audience":"employee","expect":"found","question":"대전 출장 숙소는 얼마까지 잡을 수 있어?","gold":[{"doc":"internal/travel-expense","section":"제4조"}],"trap":"heldout","note":"held-out. 표 안의 답"}
+{"id":"h4","kind":"internal","audience":"employee","expect":"found","question":"할머니 장례식이면 휴가 며칠 줘?","gold":[{"doc":"internal/benefits","section":"경조금"}],"trap":"heldout","note":"held-out"}
+{"id":"h5","kind":"internal","audience":"employee","expect":"found","question":"카페 와이파이로 회사 메일 봐도 돼?","gold":[{"doc":"internal/security-policy-v4.2","section":"제9조"}],"trap":"heldout","note":"held-out. 사전에 없는 표현"}
+{"id":"h6","kind":"internal","audience":"employee","expect":"found","question":"영수증을 잃어버렸는데 경비 처리 되나요?","gold":[{"doc":"internal/travel-expense","section":"제10조"}],"trap":"heldout","note":"held-out"}
+{"id":"h7","kind":"internal","audience":"employee","expect":"found","question":"노트북 화면 잠금은 몇 분으로 맞춰야 해?","gold":[{"doc":"internal/security-policy-v4.2","section":"제7조"}],"trap":"heldout","note":"held-out. v4.1(10분)과 v4.2(5분)가 모순"}
+{"id":"h8","kind":"internal","audience":"employee","expect":"found","question":"정보처리기사 시험 응시료도 회사가 내줘?","gold":[{"doc":"internal/benefits","section":"자기계발비"}],"trap":"heldout","note":"held-out"}

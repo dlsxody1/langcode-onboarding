@@ -20,7 +20,8 @@ export type IndexedChunk = {
 };
 
 export type Bm25Index = {
-  meta: { builtAt: string; k1: number; b: number; n: number; avgLen: number; tokenizer: string };
+  /** 만든 시각은 넣지 않는다 — 같은 코퍼스면 같은 파일이 나와야 CI 가 "커밋된 색인이 최신인가"를 diff 로 확인할 수 있다 */
+  meta: { corpusHash: string; k1: number; b: number; n: number; avgLen: number; tokenizer: string };
   chunks: IndexedChunk[];
   /** term → [chunk 번호, tf, chunk 번호, tf, ...] (평평한 배열로 JSON 크기를 줄인다). df = 길이 / 2 */
   postings: Record<string, number[]>;
@@ -28,7 +29,7 @@ export type Bm25Index = {
 
 export function buildBm25Index(
   items: { id: string; doc: string; searchText: string; audience: Audience[]; hash: string }[],
-  { k1 = 1.5, b = 0.75 } = {},
+  { k1 = 1.5, b = 0.75, corpusHash = "" } = {},
 ): Bm25Index {
   // 일반 객체 {} 를 쓰면 안 된다. 문서에 "constructor" 같은 단어가 있으면 postings["constructor"] 가
   // Object.prototype 의 함수를 돌려준다. 만들 때는 Map, 읽을 때는 Object.hasOwn 으로 확인한다
@@ -50,7 +51,7 @@ export function buildBm25Index(
   });
 
   return {
-    meta: { builtAt: new Date().toISOString(), k1, b, n: items.length, avgLen: items.length ? total / items.length : 0, tokenizer: "word+hangul-bigram/v1" },
+    meta: { corpusHash, k1, b, n: items.length, avgLen: items.length ? total / items.length : 0, tokenizer: "word+hangul-bigram/v1" },
     chunks,
     postings: Object.fromEntries(postings),
   };

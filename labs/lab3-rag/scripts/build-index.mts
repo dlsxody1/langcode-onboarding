@@ -10,6 +10,7 @@
  *
  * 실행: npm run lab:index   (lab:parse 를 먼저 돌린다)
  */
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { buildBm25Index } from "../../../lib/rag/bm25.ts";
@@ -23,7 +24,11 @@ const chunks = chunkDocs(docs);
 const dup = chunks.map((c) => c.chunkId).filter((id, i, a) => a.indexOf(id) !== i);
 if (dup.length) throw new Error(`chunkId 중복: ${dup.slice(0, 5).join(", ")}`);
 
-const index = buildBm25Index(chunks.map((c) => ({ id: c.chunkId, doc: c.docId, searchText: c.searchText, audience: c.audience, hash: c.contentHash })));
+const corpusHash = createHash("sha256").update(chunks.map((c) => c.contentHash).join(",")).digest("hex").slice(0, 16);
+const index = buildBm25Index(
+  chunks.map((c) => ({ id: c.chunkId, doc: c.docId, searchText: c.searchText, audience: c.audience, hash: c.contentHash })),
+  { corpusHash },
+);
 
 fs.writeFileSync(path.join(GEN, "chunks.json"), JSON.stringify(chunks, null, 1));
 fs.writeFileSync(path.join(GEN, "index.json"), JSON.stringify(index));

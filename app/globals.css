@@ -650,3 +650,4 @@ a:hover { text-decoration-color: var(--pen); }
 }
 .lab-card a { font-size: var(--step--1); color: var(--pencil); text-decoration: none; }
 .lab-card a:hover { text-decoration: underline; }
+.lab-card__signals { margin: -0.4rem 0 0.5rem; font-size: var(--step--1); color: var(--ink-faint); font-family: var(--mono); }

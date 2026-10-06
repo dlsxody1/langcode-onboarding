@@ -4,7 +4,15 @@ import { useState } from "react";
 import type { Evidence } from "@/lib/rag/search";
 
 type Audience = "employee" | "customer";
-type Result = { query: string; audience: Audience; evidence: Evidence[]; warnings: string[]; ms: number };
+type Result = {
+  query: string;
+  expandedQuery: string;
+  applied: { variant: string; canonical: string }[];
+  audience: Audience;
+  evidence: Evidence[];
+  warnings: string[];
+  ms: number;
+};
 
 // 예시 질문은 열람 범위에 따라 다르다. 고객 예시의 마지막 둘은 임직원 문서에만 답이 있다 → 권한 확인용
 const EXAMPLES: Record<Audience, string[]> = {
@@ -83,9 +91,14 @@ export function LabSearch({ audience }: { audience: Audience }) {
       {result && (
         <section className="lab-results" aria-live="polite">
           <p className="note">
-            「{result.query}」 · {AUDIENCE_LABEL[result.audience]} 열람 범위에서 BM25 상위 {result.evidence.length}개 · {result.ms}ms ·
+            「{result.query}」 · {AUDIENCE_LABEL[result.audience]} 열람 범위 · BM25 상위 20 → 리랭크 상위 {result.evidence.length}개 · {result.ms}ms ·
             답변 생성은 6단계
           </p>
+          {result.applied.length > 0 && (
+            <p className="note">
+              용어 사전: {result.applied.map((a) => `${a.variant} → ${a.canonical}`).join(", ")}
+            </p>
+          )}
           {result.warnings.map((w) => (
             <p key={w} className="lab-warn">{w}</p>
           ))}
@@ -104,7 +117,12 @@ export function LabSearch({ audience }: { audience: Audience }) {
                     <span className="lab-card__rank">[{e.rank}]</span>
                     <strong>{e.title}</strong>
                     {e.status === "superseded" && <span className="lab-card__flag">폐지된 버전</span>}
-                    <span className="lab-card__score" title="BM25 점수">BM25 {e.score.toFixed(2)}</span>
+                    <span
+                      className="lab-card__score"
+                      title={`BM25 ${e.bm25Rank}위 → 리랭크 ${e.rank}위 · 제목 일치 ${e.signals.heading.toFixed(2)} · 근접도 ${e.signals.proximity.toFixed(2)}${e.signals.superseded ? " · 폐지 버전 감점" : ""}`}
+                    >
+                      BM25 {e.bm25.toFixed(1)} ({e.bm25Rank}위) → {e.score.toFixed(2)}
+                    </span>
                   </div>
                   <p className="lab-card__path">
                     {e.headingPath.join(" > ") || "(머리말)"}
@@ -115,6 +133,10 @@ export function LabSearch({ audience }: { audience: Audience }) {
                     {e.version ? `v${e.version} · ` : ""}
                     {e.effectiveDate ? `시행 ${e.effectiveDate} · ` : ""}
                     열람 {e.audience.map((a) => AUDIENCE_LABEL[a]).join("·")} · <code>{e.chunkId}</code>
+                  </p>
+                  <p className="lab-card__signals">
+                    제목 일치 {e.signals.heading.toFixed(2)} · 근접도 {e.signals.proximity.toFixed(2)}
+                    {e.signals.superseded ? " · 폐지 버전 감점" : ""}
                   </p>
                   <pre className="lab-card__text">{e.text}</pre>
                   {href ? <a href={href}>원문 보기 →</a> : <span className="note">원문 보기는 7단계 (권한 확인 뷰어)</span>}
