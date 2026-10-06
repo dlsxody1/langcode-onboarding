@@ -149,11 +149,15 @@ labs/lab3-rag/
 | 복리후생 안내 | docx | 임직원 | 목록, 중첩 제목, 구어체("반반차") |
 | 정보보안 정책 v4.2 / v4.1 | md 2개 | 임직원 | 약어(MFA, DLP), 두 버전이 **모순**되는 조항 |
 
-- [ ] `corpus-internal/` 문서 + `manifest.json`(`slug`, `title`, `department`, `version`, `effectiveDate`, `audience[]`)
-- [ ] `scripts/questions-to-eval.ts`: `data/questions.ts` → `data/eval.jsonl` (`question`, `gold_doc`, `gold_section`, `audience: employee`)
-- [ ] 보강 15문항+: 문서와 **단어가 다른** 패러프레이즈 5+, 가상 사내 문서(표·약어·버전 모순) 5+, **고객 계정용** 5+ (그중 2개 이상 "임직원 문서에만 답이 있음 → 정답: 찾지 못함")
+- [x] `corpus-internal/` 문서 4개 + `manifest.json` (`status: current | superseded` 추가 — 5단계 구버전 감점에 쓴다)
+  - PDF·DOCX 는 `src/` 의 html·md 원본에서 `npm run lab:docs` 로 생성 (Edge headless 인쇄, `docx` 라이브러리)
+  - 출장 규정 표 1은 머리글이 2단(직원/임원 × 일비/숙박비) — 글자만 뽑으면 숫자의 의미가 사라진다
+- [x] `scripts/build-eval-set.mts`: 퀴즈 99문항 + `data/eval-extra.jsonl` 27문항 → `data/eval.jsonl` 126문항 (`npm run lab:eval-set`)
+  - 정답은 **문서 단위**. 퀴즈 `section` 은 헤딩과 일치하는 67문항만 절까지 기록
+  - 보강 문항의 정답 문서·절이 실제로 있는지 검증하고, 없으면 실패
+- [x] 보강 27문항: 패러프레이즈 8, 사내 문서 11(표 3·약어 2·버전 모순 2·구어체 3), 고객 6, "찾지 못함" 5(고객 권한 3 + 아무 문서에도 없음 2)
 
-**완료 기준:** 가상 문서 + manifest + eval.jsonl(90 + 보강) 커밋.
+**완료 기준:** 가상 문서 + manifest + eval.jsonl(99 + 보강) 커밋.
 
 **스스로 답해보기**
 - 퀴즈 문제를 그대로 평가셋으로 쓰면 점수가 왜 실제보다 높게 나오나?

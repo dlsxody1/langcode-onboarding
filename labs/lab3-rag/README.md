@@ -3,7 +3,7 @@
 이 사이트의 **"실습" 탭**(`/lab`)이다. 01–07 문서를 코퍼스로 검색하고, 근거와 함께 답한다.
 전체 계획은 [`PLAN.md`](./PLAN.md), 측정 기록은 [`RESULTS.md`](./RESULTS.md).
 
-**지금 상태: 0단계** — 로그인 게이트와 빈 채팅 화면만 있다.
+**지금 상태: 1단계 완료** — 로그인 게이트, 가상 사내 문서 4개, 평가셋 126문항. 검색은 아직 없다.
 
 ## 파일 위치
 
@@ -14,7 +14,16 @@
 | 화면 | `app/lab/` (`login/`, `signout/`, `page.tsx`) |
 | API | `app/api/lab/chat`, `app/api/lab/feedback` |
 | DB 스키마 · 시드 | `labs/lab3-rag/supabase/` |
-| 가상 사내 문서 · 평가셋 · 스크립트 | `labs/lab3-rag/corpus-internal/`, `data/`, `scripts/` (1단계부터) |
+| 가상 사내 문서 | `labs/lab3-rag/corpus-internal/` (목록은 `manifest.json`, PDF·DOCX 원본은 `src/`) |
+| 평가셋 | `labs/lab3-rag/data/eval.jsonl` (생성물) ← `data/questions.ts` + `data/eval-extra.jsonl` |
+| 스크립트 | `labs/lab3-rag/scripts/` — Node 24 가 `.mts` 를 바로 실행한다 (tsx 불필요) |
+
+## 명령
+
+| 명령 | 하는 일 |
+| --- | --- |
+| `npm run lab:docs` | `src/` 원본으로 `travel-expense.pdf`, `benefits.docx` 다시 만들기 (Edge/Chrome 필요) |
+| `npm run lab:eval-set` | 퀴즈 + 보강 문항 → `data/eval.jsonl`. 정답 문서·절 오타를 검증한다 |
 
 ## 처음 한 번: Supabase · Vercel 설정 (직접 할 일)
 
@@ -51,4 +60,5 @@ http://localhost:3000/lab → 로그인 화면으로 이동해야 한다.
 
 - **Supabase 무료 프로젝트는 오래 안 쓰면 일시 중지될 수 있다.** 그러면 실습 탭만 막히고, 나머지 탭은 그대로 동작한다.
 - `.env.local` 이 없어도 사이트 빌드는 성공한다. 그때 `/lab` 은 "Supabase 환경 변수가 필요합니다"(503)를 보여 준다.
-- 1단계에서 추가할 가상 사내 문서는 데모용으로 지어낸 것이고, 실제 회사 규정이 아니다.
+- `corpus-internal/` 의 가상 사내 문서(출장 규정, 복리후생, 정보보안 정책)는 실습용으로 지어낸 것이고, 실제 회사 규정이 아니다.
+- 정보보안 정책 v4.1 은 **일부러** 색인 대상에 남겨 둔 폐지 문서다. 구버전이 검색을 오염시키는 문제를 재현하고 5단계에서 고친다.

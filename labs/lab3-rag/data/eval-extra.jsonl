@@ -1,0 +1,27 @@
+{"id":"p1","kind":"paraphrase","audience":"employee","expect":"found","question":"검색할 때 질문이랑 문서에 같은 글자가 하나도 없으면 점수가 왜 0이 돼?","gold":[{"doc":"03-rag/foundations","section":"희소 벡터 vs 밀집 벡터"}],"trap":"paraphrase"}
+{"id":"p2","kind":"paraphrase","audience":"employee","expect":"found","question":"질문이랑 문서를 따로따로 숫자로 바꿔서 비교하는 거랑 둘을 같이 넣고 채점하는 거, 뭐가 달라?","gold":[{"doc":"03-rag/retrieval-quality","section":"리랭킹"}],"trap":"paraphrase"}
+{"id":"p3","kind":"paraphrase","audience":"employee","expect":"found","question":"채팅에서 앞에 얘기 이어서 '그럼 그건?' 하고 물으면 왜 엉뚱한 걸 찾아와?","gold":[{"doc":"03-rag/pipeline","section":"쿼리 전처리"},{"doc":"03-rag/retrieval-quality","section":"대화 맥락 압축"}],"trap":"paraphrase"}
+{"id":"p4","kind":"paraphrase","audience":"employee","expect":"found","question":"한 조각에 주제를 두 개 섞어서 자르면 검색이 왜 나빠져?","gold":[{"doc":"03-rag/foundations","section":"청킹이 왜 필요한지"},{"doc":"03-rag/chunking-embedding"}],"trap":"paraphrase"}
+{"id":"p5","kind":"paraphrase","audience":"employee","expect":"found","question":"백만 개를 하나하나 다 비교하지 않고 비슷한 걸 빨리 찾는 방법","gold":[{"doc":"03-rag/pipeline","section":"ANN 이 왜 필요한가"}],"trap":"paraphrase"}
+{"id":"p6","kind":"paraphrase","audience":"employee","expect":"found","question":"누군지 확인하는 거랑 그 사람이 뭘 할 수 있는지 확인하는 거, 둘이 어떻게 달라?","gold":[{"doc":"01-backend-basics/auth","section":"두 단어를 구분하는 것이 시작"}],"trap":"paraphrase"}
+{"id":"p7","kind":"paraphrase","audience":"employee","expect":"found","question":"서버에 요청 하나 들어오면 안에서 어떤 순서로 지나가?","gold":[{"doc":"01-backend-basics/request-lifecycle","section":"전체 그림"}],"trap":"paraphrase"}
+{"id":"p8","kind":"paraphrase","audience":"employee","expect":"found","question":"AI 답변을 글자가 생기는 대로 화면에 흘려보낼 때 웹소켓 말고 다른 걸 쓰는 이유","gold":[{"doc":"05-realtime-ui/sse-vs-websocket","section":"왜 LLM 스트리밍은 SSE 인가"}],"trap":"paraphrase"}
+{"id":"i1","kind":"internal","audience":"employee","expect":"found","question":"서울로 출장 가면 호텔비 얼마까지 나와?","gold":[{"doc":"internal/travel-expense","section":"제4조"}],"trap":"table","answer":"120,000원 (직원 기준)"}
+{"id":"i2","kind":"internal","audience":"employee","expect":"found","question":"부산 출장 하루 일비 얼마야?","gold":[{"doc":"internal/travel-expense","section":"제4조"}],"trap":"table","answer":"25,000원 (직원, 나 지역)"}
+{"id":"i3","kind":"internal","audience":"employee","expect":"found","question":"미국 출장 숙박비 한도","gold":[{"doc":"internal/travel-expense","section":"제7조"}],"trap":"table","answer":"USD 250 (A 권역)"}
+{"id":"i4","kind":"internal","audience":"employee","expect":"found","question":"출장 다녀와서 영수증은 며칠 안에 올려야 돼?","gold":[{"doc":"internal/travel-expense","section":"제8조"}],"answer":"귀임 후 7일 이내"}
+{"id":"i5","kind":"internal","audience":"employee","expect":"found","question":"MFA 꼭 써야 해?","gold":[{"doc":"internal/security-policy-v4.2","section":"제5조"}],"trap":"abbr"}
+{"id":"i6","kind":"internal","audience":"employee","expect":"found","question":"비밀번호 몇 달마다 바꿔야 해?","gold":[{"doc":"internal/security-policy-v4.2","section":"제4조"}],"trap":"version","answer":"정기 변경 의무 폐지 (v4.1 의 90일은 폐지된 규정)"}
+{"id":"i7","kind":"internal","audience":"employee","expect":"found","question":"USB 에 회사 파일 옮겨도 돼?","gold":[{"doc":"internal/security-policy-v4.2","section":"제8조"}],"trap":"version","answer":"전면 금지, 예외는 정보보안팀 승인 + 암호화 USB (v4.1 의 팀장 승인은 폐지된 규정)"}
+{"id":"i8","kind":"internal","audience":"employee","expect":"found","question":"DLP 가 정확히 뭘 막는 거야?","gold":[{"doc":"internal/security-policy-v4.2","section":"제3조"}],"trap":"abbr"}
+{"id":"i9","kind":"internal","audience":"employee","expect":"found","question":"병원 때문에 두 시간만 비우고 싶은데","gold":[{"doc":"internal/benefits","section":"반차와 반반차"}],"trap":"colloquial","answer":"반반차 (2시간 단위)"}
+{"id":"i10","kind":"internal","audience":"employee","expect":"found","question":"결혼하면 회사에서 돈 나와?","gold":[{"doc":"internal/benefits","section":"경조금"}],"trap":"colloquial","answer":"본인 결혼 100만원 + 휴가 5일"}
+{"id":"i11","kind":"internal","audience":"employee","expect":"found","question":"책 사는 거 회사가 지원해 줘?","gold":[{"doc":"internal/benefits","section":"자기계발비"}],"trap":"colloquial","answer":"연 100만원 한도"}
+{"id":"c1","kind":"customer","audience":"customer","expect":"found","question":"RAG 에서 권한 필터는 검색 전에 걸어야 해, 후에 걸어야 해?","gold":[{"doc":"03-rag/pipeline","section":"권한 필터는 검색"},{"doc":"03-rag/enterprise-rag"}]}
+{"id":"c2","kind":"customer","audience":"customer","expect":"found","question":"SSE 랑 WebSocket 차이","gold":[{"doc":"05-realtime-ui/sse-vs-websocket"}]}
+{"id":"c3","kind":"customer","audience":"customer","expect":"found","question":"코사인 유사도는 왜 거리가 아니라 각도를 봐?","gold":[{"doc":"03-rag/foundations","section":"왜 \"거리\"가 아니라 \"각도\"인가"}]}
+{"id":"n1","kind":"customer","audience":"customer","expect":"none","question":"서울 출장 숙박비 상한이 얼마야?","gold":[],"trap":"acl","note":"정답은 임직원 전용 문서(travel-expense)에만 있다 → 고객에게는 '찾지 못함'이 정답"}
+{"id":"n2","kind":"customer","audience":"customer","expect":"none","question":"USB 메모리 써도 되나요?","gold":[],"trap":"acl","note":"임직원 전용 security-policy 에만 있다"}
+{"id":"n3","kind":"customer","audience":"customer","expect":"none","question":"결혼하면 경조금 얼마 나와요?","gold":[],"trap":"acl","note":"임직원 전용 benefits 에만 있다"}
+{"id":"n4","kind":"none","audience":"employee","expect":"none","question":"법인 차량 빌리려면 어떻게 해?","gold":[],"note":"어느 문서에도 없다"}
+{"id":"n5","kind":"none","audience":"employee","expect":"none","question":"올해 성과급 지급일이 언제야?","gold":[],"note":"어느 문서에도 없다"}

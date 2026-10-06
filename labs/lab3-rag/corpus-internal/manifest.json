@@ -1,0 +1,51 @@
+{
+  "$comment": "가상 사내 문서 목록. 01–07 온보딩 문서는 lib/chapters.ts 가 목록이고 audience 는 [employee, customer] 로 고정한다. src/ 는 생성 원본이라 색인 대상이 아니다.",
+  "documents": [
+    {
+      "slug": "travel-expense",
+      "file": "travel-expense.pdf",
+      "format": "pdf",
+      "title": "출장·경비 규정",
+      "department": "경영지원팀",
+      "version": "2026",
+      "effectiveDate": "2026-01-01",
+      "status": "current",
+      "audience": ["employee"]
+    },
+    {
+      "slug": "benefits",
+      "file": "benefits.docx",
+      "format": "docx",
+      "title": "복리후생 안내",
+      "department": "인사팀",
+      "version": "2026",
+      "effectiveDate": "2026-01-01",
+      "status": "current",
+      "audience": ["employee"]
+    },
+    {
+      "slug": "security-policy-v4.2",
+      "file": "security-policy-v4.2.md",
+      "format": "md",
+      "title": "정보보안 정책 v4.2",
+      "department": "정보보안팀",
+      "version": "4.2",
+      "effectiveDate": "2026-03-01",
+      "status": "current",
+      "supersedes": "security-policy-v4.1",
+      "audience": ["employee"]
+    },
+    {
+      "slug": "security-policy-v4.1",
+      "file": "security-policy-v4.1.md",
+      "format": "md",
+      "title": "정보보안 정책 v4.1",
+      "department": "정보보안팀",
+      "version": "4.1",
+      "effectiveDate": "2025-01-01",
+      "status": "superseded",
+      "supersededBy": "security-policy-v4.2",
+      "audience": ["employee"]
+    }
+  ]
+}
