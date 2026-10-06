@@ -22,6 +22,7 @@ import path from "node:path";
 import { searchBm25, type Audience, type Bm25Index } from "../../../lib/rag/bm25.ts";
 import { rerank } from "../../../lib/rag/rerank.ts";
 import { buildSynonymTable, expandQuery } from "../../../lib/rag/synonyms.ts";
+import { assess } from "../../../lib/rag/answer.ts";
 
 const LAB = path.resolve(import.meta.dirname, "..");
 const ROOT = path.resolve(LAB, "../..");
@@ -35,7 +36,7 @@ const CANDIDATES = 20;
 type Config = { synonyms: boolean; rerank: boolean; prefilter: boolean; label: string };
 type Item = { id: string; kind: string; audience: Audience; expect: "found" | "none"; question: string; gold: { doc: string; section?: string }[]; trap?: string };
 type Hit = { chunkId: string; doc: string; score: number };
-type Row = Item & { hits: Hit[]; rank: number | null; sectionRank: number | null; format: string; applied: string[] };
+type Row = Item & { hits: Hit[]; rank: number | null; sectionRank: number | null; format: string; applied: string[]; answered: boolean };
 
 const readJson = (p: string) => JSON.parse(fs.readFileSync(p, "utf8"));
 const index: Bm25Index = readJson(path.join(LAB, "generated/index.json"));
@@ -54,20 +55,22 @@ const audOf = new Map(index.chunks.map((c) => [c.id, c.aud]));
 function retrieve(question: string, audience: Audience, cfg: Config) {
   const { query, applied } = cfg.synonyms ? expandQuery(question, synonyms) : { query: question, applied: [] };
   const hits = searchBm25(index, query, { audience, k: cfg.rerank ? CANDIDATES : DEPTH, unsafeSkipAudienceFilter: !cfg.prefilter });
-  if (!cfg.rerank) return { hits, applied };
+  const sourcesOf = (ids: string[]) => ids.map((id) => chunkById.get(id)).map((c) => ({ chunkId: c.chunkId, title: c.title, headingPath: c.headingPath, text: c.text, kind: c.kind }));
+  if (!cfg.rerank) return { hits, applied, verdict: assess(index, question, sourcesOf(hits.slice(0, 5).map((h) => h.chunkId)), applied) };
   const ranked = rerank(
     query,
     hits.map((h) => {
       const c = chunkById.get(h.chunkId);
-      return { chunkId: h.chunkId, doc: h.doc, bm25: h.score, title: c.title, headingPath: c.headingPath, text: c.text, status: c.status };
+      return { chunkId: h.chunkId, doc: h.doc, bm25: h.score, title: c.title, headingPath: c.headingPath, text: c.text, status: c.status, source: c.source };
     }),
   );
-  return { hits: ranked.slice(0, DEPTH).map((r) => ({ chunkId: r.chunkId, doc: r.doc, score: r.score })), applied };
+  const top = ranked.slice(0, DEPTH).map((r) => ({ chunkId: r.chunkId, doc: r.doc, score: r.score }));
+  return { hits: top, applied, verdict: assess(index, question, sourcesOf(top.slice(0, 5).map((h) => h.chunkId)), applied) };
 }
 
 function run(cfg: Config): { rows: Row[]; leaks: { id: string; chunkId: string }[] } {
   const rows = items.map((it) => {
-    const { hits, applied } = retrieve(it.question, it.audience, cfg);
+    const { hits, applied, verdict } = retrieve(it.question, it.audience, cfg);
     const golds = new Set(it.gold.map((g) => g.doc));
     const idx = hits.findIndex((h) => golds.has(h.doc));
     const withSection = it.gold.filter((g) => g.section);
@@ -81,6 +84,7 @@ function run(cfg: Config): { rows: Row[]; leaks: { id: string; chunkId: string }
       sectionRank: s >= 0 ? s + 1 : null,
       format: it.gold[0] ? formatOf(it.gold[0].doc) : "-",
       applied: applied.map((a) => `${a.variant}→${a.canonical}`),
+      answered: verdict.found,
     };
   });
   const leaks: { id: string; chunkId: string }[] = [];
@@ -156,6 +160,13 @@ if (has("--compare")) {
   const desc = (xs: number[]) => (xs.length ? `최소 ${xs[0].toFixed(2)} · 중앙 ${xs[Math.floor(xs.length / 2)].toFixed(2)} · 최대 ${xs[xs.length - 1].toFixed(2)}` : "-");
   console.log(`\n1등 점수  맞힌 질문(R@1): ${desc(top1(found.filter((r) => r.rank === 1)))}`);
   console.log(`          찾지 못함이 정답: ${desc(top1(result.rows.filter((r) => r.expect === "none")))}`);
+  // 6단계 "문서에서 찾지 못했어요" 판정 (lib/rag/answer.ts 의 assess)
+  const none = result.rows.filter((r) => r.expect === "none");
+  const okFound = found.filter((r) => r.rank !== null && r.rank <= 3);
+  const wrongNo = okFound.filter((r) => !r.answered);
+  console.log(`\n답변 판정  찾지 못함이 정답 ${none.length}문항 중 "못 찾음"으로 거름 ${none.filter((r) => !r.answered).length}  (${none.map((r) => `${r.id}${r.answered ? "✗" : "✓"}`).join(" ")})`);
+  console.log(`           정답을 찾은(R@3) ${okFound.length}문항 중 잘못 "못 찾음" ${wrongNo.length}  ${wrongNo.map((r) => r.id).join(" ")}`);
+
   console.log(`\n권한 누출 (전 ${items.length}문항을 고객으로, 상위 ${DEPTH}개): ${result.leaks.length}건 ${result.leaks.length ? "✗" : "✓"}`);
   for (const l of result.leaks.slice(0, 5)) console.log(`  ${l.id} → ${l.chunkId}`);
 

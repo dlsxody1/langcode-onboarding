@@ -3,7 +3,7 @@
 이 사이트의 **"실습" 탭**(`/lab`)이다. 01–07 문서를 코퍼스로 검색하고, 근거와 함께 답한다.
 전체 계획은 [`PLAN.md`](./PLAN.md), 측정 기록은 [`RESULTS.md`](./RESULTS.md).
 
-**지금 상태: 5단계 완료** — 용어 사전 + 수제 리랭커. R@1 0.705 → 0.783 · R@3 0.876 → 0.915 · 누출 0건 → [`RESULTS.md`](./RESULTS.md). 답변 생성은 6단계.
+**지금 상태: 6·7단계 완료** — 채팅 UI(스트리밍) + 추출형 답변 + "찾지 못했어요" + 근거 카드 + 사내 문서 뷰어·원본 다운로드. R@3 0.922 · 누출 0건 → [`RESULTS.md`](./RESULTS.md).
 
 ## 파일 위치
 
@@ -11,8 +11,9 @@
 | --- | --- |
 | 로그인 게이트 | `middleware.ts` (matcher: `/lab`, `/api/lab` 만) |
 | Supabase 클라이언트 | `lib/supabase/` |
-| 화면 | `app/lab/` (`login/`, `signout/`, `page.tsx`) |
-| API | `app/api/lab/chat`, `app/api/lab/feedback` |
+| 화면 | `app/lab/` (`login/`, `signout/`, `page.tsx`, 채팅 `LabChat.tsx`, 사내 문서 뷰어 `docs/[slug]/`) |
+| API | `app/api/lab/chat` (SSE 스트리밍), `app/api/lab/feedback` (8단계) |
+| 검색·답변 | `lib/rag/` — tokenizer · bm25 · synonyms · rerank · answer · search |
 | DB 스키마 · 시드 | `labs/lab3-rag/supabase/` |
 | 가상 사내 문서 | `labs/lab3-rag/corpus-internal/` (목록은 `manifest.json`, PDF·DOCX 원본은 `src/`) |
 | 평가셋 | `labs/lab3-rag/data/eval.jsonl` (생성물) ← `data/questions.ts` + `data/eval-extra.jsonl` |

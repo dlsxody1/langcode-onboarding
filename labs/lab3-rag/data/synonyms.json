@@ -16,6 +16,8 @@
     { "canonical": "자기계발비", "variants": ["책값", "도서 구입", "도서비", "강의비", "교육비", "자격증"] },
     { "canonical": "재택근무", "variants": ["집에서 일", "원격 근무", "원격근무"] },
     { "canonical": "신규 입사자", "variants": ["새로 들어온 사람", "신입 사원", "신입"] },
-    { "canonical": "SSE", "variants": ["Server-Sent Events", "서버 전송 이벤트"] }
+    { "canonical": "SSE", "variants": ["Server-Sent Events", "서버 전송 이벤트"] },
+    { "canonical": "변경", "variants": ["바꿔", "바꾸", "바뀌"] },
+    { "canonical": "주기", "variants": ["달마다", "몇 달", "개월마다", "며칠마다"] }
   ]
 }

@@ -19,12 +19,19 @@ export type Candidate = {
   headingPath: string[];
   text: string;
   status?: "current" | "superseded" | null;
+  source?: "onboarding" | "internal";
 };
 
 export type Signals = { bm25: number; heading: number; proximity: number; superseded: boolean };
 export type Reranked<T extends Candidate> = T & { score: number; signals: Signals };
 
-export const RERANK_WEIGHTS = { bm25: 0.6, heading: 0.25, proximity: 0.15, superseded: 0.25 };
+export const RERANK_WEIGHTS = { bm25: 0.6, heading: 0.25, proximity: 0.15, superseded: 0.25, route: 0.1 };
+
+/**
+ * 쿼리 라우팅(03-rag/03 1절)의 아주 작은 판: "우리 회사", "사내 규정" 처럼 회사 일을 묻는 질문이면 사내 문서를 조금 앞세운다.
+ * 이 코퍼스는 RAG 를 설명하는 온보딩 문서가 "연차휴가 15일" 같은 사내 규정 예시를 많이 쓴다 — 예시가 진짜 규정을 이기지 않게.
+ */
+const COMPANY_QUERY = /회사|우리|사내|규정|정책|저희/;
 
 // 신호 계산에서만 빼는 흔한 말. BM25 자체는 건드리지 않는다
 const STOP = new Set([
@@ -88,6 +95,7 @@ export function rerank<T extends Candidate>(query: string, candidates: T[], w = 
   const max = Math.max(...candidates.map((c) => c.bm25), 1e-9);
   const qTokens = contentTokens(query);
   const qWords = contentWords(query);
+  const companyQuery = COMPANY_QUERY.test(query);
   return candidates
     .map((c) => {
       const signals: Signals = {
@@ -96,7 +104,8 @@ export function rerank<T extends Candidate>(query: string, candidates: T[], w = 
         proximity: proximitySignal(qWords, c),
         superseded: c.status === "superseded",
       };
-      const score = w.bm25 * signals.bm25 + w.heading * signals.heading + w.proximity * signals.proximity - (signals.superseded ? w.superseded : 0);
+      const routed = companyQuery && c.source === "internal";
+      const score = w.bm25 * signals.bm25 + w.heading * signals.heading + w.proximity * signals.proximity - (signals.superseded ? w.superseded : 0) + (routed ? w.route : 0);
       return { ...c, score, signals };
     })
     .sort((a, b) => b.score - a.score);

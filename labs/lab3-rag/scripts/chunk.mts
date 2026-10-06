@@ -73,14 +73,35 @@ function splitTable(text: string): string[] {
 
 const hash = (v: unknown) => createHash("sha256").update(JSON.stringify(v)).digest("hex").slice(0, 16);
 
+type Piece = { s: Section; text: string; kind: Section["kind"] };
+
+/**
+ * 같은 절(앵커) 안에서 이웃한 조각을 600자까지 다시 합친다.
+ * 파서는 표를 따로 떼어 내므로, 합치지 않으면 "표 앞 한 문장" 같은 아주 작은 청크가 생긴다.
+ * 그런 청크는 검색에는 걸리는데 답할 내용이 없다 (6단계에서 발견, RESULTS 참고).
+ */
+function mergeSmall(pieces: Piece[]): Piece[] {
+  const out: Piece[] = [];
+  for (const p of pieces) {
+    const prev = out[out.length - 1];
+    if (prev && prev.s.anchor === p.s.anchor && prev.text.length + 2 + p.text.length <= MAX_CHARS) {
+      out[out.length - 1] = { s: prev.s, text: `${prev.text}\n\n${p.text}`, kind: prev.kind === p.kind ? prev.kind : "text" };
+    } else out.push(p);
+  }
+  return out;
+}
+
 export function chunkDocs(docs: ParsedDoc[]): Chunk[] {
   const chunks: Chunk[] = [];
   for (const d of docs) {
     // chunkId = 문서 + 앵커 + 앵커 안 순번. 다른 절을 고쳐도 이 절의 id 는 그대로라 동기화 때 바뀐 것만 보낸다
     const perAnchor = new Map<string, number>();
-    for (const s of d.sections) {
-      const parts = s.kind === "table" ? splitTable(s.text) : splitText(s.text);
-      for (const text of parts) {
+    const pieces = mergeSmall(
+      d.sections.flatMap((s) => (s.kind === "table" ? splitTable(s.text) : splitText(s.text)).map((text) => ({ s, text, kind: s.kind }))),
+    );
+    for (const { s: s0, text, kind } of pieces) {
+      const s = { ...s0, kind };
+      {
         const key = s.anchor ?? "_";
         const k = perAnchor.get(key) ?? 0;
         perAnchor.set(key, k + 1);
