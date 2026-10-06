@@ -121,7 +121,10 @@ labs/lab3-rag/
 - [x] `/lab/login`(서버 액션), `/lab/signout`, 헤더 배지, Masthead 에 "실습" 탭
 - [x] API 에서 `getUser()` 재확인 → 401
 - [x] `0001_profiles.sql`, `seed.sql`
-- [ ] Supabase 프로젝트·계정 생성, Vercel env 등록 (README 체크리스트)
+- [x] Supabase 프로젝트·데모 계정 2개, `0001_profiles` 적용, 고객 역할 RLS 확인 (본인 행 1개만 보임)
+- [x] 로컬에서 로그인 → 배지 → 새로고침 유지 → 로그아웃 차단, 임직원·고객 둘 다 확인
+- [x] 공개 회원가입 끄기 ("Allow new users to sign up")
+- [ ] Vercel env 등록 (README 체크리스트)
 
 **완료 기준**
 - 시크릿 창에서 `/lab` → `/lab/login`, `POST /api/lab/chat` → 401. `/docs`·`/quiz` 는 로그인 없이 열림
