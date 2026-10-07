@@ -41,6 +41,7 @@ export const CHAPTERS: Chapter[] = [
       { slug: "aspnet-core", file: "02-aspnet-core.md", title: "ASP.NET Core" },
       { slug: "ef-core", file: "03-ef-core.md", title: "EF Core" },
       { slug: "reading-a-codebase", file: "04-reading-a-dotnet-codebase.md", title: "코드베이스 읽는 법" },
+      { slug: "team-tech-list", file: "05-team-tech-list.md", title: "팀 기술 목록", kicker: "Carter · Scrutor · RabbitMQ · Aspire" },
     ],
   },
   {

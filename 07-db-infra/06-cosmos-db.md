@@ -193,7 +193,8 @@ Cosmos DB 는 여러 "말투(API)"로 접속할 수 있다. 계정을 만들 때
 
 `01-backend-basics/03-database.md` 6절에 회사 스택으로 MongoDB 가 나온다. 그 MongoDB 가 **직접 운영하는 Mongo 인지, Cosmos DB 의 MongoDB API 인지**에 따라 운영 방식과 비용 구조가 완전히 달라진다.
 
-> ❓ 입사 후 확인: 회사의 MongoDB 는 자체 운영인가, Atlas 인가, Cosmos DB for MongoDB 인가? Cosmos DB NoSQL API 를 쓰는 곳이 있나?
+> ✅ 팀 기술 목록에 **"코스모스 안 씀"** 이 명시돼 있다. MongoDB 는 Docker 로 띄워 챗 메시지 등에 쓴다 (`02-csharp-dotnet/05-team-tech-list.md`).
+> 그래서 이 문서는 "Azure 에서 문서형 DB 를 고르면 어떻게 생각하나"를 배우는 참고용으로 읽는다. 접근 패턴부터 설계하는 발상은 MongoDB 에도 그대로 통한다.
 
 ### 벡터 검색
 

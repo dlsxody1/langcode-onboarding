@@ -247,7 +247,8 @@ var list = await messages
 공식 드라이버(`MongoDB.Driver`)는 LINQ 를 지원해서 EF Core 와 비슷하게 읽힌다. EF Core 용 MongoDB 프로바이더도 있다.
 **복합 인덱스는 직접 만들어야 한다.** `{ tenantId: 1, conversationId: 1, createdAt: 1 }` 같은 인덱스가 없으면 컬렉션 전체를 훑는다. 원리는 관계형 복합 인덱스와 같다 (`01-backend-basics/03-database.md` 1절).
 
-> ❓ 입사 후 확인: MongoDB 에 실제로 무엇이 들어가나? 운영 형태는? (자체 운영 / MongoDB Atlas / Cosmos DB for MongoDB — `06-cosmos-db.md` 8절)
+> ✅ 팀 기술 목록에서 확인된 것: MongoDB 는 **챗 메시지 등**에 쓰고, DB 는 **Docker 에 띄워서** 쓰며, **Cosmos DB 는 쓰지 않는다** (`02-csharp-dotnet/05-team-tech-list.md`).
+> ❓ 입사 후 확인: 챗 메시지 말고 Mongo 에 들어가는 것은? 운영(고객사) 환경에서도 컨테이너로 띄우나, 관리형(Atlas 등)을 쓰나?
 > ❓ Postgres 와 Mongo 에 걸친 쓰기는 어떻게 맞추나? 아웃박스를 쓰나?
 
 ---
@@ -312,6 +313,7 @@ Redis 는 2024년에 라이선스를 오픈소스가 아닌 쪽으로 바꿨다�
 
 Azure 쪽도 기존 Azure Cache for Redis 에서 **Azure Managed Redis** 로 옮겨 가는 흐름이다. 정확한 일정은 Azure 공식 문서로 확인한다.
 
+> ✅ 팀 기술 목록: Redis 는 캐싱 용도이고, **무엇을 캐시할지(객체)는 추후 정할 예정**이다.
 > ❓ 입사 후 확인: Redis 는 어디서 도나? (Azure Managed Redis / 컨테이너 / 고객사 설치 시엔?) 캐시 말고 무엇에 쓰나? Redis 장애 시 동작은 정해져 있나?
 
 ---

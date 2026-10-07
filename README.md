@@ -149,7 +149,7 @@ winget install Docker.DockerDesktop
 
 ```
 01-backend-basics/     요청 수명주기 · 계층과 DI · DB · 인증인가 · 비동기 작업 · 아키텍처 패턴
-02-csharp-dotnet/      TS 개발자용 C# · ASP.NET Core · EF Core · Spring 대조
+02-csharp-dotnet/      TS 개발자용 C# · ASP.NET Core · EF Core · Spring 대조 · 팀 기술 목록
 03-rag/                파이프라인 · 청킹/임베딩 · 검색품질 · 엔터프라이즈 RAG
 04-agent/              에이전트란 · MAF · MCP · Agentic RAG · 오케스트레이션
 05-realtime-ui/        SSE vs WebSocket · 스트리밍 UI 렌더링

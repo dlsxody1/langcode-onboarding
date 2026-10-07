@@ -9,8 +9,9 @@
 | [02. ASP.NET Core](02-aspnet-core.md) | Program.cs 부터 컨트롤러까지 |
 | [03. EF Core](03-ef-core.md) | LINQ → SQL, 추적, 마이그레이션 |
 | [04. 처음 보는 .NET 코드베이스 읽는 법](04-reading-a-dotnet-codebase.md) | 입사 첫 주에 실제로 할 일 |
+| [05. 팀 기술 목록 — 쓰기 전과 후](05-team-tech-list.md) | Carter · FluentValidation · Scrutor · Mediator · RabbitMQ · SignalR · Aspire. 라이브러리마다 없을 때와 있을 때의 코드 |
 
-읽는 순서는 01 → 02 → 03 → 04 다. 03 까지 읽었으면 `labs/lab1-dotnet-crud/README.md` 로 넘어가 직접 만들어 본다.
+읽는 순서는 01 → 02 → 03 → 04 다. 05 는 02 를 읽은 뒤 언제든. 03 까지 읽었으면 `labs/lab1-dotnet-crud/README.md` 로 넘어가 직접 만들어 본다.
 요청 수명주기, 계층과 DI, 인덱스·트랜잭션 같은 개념은 `01-backend-basics/` 에서 먼저 다뤘다. 이 장은 그 개념이 .NET 코드에서 어떤 모양으로 나타나는지를 본다.
 
 ## 먼저 알 것 — .NET 용어 정리

@@ -2137,5 +2137,55 @@
     "aliases": [],
     "def": "Redis 가 라이선스를 바꾼 뒤 리눅스 재단 쪽에서 이어받은 오픈소스 포크. 명령어 · 프로토콜이 같아서 앱 코드는 거의 그대로 붙는다.",
     "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "carter",
+    "term": "Carter",
+    "aliases": [
+      "ICarterModule"
+    ],
+    "def": "Minimal API 엔드포인트를 ICarterModule 단위로 나눠 쓰고, 어셈블리를 훑어 자동으로 등록해 주는 얇은 라이브러리. 안쪽은 그대로 Minimal API 다.",
+    "doc": "02-csharp-dotnet/team-tech-list"
+  },
+  {
+    "id": "scrutor",
+    "term": "Scrutor",
+    "aliases": [],
+    "def": "기본 DI 컨테이너에 어셈블리 스캔 자동 등록(Scan)과 데코레이터 등록(Decorate)을 더하는 라이브러리. 제네릭 인터페이스 전체를 감싸 Mediator 파이프라인 같은 효과를 낼 수 있다.",
+    "doc": "02-csharp-dotnet/team-tech-list"
+  },
+  {
+    "id": "decorator-pattern",
+    "term": "데코레이터 패턴",
+    "aliases": [
+      "Decorator 패턴",
+      "Decorator"
+    ],
+    "def": "같은 인터페이스를 구현한 클래스로 원래 객체를 감싸 앞뒤에 기능(로깅 · 캐싱 · 검증)을 붙이는 패턴. 원래 코드를 고치지 않는다. 프론트의 고차 함수와 같은 모양이다.",
+    "doc": "02-csharp-dotnet/team-tech-list"
+  },
+  {
+    "id": "rabbitmq",
+    "term": "RabbitMQ",
+    "aliases": [],
+    "def": "메시지 브로커. 발행자는 Exchange 로 보내고, Exchange 가 라우팅 키로 큐에 나눠 담으면 소비자가 꺼내 처리한 뒤 Ack 한다. Ack 전에 죽으면 다시 전달되므로 소비자는 멱등이어야 한다.",
+    "doc": "02-csharp-dotnet/team-tech-list"
+  },
+  {
+    "id": "aspire",
+    "term": "Aspire",
+    "aliases": [
+      ".NET Aspire",
+      "Aspire Dashboard"
+    ],
+    "def": "여러 서비스와 DB 를 C# 코드(AppHost)로 선언해 로컬에서 한 번에 띄우고 연결 문자열을 넣어 주는 도구. 함께 오는 대시보드는 OpenTelemetry 로그 · 트레이스 · 메트릭을 보여 주며 단독 컨테이너로도 띄울 수 있다.",
+    "doc": "02-csharp-dotnet/team-tech-list"
+  },
+  {
+    "id": "signalr",
+    "term": "SignalR",
+    "aliases": [],
+    "def": "ASP.NET Core 의 실시간 양방향 통신 라이브러리. WebSocket 을 기본으로 쓰고 안 되면 다른 방식으로 대체한다. 사용자 · 그룹 단위로 보내기가 내장돼 알림 · 푸시에 쓴다. 서버가 여러 대면 백플레인이 필요하다.",
+    "doc": "02-csharp-dotnet/team-tech-list"
   }
 ]

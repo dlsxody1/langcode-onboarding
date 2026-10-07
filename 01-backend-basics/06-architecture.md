@@ -283,6 +283,8 @@ mediator.Send(cmd)
 
 ### MediatR 라이선스와 사내 구현
 
+> 📌 팀 기술 목록에서 MediatR 은 **(X, 상용)** 이고 "직접 구현과 비교 후 다시 논의"로 남아 있다. 세 가지 선택지 비교는 `02-csharp-dotnet/05-team-tech-list.md` 4절.
+
 MediatR 은 .NET 에서 이 패턴의 사실상 표준 라이브러리였는데, 최근 버전부터 **상용 라이선스로 바뀌었다.**
 그래서 라이브러리 대신 **팀이 직접 만든 Mediator 를 패키지로 쓰는** 곳이 늘고 있다.
 이때 보통 `IRequest`, `IRequestHandler`, `Send` 같은 **이름과 사용법을 MediatR 과 최대한 비슷하게** 맞춘다.
@@ -368,6 +370,9 @@ public class GetOrderHandler(AppDbContext db) : IRequestHandler<GetOrderQuery, O
 ---
 
 ## 5. Vertical Slice (수직 슬라이스) — 기능 단위로 묶기
+
+> 📌 팀 기술 목록에서 Vertical Slice 는 **취소선(제외)** 이다. 우리는 Clean Architecture 층 구조를 쓴다.
+> 다른 팀 코드나 자료에서 자주 만나므로 개념은 알아 두되, 우리 코드에서 기능별 폴더를 기대하지는 않는다 (`02-csharp-dotnet/05-team-tech-list.md`).
 
 ### 무슨 문제를 푸나
 

@@ -229,7 +229,8 @@ pets.MapPost("/", ...);
 
 Minimal API 에서는 `Results.Ok(...)` 대신 `TypedResults.Ok(...)` 를 쓰는 코드도 볼 수 있다. 반환 타입이 구체적으로 남아서 OpenAPI 문서와 단위 테스트에 유리하다.
 
-> ❓ 입사 후 확인: 우리 팀은 컨트롤러와 Minimal API 중 뭘 쓰나? 신규 엔드포인트 기준은?
+> ✅ 팀 기술 목록에는 **Minimal API + Carter**(Minimal API 를 모듈 단위로 나누는 라이브러리)가 올라 있다. 전후 비교는 `05-team-tech-list.md` 1절.
+> ❓ 입사 후 확인: 컨트롤러로 된 옛 코드가 남아 있나? 신규 엔드포인트 기준은?
 
 ---
 
