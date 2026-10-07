@@ -450,8 +450,8 @@
     "id": "lts",
     "term": "LTS",
     "aliases": [],
-    "def": "Long Term Support. 3년 지원하는 .NET 버전으로 짝수 버전(.NET 8, 10)이 해당한다. 기업 코드는 대개 LTS 에 머문다.",
-    "doc": "02-csharp-dotnet/intro"
+    "def": "Long Term Support. 3년 지원하는 .NET 버전으로 짝수 버전(.NET 8, 10)이 해당한다. 기업 코드는 대개 LTS 에 머문다. .NET 8 은 2026-11-10 에 지원이 끝난다.",
+    "doc": "02-csharp-dotnet/lifecycles"
   },
   {
     "id": "nuget",
@@ -2187,5 +2187,61 @@
     "aliases": [],
     "def": "ASP.NET Core 의 실시간 양방향 통신 라이브러리. WebSocket 을 기본으로 쓰고 안 되면 다른 방식으로 대체한다. 사용자 · 그룹 단위로 보내기가 내장돼 알림 · 푸시에 쓴다. 서버가 여러 대면 백플레인이 필요하다.",
     "doc": "02-csharp-dotnet/team-tech-list"
+  },
+  {
+    "id": "sts",
+    "term": "STS",
+    "aliases": [
+      "Standard Term Support"
+    ],
+    "def": "2년 지원하는 .NET 버전으로 홀수 버전(.NET 9, 11)이 해당한다. .NET 9 부터 18개월에서 24개월로 늘었다.",
+    "doc": "02-csharp-dotnet/lifecycles"
+  },
+  {
+    "id": "generic-host",
+    "term": "제네릭 호스트",
+    "aliases": [
+      "Generic Host",
+      "IHost"
+    ],
+    "def": "DI 컨테이너·설정·로깅·시작과 종료 관리를 한 묶음으로 가진 객체. ASP.NET Core 앱은 이 위에서 돈다. 종료 신호가 오면 요청을 마무리하고 백그라운드 서비스를 멈춘 뒤 정리한다.",
+    "doc": "02-csharp-dotnet/lifecycles"
+  },
+  {
+    "id": "graceful-shutdown",
+    "term": "우아한 종료",
+    "aliases": [
+      "graceful shutdown",
+      "SIGTERM"
+    ],
+    "def": "종료 신호를 받으면 새 요청을 막고 진행 중인 작업을 마무리하거나 되돌린 뒤 끝내는 것. ASP.NET Core 의 기본 제한 시간은 30초다.",
+    "doc": "02-csharp-dotnet/lifecycles"
+  },
+  {
+    "id": "http-client-factory",
+    "term": "IHttpClientFactory",
+    "aliases": [
+      "AddHttpClient"
+    ],
+    "def": "HttpClient 의 내부 핸들러를 풀에 두고 주기적으로 교체해 주는 팩토리. 요청마다 new 할 때의 소켓 고갈과 static 하나를 쓸 때의 DNS 문제를 함께 푼다.",
+    "doc": "02-csharp-dotnet/lifecycles"
+  },
+  {
+    "id": "named-query-filter",
+    "term": "이름 있는 쿼리 필터",
+    "aliases": [
+      "named query filters"
+    ],
+    "def": "EF Core 10 의 기능. 엔터티에 여러 글로벌 필터를 이름 붙여 걸고, 특정 필터만 골라 끌 수 있다. 소프트 삭제만 끄고 테넌트 필터는 남길 수 있다.",
+    "doc": "02-csharp-dotnet/dotnet-versions"
+  },
+  {
+    "id": "union-type",
+    "term": "유니언 타입",
+    "aliases": [
+      "union types"
+    ],
+    "def": "C# 15(.NET 11)의 기능. 값이 여러 타입 중 하나임을 표현하고, switch 가 모든 경우를 다뤘는지 컴파일러가 검사한다. TS 의 A | B 와 비슷하다.",
+    "doc": "02-csharp-dotnet/dotnet-versions"
   }
 ]

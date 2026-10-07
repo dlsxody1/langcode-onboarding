@@ -42,6 +42,8 @@ export const CHAPTERS: Chapter[] = [
       { slug: "ef-core", file: "03-ef-core.md", title: "EF Core" },
       { slug: "reading-a-codebase", file: "04-reading-a-dotnet-codebase.md", title: "코드베이스 읽는 법" },
       { slug: "team-tech-list", file: "05-team-tech-list.md", title: "팀 기술 목록", kicker: "Carter · Scrutor · RabbitMQ · Aspire" },
+      { slug: "lifecycles", file: "06-lifecycles.md", title: "생명주기 딥다이브", kicker: "앱 · 요청 · DI · GC · 지원 기간" },
+      { slug: "dotnet-versions", file: "07-dotnet-versions.md", title: ".NET 8 → 11", kicker: "버전별 변화 · 업그레이드 함정" },
     ],
   },
   {
