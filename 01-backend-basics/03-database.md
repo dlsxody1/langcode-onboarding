@@ -553,6 +553,7 @@ Offset 을 쓸 때도 `OrderBy` 에 타이브레이커를 넣어야 한다는 �
 
 랭코드 스택에 **PostgreSQL + MongoDB + Vector DB + MSSQL** 이 다 있는 건
 "고객사 시스템이 제각각"이라는 제품 성격 때문일 가능성이 높다.
+회사 스택 표 기준으로 저장소마다 왜 골랐고 무엇을 어디에 두는지는 `07-db-infra/07-our-stack.md` 에서 다룬다.
 
 > 참고: PostgreSQL 의 `jsonb` 는 문서형의 상당 부분을 대체한다. 인덱스(GIN)도 걸린다.
 > "반정형이니까 무조건 Mongo" 는 옛날 이야기다.

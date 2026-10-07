@@ -2068,5 +2068,74 @@
     ],
     "def": "지금 당장은 어긋날 수 있지만 곧 같아지는 일관성. 읽기 DB 를 따로 두는 CQRS 에서 쓰기 직후 조회에 잠깐 안 보이는 현상이 그 예다.",
     "doc": "01-backend-basics/architecture"
+  },
+  {
+    "id": "polyglot-persistence",
+    "term": "폴리글랏 퍼시스턴스",
+    "aliases": [
+      "polyglot persistence"
+    ],
+    "def": "데이터 성격마다 맞는 저장소를 골라 같이 쓰는 설계. 권한은 PostgreSQL, 대화 기록은 MongoDB, 캐시는 Redis, 파일은 Blob 처럼 나눈다. 대가는 저장소를 넘나드는 트랜잭션이 없다는 것이다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "model-registry",
+    "term": "모델 레지스트리",
+    "aliases": [
+      "LLM 목록"
+    ],
+    "def": "어떤 LLM 을 어떤 프로바이더 · 버전 · 엔드포인트로 쓸지를 코드가 아니라 DB 데이터로 관리하는 표. 도구 호출 · 이미지 입력 지원 같은 능력 표시와 비밀값 참조를 함께 둔다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "azure-ai-foundry",
+    "term": "Azure AI Foundry",
+    "aliases": [
+      "AI Foundry"
+    ],
+    "def": "Azure 에서 AI 모델을 고르고 배포하고 호출하는 곳. 여러 회사 모델이 카탈로그에 있고, 배포를 만들면 호출할 엔드포인트가 생긴다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "amazon-bedrock",
+    "term": "Amazon Bedrock",
+    "aliases": [
+      "Bedrock"
+    ],
+    "def": "AWS 의 관리형 LLM 서비스. AWS 만 쓰는 고객사가 데이터를 AWS 밖으로 내보내지 않고 LLM 을 쓸 때 연동한다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "presigned-url",
+    "term": "서명된 URL",
+    "aliases": [
+      "SAS URL",
+      "presigned URL"
+    ],
+    "def": "정해진 시간 동안 특정 파일을 읽거나 쓸 수 있는 권한이 담긴 임시 URL. 서버는 권한을 확인한 뒤 URL 만 발급하고, 브라우저가 저장소와 직접 파일을 주고받는다. Azure 는 SAS, S3 는 presigned 라고 부른다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "keycloak",
+    "term": "Keycloak",
+    "aliases": [],
+    "def": "오픈소스 인증 서버(IdP). 컨테이너로 띄우고 관리 화면에서 설정한다. 고객사 Entra ID · SAML 같은 외부 IdP 를 대신 상대하는 브로커 역할을 하고, realm 단위로 테넌트를 나눌 수 있다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "identityserver",
+    "term": "IdentityServer",
+    "aliases": [
+      "Duende IdentityServer"
+    ],
+    "def": "ASP.NET Core 앱 안에 코드로 짜 넣는 OIDC 인증 서버 라이브러리. 자유도가 높지만 관리 화면 · 외부 IdP 연동을 직접 만들어야 하는 부분이 많고, 일정 매출 이상이면 상용 라이선스가 필요하다.",
+    "doc": "07-db-infra/our-stack"
+  },
+  {
+    "id": "valkey",
+    "term": "Valkey",
+    "aliases": [],
+    "def": "Redis 가 라이선스를 바꾼 뒤 리눅스 재단 쪽에서 이어받은 오픈소스 포크. 명령어 · 프로토콜이 같아서 앱 코드는 거의 그대로 붙는다.",
+    "doc": "07-db-infra/our-stack"
   }
 ]

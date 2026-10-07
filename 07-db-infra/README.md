@@ -12,6 +12,7 @@
 | [04. 관측성](04-observability.md) | 구조화 로그 · 추적 ID · 메트릭 · OpenTelemetry |
 | [05. 인프라 지도](05-infra.md) | 요청이 서버에 닿기까지 · 무상태 · 컨테이너 · Azure 관리형 서비스 · 배포 |
 | [06. Cosmos DB](06-cosmos-db.md) | 파티션 키 · RU · 일관성 수준 · Change Feed. 관계형과 반대로 설계하는 문서형 DB |
+| [07. 우리 스택은 왜 이렇게 생겼나](07-our-stack.md) | 왜 PostgreSQL · 왜 MongoDB 를 같이 · 왜 Redis · Blob · 인증 서버 · 멀티 LLM · Container Apps. **01\~06 을 회사 스택 표 위에서 다시 묶는다** |
 
 ---
 

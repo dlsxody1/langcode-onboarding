@@ -108,6 +108,7 @@ export const CHAPTERS: Chapter[] = [
       { slug: "observability", file: "04-observability.md", title: "관측성" },
       { slug: "infra", file: "05-infra.md", title: "인프라 지도" },
       { slug: "cosmos-db", file: "06-cosmos-db.md", title: "Cosmos DB", kicker: "파티션 키 · RU · 일관성" },
+      { slug: "our-stack", file: "07-our-stack.md", title: "우리 스택은 왜", kicker: "Postgres · Mongo · Redis · Blob · LLM" },
     ],
   },
 ];
