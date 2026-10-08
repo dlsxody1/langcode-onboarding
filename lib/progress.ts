@@ -8,7 +8,7 @@
 
 const KEY = "lc-onboarding-v1";
 
-export type Attempt = { qid: string; picked: number; correct: boolean; at: number };
+export type Attempt = { qid: string; picked: number; correct: boolean; at: number; text?: string };
 export type Store = { attempts: Record<string, Attempt>; read: Record<string, number> };
 
 const EMPTY: Store = { attempts: {}, read: {} };

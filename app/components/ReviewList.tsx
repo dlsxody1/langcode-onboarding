@@ -68,12 +68,25 @@ export function ReviewList() {
             {items.map((q) => (
               <li key={q.id}>
                 <p className="wrong-list__q">{q.q}</p>
-                <p className="wrong-list__a">
-                  정답 <b>{LABELS[q.answer]}</b> — {q.choices[q.answer]}
-                </p>
-                <p className="wrong-list__a" style={{ color: "var(--ink-soft)" }}>
-                  {q.why}
-                </p>
+                {q.kind === "short" ? (
+                  <>
+                    {store.attempts[q.id]?.text && (
+                      <p className="wrong-list__a">내 답 — {store.attempts[q.id].text}</p>
+                    )}
+                    <p className="wrong-list__a">
+                      모범답안 — <b>{q.why}</b>
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="wrong-list__a">
+                      정답 <b>{LABELS[q.answer]}</b> — {q.choices[q.answer]}
+                    </p>
+                    <p className="wrong-list__a" style={{ color: "var(--ink-soft)" }}>
+                      {q.why}
+                    </p>
+                  </>
+                )}
                 <p className="wrong-list__src">
                   <Link href={`/docs/${q.chapter}/${q.doc}`}>
                     {q.section ?? "해당 문서"} 로 돌아가기 →

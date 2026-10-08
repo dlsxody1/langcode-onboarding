@@ -27,7 +27,7 @@ export default function QuizIndex() {
           <span className="qcount">문 제</span>
           <h1>주제 고르기</h1>
           <p>
-            {TOPICS.length}개 주제 · {QUESTIONS.length}문항. 한 주제는 3~6문항이라 5분이면 끝난다.
+            {TOPICS.length}개 주제 · {QUESTIONS.length}문항. 한 주제는 대개 5~12문항이고, 서술형도 섞여 있다.
           </p>
         </header>
         <TopicList chapters={chapters} />
