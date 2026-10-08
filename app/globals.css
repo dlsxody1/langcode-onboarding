@@ -561,21 +561,30 @@ a:hover { text-decoration-color: var(--pen); }
 }
 
 /* ── 용어 사전 페이지 ───────────────────────────────────── */
+.glossary__search { display: flex; gap: 0.5rem; margin-bottom: 0.9rem; }
+.glossary__search input {
+  flex: 1; min-width: 0; padding: 0.6rem 0.8rem;
+  font: inherit; font-size: var(--step-0); color: var(--ink);
+  background: transparent; border: 1px solid var(--rule); border-radius: 2px;
+}
+.glossary__search input:focus { outline: none; border-color: var(--pencil); }
+.glossary__search button,
+.glossary__index button {
+  font: inherit; color: var(--ink-soft); background: none; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: 2px; padding: 0.4rem 0.7rem;
+}
+.glossary__search button:hover,
+.glossary__index button:hover { color: var(--pencil); border-color: var(--pencil); }
 .glossary__index {
-  display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem;
-  padding: 0.8rem 0; margin-bottom: 1.6rem;
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+  padding: 0.8rem 0; margin-bottom: 1rem;
   border-block: 1px solid var(--rule);
-  font-family: var(--serif); font-size: var(--step-1);
+  font-family: var(--serif); font-size: var(--step-0);
 }
-.glossary__index a { color: var(--ink-soft); text-decoration: none; }
-.glossary__index a:hover { color: var(--pencil); }
-.glossary__group { margin-bottom: 2.4rem; scroll-margin-top: 1.5rem; }
-.glossary__group h2 {
-  font-family: var(--serif); font-size: var(--step-2); font-weight: 700;
-  margin: 0 0 0.6rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--rule);
-  scroll-margin-top: 1.5rem;
-}
-.glossary__group dl { margin: 0; }
+.glossary__index button { min-width: 2.2rem; }
+.glossary__index button.is-on { color: var(--paper); background: var(--pencil); border-color: var(--pencil); }
+.glossary__hint { color: var(--ink-soft); font-size: var(--step--1); margin: 1.2rem 0; }
+.glossary__count { color: var(--ink-soft); font-size: var(--step--1); margin: 0 0 0.4rem; }
 .glossary__item {
   display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr; gap: 0.3rem 1.4rem;
   padding: 0.75rem 0; border-bottom: 1px solid var(--rule-soft);
