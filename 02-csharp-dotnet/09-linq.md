@@ -55,6 +55,38 @@ Console.WriteLine(q.Count());      // 3  ← (2, 3, 10). 열거 시점의 원본
 **함정 3 — 정렬·그룹은 "지연이지만 열거 시작하면 전부 읽는다".** `OrderBy` 는 첫 요소를 내려면 전체를 봐야 한다.
 (`Where` 는 하나씩 흘려보내는 스트리밍, `OrderBy` 는 버퍼링.)
 
+### JS 와 비교
+
+JS 배열 메서드는 **전부 즉시 실행**이다. 호출하는 순간 새 배열을 만든다. LINQ 는 대부분 **지연**이라 이 부분이 가장 다르다.
+
+```js
+const nums = [1, 2, 3];
+const q = nums.filter(n => n > 1);   // 이 줄에서 바로 [2, 3] 이 만들어진다
+nums.push(10);
+q.length;                            // 2  (이미 끝난 결과라 원본이 바뀌어도 그대로)
+```
+
+```csharp
+var q = nums.Where(n => n > 1);      // 아무것도 안 했다
+nums.Add(10);
+q.Count();                           // 3  (센 시점에 원본을 읽는다)
+```
+
+| JS 배열 | LINQ |
+| --- | --- |
+| `map` | `Select` |
+| `filter` | `Where` |
+| `flatMap` | `SelectMany` |
+| `reduce` | `Aggregate` |
+| `find` | `FirstOrDefault(조건)` |
+| `some` / `every` | `Any` / `All` |
+| `includes` | `Contains` |
+| `slice(0, n)` | `Take(n)` |
+| `.sort()` (원본을 바꾼다) | `OrderBy` (원본은 그대로, 새 시퀀스) |
+| `Array.from(x)` / `[...x]` | `ToList()` / `ToArray()` |
+
+JS 의 **제너레이터**(`function*`)가 LINQ 와 가장 비슷한 동작이다. 값을 요청할 때마다 하나씩 계산한다. 결과를 굳히고 싶을 때 `ToList()` 를 붙이는 것은 JS 에서 `[...gen]` 으로 펼치는 것과 같다.
+
 ---
 
 ## 3. 필터 · 투영

@@ -41,6 +41,30 @@ app.MapGet("/api/todos/{id:int}", async (int id, ITodoService svc, CancellationT
     await svc.FindAsync(id, ct) is { } todo ? Results.Ok(todo) : Results.NotFound());
 ```
 
+### JS (Express) 와 비교
+
+Minimal API 는 Express 와 모양이 거의 같다.
+
+```js
+// Express
+app.get("/api/todos/:id", async (req, res) => {
+  const todo = await svc.find(Number(req.params.id));
+  if (!todo) return res.sendStatus(404);
+  res.json(todo);
+});
+```
+
+| Express | ASP.NET Core |
+| --- | --- |
+| `app.get(path, handler)` | `app.MapGet(path, handler)` |
+| `req.params.id` (문자열 → 직접 `Number()`) | 핸들러 인자 `int id` 로 **자동 변환** |
+| `req.query.page` | 인자 `int page` (단순 타입이면 쿼리) |
+| `req.body` (`express.json()` 필요) | 복합 타입 인자 (JSON 자동 역직렬화) |
+| `res.status(404).json(x)` | `Results.NotFound()` / `Results.Ok(x)` |
+| `app.use(mw)` (미들웨어) | `app.Use...()` (미들웨어, 등록 **순서**가 중요한 것은 같다) |
+| 전역 변수·모듈로 공유 | **DI**: 인자로 서비스가 자동 주입된다 |
+| 클래스 + 데코레이터 (NestJS) | 컨트롤러 + 특성(`[HttpGet]`) |
+
 ---
 
 ## 2. Program.cs — API 에 필요한 최소 구성
@@ -112,6 +136,8 @@ Minimal API 의 추정 규칙 (단순 → 복합):
 1. 경로에 있으면 route, 2. 서비스로 등록돼 있으면 DI, 3. 단순 타입이면 query, 4. 그 외 복합 타입은 **body**.
 
 **본문은 하나만** 받을 수 있다. `[FromBody]` 가 둘이면 안 된다 (스트림을 한 번만 읽는다).
+
+JS 에서는 `req` 객체 하나에서 `params` / `query` / `body` / `headers` 를 **직접 꺼내 쓴다**. ASP.NET 은 반대로 **핸들러 인자의 타입과 이름을 보고** 프레임워크가 알아서 꺼내서 채워 준다. 그래서 위 표의 "출처" 개념이 필요하다.
 
 ---
 
