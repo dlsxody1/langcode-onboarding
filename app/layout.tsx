@@ -7,7 +7,13 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export const viewport: Viewport = { themeColor: "#f7f3ec" };
+// viewportFit: cover — 노치가 있는 폰에서 safe-area 여백을 CSS 로 직접 챙긴다
+export const viewport: Viewport = {
+  themeColor: "#f7f3ec",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

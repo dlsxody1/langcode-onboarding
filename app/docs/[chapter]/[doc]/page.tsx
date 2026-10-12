@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Masthead } from "@/app/components/Masthead";
 import { Toc } from "@/app/components/Toc";
 import { MarkRead } from "@/app/components/MarkRead";
+import { DocOutline } from "@/app/components/DocOutline";
 import { CHAPTERS, getDoc, getNeighbours, renderDoc } from "@/lib/content";
 import { topicsForChapter } from "@/data/questions";
 
@@ -24,7 +25,7 @@ export default async function DocPage({ params }: { params: Promise<Params> }) {
   const found = getDoc(chapter, doc);
   if (!found) notFound();
 
-  const { html } = renderDoc(found.chapter, found.doc);
+  const { html, headings } = renderDoc(found.chapter, found.doc);
   const { prev, next } = getNeighbours(chapter, doc);
   const isLast = found.chapter.docs.at(-1)?.slug === doc;
   const topics = topicsForChapter(chapter);
@@ -35,6 +36,12 @@ export default async function DocPage({ params }: { params: Promise<Params> }) {
       <div className="layout">
         <Toc chapters={CHAPTERS} />
         <main className="sheet">
+          <DocOutline
+            headings={headings}
+            chapterId={chapter}
+            siblings={found.chapter.docs.map((d) => ({ slug: d.slug, title: d.title }))}
+            current={doc}
+          />
           <MarkRead chapterId={chapter} docSlug={doc} />
 
           <header className="doc-head">

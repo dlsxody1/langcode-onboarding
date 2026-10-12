@@ -9,11 +9,14 @@ export function Masthead() {
   return (
     <header className="masthead">
       <Link href="/" className="masthead__title">
-        랭코드 온보딩
+        랭코드<span className="masthead__t2"> 온보딩</span>
       </Link>
       <span className="masthead__sub">입사 2026-10-01</span>
       <span className="masthead__spacer" />
       <nav>
+        <Link href="/study" aria-current={on("/study")}>
+          계획
+        </Link>
         <Link href="/docs" aria-current={on("/docs")}>
           공부
         </Link>

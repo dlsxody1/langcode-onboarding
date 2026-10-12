@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Masthead } from "./components/Masthead";
 import { CoverStats } from "./components/CoverStats";
 import { CHAPTERS } from "@/lib/content";
-import { topicsForChapter } from "@/data/questions";
+import { ALL_DOCS } from "@/lib/chapters";
+import { QUESTIONS, TOPICS, topicsForChapter } from "@/data/questions";
 
 export default function Home() {
   return (
@@ -23,16 +24,21 @@ export default function Home() {
 
         <CoverStats />
 
+        <Link className="plan-mock" href="/study" style={{ marginTop: "1.6rem" }}>
+          <strong>금요일 테스트 공부 계획</strong>
+          <span>Web API · C# 문법 · LINQ · SignalR — 10/12 ~ 10/16 일정과 체크리스트 →</span>
+        </Link>
+
         <nav className="gateway">
           <Link className="gateway__card" href="/docs">
             <span className="gateway__no">공부</span>
             <span className="gateway__t">문서를 순서대로 읽는다</span>
-            <span className="gateway__d">6챕터 23편. 하루 1~2편이면 입사 전에 끝난다.</span>
+            <span className="gateway__d">{CHAPTERS.length}챕터 {ALL_DOCS.length}편. 하루 1~2편이면 입사 전에 끝난다.</span>
           </Link>
           <Link className="gateway__card" href="/quiz">
             <span className="gateway__no">문제</span>
             <span className="gateway__t">주제별로 확인한다</span>
-            <span className="gateway__d">18주제 67문항. 한 주제 3~6문항, 힌트와 해설이 붙는다.</span>
+            <span className="gateway__d">{TOPICS.length}주제 {QUESTIONS.length}문항. 힌트와 해설이 붙고, 서술형은 자동 채점된다.</span>
           </Link>
         </nav>
 

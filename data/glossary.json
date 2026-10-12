@@ -2301,5 +2301,107 @@
     ],
     "def": "스키마를 무중단으로 바꾸는 3단계. 새 컬럼 추가 → 데이터 이전과 코드 전환 → 옛 컬럼 삭제. 배포 중 옛 코드와 새 코드가 함께 떠 있어도 안전하다.",
     "doc": "07-db-infra/db-design"
+  },
+  {
+    "id": "immediate-execution",
+    "term": "즉시 실행",
+    "aliases": [
+      "immediate execution"
+    ],
+    "def": "호출하는 순간 결과를 만드는 방식. ToList · ToArray · Count · Sum · First · Any 등.",
+    "doc": "02-csharp-dotnet/linq"
+  },
+  {
+    "id": "selectmany",
+    "term": "SelectMany",
+    "aliases": [
+      "flatMap"
+    ],
+    "def": "요소마다 만든 컬렉션을 한 줄로 펼치는 LINQ 메서드. Select 는 1:1 변환이라 컬렉션의 컬렉션이 되지만 SelectMany 는 평평하게 만든다.",
+    "doc": "02-csharp-dotnet/linq"
+  },
+  {
+    "id": "iqueryable",
+    "term": "IQueryable",
+    "aliases": [
+      "IQueryable<T>",
+      "식 트리",
+      "Expression Tree"
+    ],
+    "def": "람다를 코드가 아닌 식 트리(Expression)로 받아 SQL 등으로 번역하는 인터페이스. EF Core 의 DbSet 이 이것이다. IEnumerable 은 메모리에서 실행된다.",
+    "doc": "02-csharp-dotnet/linq"
+  },
+  {
+    "id": "api-controller",
+    "term": "[ApiController]",
+    "aliases": [
+      "ApiController"
+    ],
+    "def": "컨트롤러에 붙이는 특성. 모델 검증 실패 시 자동 400, 바인딩 소스 추정, ProblemDetails 응답, 특성 라우팅 필수화를 해 준다.",
+    "doc": "02-csharp-dotnet/web-api"
+  },
+  {
+    "id": "typed-results",
+    "term": "TypedResults",
+    "aliases": [],
+    "def": "Minimal API 에서 Ok<T> · NotFound 같은 구체 타입을 반환하는 헬퍼. Results 는 IResult 를 반환하지만 TypedResults 는 응답 타입이 시그니처에 드러나 OpenAPI 와 테스트에 유리하다.",
+    "doc": "02-csharp-dotnet/web-api"
+  },
+  {
+    "id": "idempotent",
+    "term": "멱등",
+    "aliases": [
+      "idempotent",
+      "멱등성"
+    ],
+    "def": "같은 요청을 여러 번 보내도 결과가 같은 성질. GET · PUT · DELETE 는 멱등이고 POST 는 아니다.",
+    "doc": "02-csharp-dotnet/web-api"
+  },
+  {
+    "id": "boxing",
+    "term": "박싱",
+    "aliases": [
+      "boxing",
+      "언박싱",
+      "unboxing"
+    ],
+    "def": "값 타입을 object(참조 타입)에 담을 때 힙에 상자를 만드는 것. 반대는 언박싱. 할당 비용이 있다.",
+    "doc": "02-csharp-dotnet/csharp-syntax"
+  },
+  {
+    "id": "extension-method",
+    "term": "확장 메서드",
+    "aliases": [
+      "extension method"
+    ],
+    "def": "정적 클래스의 정적 메서드 첫 매개변수에 this 를 붙여 기존 타입에 메서드를 더한 것처럼 쓰는 기능. LINQ 가 전부 이 방식이다.",
+    "doc": "02-csharp-dotnet/csharp-syntax"
+  },
+  {
+    "id": "signalr-hub",
+    "term": "Hub",
+    "aliases": [
+      "허브",
+      "SignalR Hub"
+    ],
+    "def": "SignalR 에서 클라이언트와 서버가 서로 메서드를 호출하는 상위 수준 파이프라인. 호출마다 새 인스턴스가 만들어진다.",
+    "doc": "02-csharp-dotnet/signalr"
+  },
+  {
+    "id": "backplane",
+    "term": "백플레인",
+    "aliases": [
+      "backplane",
+      "Redis 백플레인"
+    ],
+    "def": "서버를 여러 대로 늘렸을 때 서버 간에 메시지를 전달하는 장치. SignalR 은 Redis 백플레인이나 Azure SignalR Service 를 쓴다.",
+    "doc": "02-csharp-dotnet/signalr"
+  },
+  {
+    "id": "messagepack",
+    "term": "MessagePack",
+    "aliases": [],
+    "def": "JSON 보다 작은 이진 직렬화 형식. SignalR 허브 프로토콜의 선택지(기본은 JSON).",
+    "doc": "02-csharp-dotnet/signalr"
   }
 ]

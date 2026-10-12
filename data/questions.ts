@@ -1,3 +1,5 @@
+import { DOTNET_QUESTIONS, DOTNET_TOPICS } from "./dotnet-quiz";
+
 export type Question = {
   id: string;
   chapter: string;
@@ -2825,6 +2827,7 @@ export const QUESTIONS: Question[] = [
     keys: [["행마다", "모양이 다르", "고객사별", "제각각"], ["통째", "읽고 쓴", "원본"], ["WHERE", "필터", "JOIN", "정렬", "검색"], ["컬럼", "승격"], ["제약", "NOT NULL", "FK", "검증"]],
     why: "행마다 모양이 다르고 통째로 읽고 쓰는 것(고객사별 커스텀 필드, 응답 원본, 설정 묶음)은 jsonb 가 맞다. WHERE · JOIN · ORDER BY 에 쓰거나 NOT NULL · FK 같은 제약을 걸고 싶은 값은 컬럼으로 꺼낸다. 자주 필터링하게 된 jsonb 키는 컬럼으로 승격하라는 신호다.",
   },
+  ...DOTNET_QUESTIONS,
 ];
 
 export type Topic = { id: string; chapter: string; title: string; blurb: string };
@@ -3021,7 +3024,8 @@ export const TOPICS: Topic[] = [
     "chapter": "07-db-infra",
     "title": "DB 설계",
     "blurb": "설계 순서 · 저장소 배치 · 키 · 테넌트 · 모듈 스키마 · 마이그레이션."
-  }
+  },
+  ...DOTNET_TOPICS,
 ];
 
 export function questionsForChapter(chapterId: string) {

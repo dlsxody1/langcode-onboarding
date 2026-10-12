@@ -12,6 +12,10 @@
 | [05. 팀 기술 목록 — 쓰기 전과 후](05-team-tech-list.md) | Carter · FluentValidation · Scrutor · Mediator · RabbitMQ · SignalR · Aspire. 라이브러리마다 없을 때와 있을 때의 코드 |
 | [06. 생명주기 딥다이브](06-lifecycles.md) | 앱(Host) 시작·종료, 요청 스코프, DI 수명 규칙 7개, GC·Dispose, .NET 지원 기간 |
 | [07. .NET 8 → 11](07-dotnet-versions.md) | C# 12~15 · ASP.NET Core · EF Core 버전별 변화, .NET 10 업그레이드 때 깨지는 곳, 공식 문서 읽는 법 |
+| [08. C# 문법 정리](08-csharp-syntax.md) | 시험용. 값/참조 · null · record · 접근 제한자 · 델리게이트 · 패턴 매칭 · async · C# 12~14 |
+| [09. LINQ 완전판](09-linq.md) | Enumerable 메서드 카테고리별 · 지연 vs 즉시 · First/Single · 집합 · IQueryable · .NET 6~10 신규 |
+| [10. Web API 만들기](10-web-api.md) | 컨트롤러 vs Minimal API · 바인딩 · 상태코드 · `[ApiController]` · 검증 · ProblemDetails · 필터 |
+| [11. SignalR 개념](11-signalr.md) | 전송 폴백 · Hub · 프로토콜 · 확장(백플레인) — 개념만 짧게 |
 
 읽는 순서는 01 → 02 → 03 → 04 다. 05 는 02 를 읽은 뒤 언제든. 06 은 02 를, 07 은 03 을 읽은 뒤가 좋다. 03 까지 읽었으면 `labs/lab1-dotnet-crud/README.md` 로 넘어가 직접 만들어 본다.
 요청 수명주기, 계층과 DI, 인덱스·트랜잭션 같은 개념은 `01-backend-basics/` 에서 먼저 다뤘다. 이 장은 그 개념이 .NET 코드에서 어떤 모양으로 나타나는지를 본다.

@@ -44,6 +44,10 @@ export const CHAPTERS: Chapter[] = [
       { slug: "team-tech-list", file: "05-team-tech-list.md", title: "팀 기술 목록", kicker: "Carter · Scrutor · RabbitMQ · Aspire" },
       { slug: "lifecycles", file: "06-lifecycles.md", title: "생명주기 딥다이브", kicker: "앱 · 요청 · DI · GC · 지원 기간" },
       { slug: "dotnet-versions", file: "07-dotnet-versions.md", title: ".NET 8 → 11", kicker: "버전별 변화 · 업그레이드 함정" },
+      { slug: "csharp-syntax", file: "08-csharp-syntax.md", title: "C# 문법 정리", kicker: "시험용 · 값/참조 · record · async · C# 14" },
+      { slug: "linq", file: "09-linq.md", title: "LINQ 완전판", kicker: "Enumerable 메서드 · 지연 실행 · 함정" },
+      { slug: "web-api", file: "10-web-api.md", title: "Web API 만들기", kicker: "컨트롤러 · Minimal API · 바인딩 · 상태코드" },
+      { slug: "signalr", file: "11-signalr.md", title: "SignalR 개념", kicker: "전송 · Hub · 확장" },
     ],
   },
   {
