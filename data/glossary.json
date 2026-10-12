@@ -2243,5 +2243,63 @@
     ],
     "def": "C# 15(.NET 11)의 기능. 값이 여러 타입 중 하나임을 표현하고, switch 가 모든 경우를 다뤘는지 컴파일러가 검사한다. TS 의 A | B 와 비슷하다.",
     "doc": "02-csharp-dotnet/dotnet-versions"
+  },
+  {
+    "id": "access-pattern",
+    "term": "접근 패턴",
+    "aliases": [
+      "access pattern"
+    ],
+    "def": "어떤 쿼리를 얼마나 자주, 얼마나 빨라야 하는지 적은 목록. DB 설계는 테이블이 아니라 이것부터 정한다.",
+    "doc": "07-db-infra/db-design"
+  },
+  {
+    "id": "surrogate-key",
+    "term": "대리키",
+    "aliases": [
+      "surrogate key",
+      "natural key",
+      "자연키"
+    ],
+    "def": "의미 없는 값(uuid 등)으로 만든 기본 키. 이메일 · 사번 같은 자연키는 바뀔 수 있어서 PK 로 쓰지 않고 UNIQUE 로만 건다.",
+    "doc": "07-db-infra/db-design"
+  },
+  {
+    "id": "uuid-v7",
+    "term": "UUID v7",
+    "aliases": [
+      "uuidv7",
+      "uuid v7"
+    ],
+    "def": "앞부분이 생성 시각이라 시간순으로 정렬되는 UUID. 랜덤 v4 보다 인덱스 삽입이 덜 흩어진다. .NET 9 의 Guid.CreateVersion7(), PostgreSQL 18 의 uuidv7().",
+    "doc": "07-db-infra/db-design"
+  },
+  {
+    "id": "composite-fk",
+    "term": "복합 FK",
+    "aliases": [
+      "composite foreign key"
+    ],
+    "def": "컬럼 둘 이상으로 거는 외래 키. (tenant_id, document_id) 로 걸면 자식과 부모의 테넌트가 같다는 것을 DB 가 강제해 교차 테넌트 참조를 막는다.",
+    "doc": "07-db-infra/db-design"
+  },
+  {
+    "id": "polymorphic-association",
+    "term": "다형성 연관",
+    "aliases": [
+      "polymorphic association"
+    ],
+    "def": "target_type + target_id 처럼 여러 종류의 테이블을 가리키는 컬럼. 어느 테이블인지 행마다 달라서 FK 를 걸 수 없고, 정합성은 앱이 책임진다.",
+    "doc": "07-db-infra/db-design"
+  },
+  {
+    "id": "expand-contract",
+    "term": "확장·이전·수축",
+    "aliases": [
+      "expand contract",
+      "expand-migrate-contract"
+    ],
+    "def": "스키마를 무중단으로 바꾸는 3단계. 새 컬럼 추가 → 데이터 이전과 코드 전환 → 옛 컬럼 삭제. 배포 중 옛 코드와 새 코드가 함께 떠 있어도 안전하다.",
+    "doc": "07-db-infra/db-design"
   }
 ]

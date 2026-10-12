@@ -20,7 +20,7 @@
 
 - `04-agent/` — MAF·MCP·tool calling·Agentic RAG·오케스트레이션. "에이전트"라는 말이 코드에서 정확히 뭘 가리키는지
 - `05-realtime-ui/` — 스트리밍 응답 UI. 내가 이미 잘하는 영역이지만, 채팅 화면 특유의 함정이 따로 있다
-- `07-db-infra/` — 관계형 DB 기초 · 캐싱 · 장애 대응 패턴 · 관측성 · 인프라 · 회사 스택 선택 이유. 서버가 여러 대이고 남의 시스템이 느릴 때
+- `07-db-infra/` — 관계형 DB 기초 · 캐싱 · 장애 대응 패턴 · 관측성 · 인프라 · 회사 스택 선택 이유 · DB 설계 방법. 서버가 여러 대이고 남의 시스템이 느릴 때
 
 ## 읽는 순서
 
@@ -154,7 +154,7 @@ winget install Docker.DockerDesktop
 04-agent/              에이전트란 · MAF · MCP · Agentic RAG · 오케스트레이션
 05-realtime-ui/        SSE vs WebSocket · 스트리밍 UI 렌더링
 06-fullstack-workflow/ 요즘 풀스택이 실제로 일하는 방식
-07-db-infra/           관계형 DB 기초 · 캐싱 · 장애 대응 · 관측성 · 인프라 지도
+07-db-infra/           관계형 DB 기초 · 캐싱 · 장애 대응 · 관측성 · 인프라 지도 · DB 설계
 labs/lab1-dotnet-crud/ 실습: ASP.NET Core + EF Core CRUD API
 labs/lab2-mini-rag/    실습: 의존성 없는 미니 RAG 엔진 (Python)
 labs/lab3-rag/         실습: 온보딩 문서로 만드는 미니 사내 RAG 챗봇 (사이트의 "실습" 탭)
