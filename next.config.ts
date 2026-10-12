@@ -8,7 +8,11 @@ const config: NextConfig = {
   },
   // 검색엔진 노출 차단 — 특정 회사 입사 준비 자료다
   async headers() {
-    return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
+    return [
+      { source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      // 서비스 워커는 배포마다 새로 받아야 한다
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, max-age=0" }] },
+    ];
   },
 };
 
