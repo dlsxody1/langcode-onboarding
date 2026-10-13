@@ -175,16 +175,33 @@ var r = from u in users
 
 ## 7. 요소 하나를 꺼내기 — 시험 단골
 
-| 메서드 | 0 개일 때 | 2 개 이상일 때 |
-| --- | --- | --- |
-| `First` | 예외 | 첫 번째 |
-| `FirstOrDefault` | 기본값 (참조 형식은 null) | 첫 번째 |
-| `Single` | 예외 | **예외** |
-| `SingleOrDefault` | 기본값 | **예외** |
-| `Last` / `LastOrDefault` | 예외 / 기본값 | 마지막 |
-| `ElementAt` / `ElementAtOrDefault` | 예외 / 기본값 | 해당 위치 |
+| 메서드 | 0 개일 때 | 1 개일 때 | 2 개 이상일 때 |
+| --- | --- | --- | --- |
+| `First` | **예외** | 그것 | 첫 번째 |
+| `FirstOrDefault` | 기본값 (참조 형식은 null) | 그것 | 첫 번째 |
+| `Single` | **예외** | 그것 | **예외** |
+| `SingleOrDefault` | 기본값 | 그것 | **예외** |
+| `Last` / `LastOrDefault` | 예외 / 기본값 | 그것 | 마지막 |
+| `ElementAt` / `ElementAtOrDefault` | 예외 / 기본값 | — | 해당 위치 |
 
-- "유일해야 하는 값"에는 `Single` — 2 개면 데이터 오류를 **터뜨려서** 알려 준다.
+```csharp
+var pets = new List<Pet> {
+    new(1, "코코", 3),
+    new(2, "몽이", 5),
+    new(3, "나비", 5),
+};
+
+pets.First(p => p.Age == 3);            // 코코 (1개 → 그것)
+pets.First(p => p.Age == 5);            // 몽이 (2개 → 첫 번째)
+pets.First(p => p.Age == 9);            // InvalidOperationException (0개 → 예외)
+pets.FirstOrDefault(p => p.Age == 9);   // null (0개 → 기본값)
+
+pets.Single(p => p.Id == 1);            // 코코 (정확히 1개)
+pets.Single(p => p.Age == 5);           // InvalidOperationException (2개 → 예외)
+pets.SingleOrDefault(p => p.Id == 9);   // null (0개 → 기본값)
+```
+
+- "유일해야 하는 값"에는 `Single` — 2 개면 데이터 오류를 **터뜨려서** 알려 준다. 예를 들어 Id 가 PK 인데 같은 Id 가 두 개 나오면 DB 가 깨진 것이므로 `Single` 이 그걸 바로 드러낸다.
 - "있으면 쓰고 없으면 말고" 는 `FirstOrDefault`.
 - `FirstOrDefault(defaultValue)` 오버로드 (.NET 6+) — `int` 에서 기본값이 0 이 아니라 내가 정한 값.
 - `^1`(끝에서 첫째) 인덱스: `ElementAt(^1)` 은 .NET 6+.

@@ -3,6 +3,8 @@ import { CSYNTAX_QUESTIONS } from "./csyntax";
 import { LINQ_QUESTIONS } from "./linq";
 import { WEBAPI_QUESTIONS } from "./webapi";
 import { SIGNALR_QUESTIONS } from "./signalr";
+import { CH02_CORE_QUESTIONS } from "./ch02-core";
+import { CH02_OPS_QUESTIONS } from "./ch02-ops";
 
 /** 금요일 테스트 범위 — Web API · C# 문법 · LINQ (+ SignalR 개념) */
 export const DOTNET_TOPICS: Topic[] = [
@@ -17,4 +19,6 @@ export const DOTNET_QUESTIONS: Question[] = [
   ...LINQ_QUESTIONS,
   ...WEBAPI_QUESTIONS,
   ...SIGNALR_QUESTIONS,
+  ...CH02_CORE_QUESTIONS,
+  ...CH02_OPS_QUESTIONS,
 ];
